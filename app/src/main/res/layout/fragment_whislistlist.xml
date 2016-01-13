@@ -1,7 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                                        android:id="@+id/fragment_whislist_list_recycler_view"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="it.polimi.dima.giftlist.base.BaseViewStateLceActivity">
+            <!--not sure about the row above... -->
 
-</android.support.v7.widget.RecyclerView>
+    <include layout="@layout/loading_view" />
+    <include layout="@layout/error_view" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/fragment_wishlistlist_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</FrameLayout>

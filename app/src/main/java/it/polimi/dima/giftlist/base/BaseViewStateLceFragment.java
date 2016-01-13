@@ -24,7 +24,7 @@ public abstract class BaseViewStateLceFragment<CV extends View, M, V extends Mvp
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FragmentArgs.inject(this);
+        //FragmentArgs.inject(this);
     }
 
     @LayoutRes protected abstract int getLayoutRes();

@@ -15,7 +15,7 @@ public interface WishlistListComponent {
 
     public void inject(WishlistListFragment fragment); //allows injecting non-private field members to provided object as argument
 
-    public WishlistListPresenter presenter(); //returned object is an instance created by Dagger2 and all dependencies are provided by constructor injection.
+    public WishlistListPresenter providePresenter(); //returned object is an instance created by Dagger2 and all dependencies are provided by constructor injection.
 
     public WishlistListAdapter provideAdapter();
 }

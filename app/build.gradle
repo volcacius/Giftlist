@@ -137,6 +137,10 @@ dependencies {
     compile "frankiesardo:icepick:$ICEPICK_VERSION"
     provided "frankiesardo:icepick-processor:$ICEPICK_VERSION"
 
+    compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
+    compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
+    apt 'com.hannesdorfmann.annotatedadapter:processor:1.1.1'
+
     // Instrumentation test dependencies
     androidTestCompile jUnit
     androidTestCompile mockito

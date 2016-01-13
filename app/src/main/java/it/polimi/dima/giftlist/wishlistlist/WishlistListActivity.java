@@ -14,11 +14,11 @@ public class WishlistListActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_wishlistlist);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_wishlistlist, new WishlistListFragment())
+                    .add(R.id.activity_frame, new WishlistListFragment())
                     .commit();
         }
     }
