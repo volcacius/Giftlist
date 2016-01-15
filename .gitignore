@@ -5,5 +5,8 @@
 /gradle.properties
 /Giftlist.iml
 /.gradle
+/build
+/build.gradle
+/crashlytics_release_note.txt
 
 
