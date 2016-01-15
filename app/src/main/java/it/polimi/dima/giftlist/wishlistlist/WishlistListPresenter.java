@@ -1,16 +1,20 @@
 package it.polimi.dima.giftlist.wishlistlist;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import it.polimi.dima.giftlist.DummyInterface;
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.model.Person;
 import it.polimi.dima.giftlist.model.Wishlist;
 import it.polimi.dima.giftlist.model.WishlistAddedEvent;
 import it.polimi.dima.giftlist.model.WishlistListProvider;
 import it.polimi.dima.giftlist.model.WishlistRemovedEvent;
+import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by Alessandro on 08/01/16.

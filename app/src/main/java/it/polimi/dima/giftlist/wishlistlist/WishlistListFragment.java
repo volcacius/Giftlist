@@ -123,4 +123,24 @@ public class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLa
             });
         }
     }
+
+    @Override
+    public void addWishlist(int wishlistId) {
+
+    }
+
+    @Override
+    public void removeWishlist(int wishlistId) {
+
+    }
+
+    @Override
+    public void showAddingFailed(Wishlist wishlist) {
+
+    }
+
+    @Override
+    public void showRemovingFailed(Wishlist wishlist) {
+
+    }
 }
