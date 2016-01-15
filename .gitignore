@@ -1,0 +1,5 @@
+.idea
+.gradle
+Giftlist.iml
+app/fabric.properties
+local.properties
