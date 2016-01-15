@@ -19,11 +19,13 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
 
     protected EventBus eventBus;
     protected WishlistListProvider wishlistListProvider;
+    protected DummyInterface mDummyAPI;
 
     @Inject
-    public WishlistListPresenter(WishlistListProvider wishlistListProvider, EventBus eventBus) {
+    public WishlistListPresenter(WishlistListProvider wishlistListProvider, EventBus eventBus, DummyInterface dummyAPI) {
         this.eventBus = eventBus;
         this.wishlistListProvider = wishlistListProvider;
+        this.mDummyAPI = dummyAPI;
     }
 
     @Override
@@ -40,6 +42,19 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
 
     public void load(boolean pullToRefresh, Person person) {
         subscribe(wishlistListProvider.getWishlistsOfPerson(person.getName()), pullToRefresh);
+    }
+
+    public void loadWishlistList(boolean pullToRefresh) {
+
+        Observable<List<Wishlist>> observable =
+                Observable.from(mDummyAPI.getDummyList()).flatMap(new Func1<List<Wishlist>, Observable<List<Wishlist>>>() {
+                    @Override public Observable<List<Wishlist>> call(List<Wishlist> repos) {
+                        Collections.shuffle(repos);
+                        return Observable.just(repos);
+                    }
+                });
+
+        subscribe(observable, pullToRefresh);
     }
 
     public void onEventMainThread(WishlistAddedEvent event) {

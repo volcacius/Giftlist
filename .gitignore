@@ -1,6 +1,9 @@
 /.idea
 /.idea/libraries
-.gradle
-Giftlist.iml
-app/fabric.properties
-local.properties
+/app/fabric.properties
+/local.properties
+/gradle.properties
+/Giftlist.iml
+/.gradle
+
+
