@@ -1,12 +1,10 @@
-/.idea
-/.idea/libraries
-/app/fabric.properties
-/local.properties
-/gradle.properties
-/Giftlist.iml
-/.gradle
-/build
-/build.gradle
-/crashlytics_release_note.txt
+.idea
+*.iws
+app/fabric.properties
+local.properties
+Giftlist.iml
+.gradle
+build
+crashlytics_release_note.txt
 
 
