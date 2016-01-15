@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+/app/fabric.properties
+/local.properties
+/gradle.properties
+/Giftlist.iml
+/.gradle
+/.idea
