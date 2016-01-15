@@ -1,4 +1,5 @@
-.idea
+/.idea
+/.idea/libraries
 .gradle
 Giftlist.iml
 app/fabric.properties
