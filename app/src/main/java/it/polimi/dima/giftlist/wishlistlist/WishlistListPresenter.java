@@ -26,7 +26,7 @@ public class WishlistListPresenter extends MvpLceRxPresenter<WishlistListView, L
         this.mDummyAPI = dummyAPI;
     }
 
-    public void loadRepos(boolean pullToRefresh) {
+    public void loadWishlistList(boolean pullToRefresh) {
 
         Observable<List<Wishlist>> observable =
                 Observable.from(mDummyAPI.getDummyList()).flatMap(new Func1<List<Wishlist>, Observable<List<Wishlist>>>() {

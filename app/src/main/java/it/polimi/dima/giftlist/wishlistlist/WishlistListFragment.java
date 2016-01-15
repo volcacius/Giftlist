@@ -94,7 +94,7 @@ public class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLa
     }
 
     @Override public void loadData(boolean pullToRefresh) {
-        presenter.loadRepos(pullToRefresh);
+        presenter.loadWishlistList(pullToRefresh);
     }
 
     @Override public void onRefresh() {
