@@ -25,10 +25,14 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     protected WishlistListProvider wishlistListProvider;
     protected DummyInterface mDummyAPI;
 
-    @Inject
+    //@Inject
     public WishlistListPresenter(WishlistListProvider wishlistListProvider, EventBus eventBus, DummyInterface dummyAPI) {
         this.eventBus = eventBus;
         this.wishlistListProvider = wishlistListProvider;
+        this.mDummyAPI = dummyAPI;
+    }
+
+    @Inject public WishlistListPresenter(DummyInterface dummyAPI) {
         this.mDummyAPI = dummyAPI;
     }
 
