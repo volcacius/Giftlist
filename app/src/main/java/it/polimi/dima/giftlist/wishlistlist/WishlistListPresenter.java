@@ -9,7 +9,7 @@ import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.model.Person;
 import it.polimi.dima.giftlist.model.Wishlist;
 import it.polimi.dima.giftlist.model.WishlistAddedEvent;
-import it.polimi.dima.giftlist.model.WishlistsProvider;
+import it.polimi.dima.giftlist.model.WishlistListProvider;
 import it.polimi.dima.giftlist.model.WishlistRemovedEvent;
 
 /**
@@ -18,12 +18,12 @@ import it.polimi.dima.giftlist.model.WishlistRemovedEvent;
 public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, List<Wishlist>> {
 
     protected EventBus eventBus;
-    protected WishlistsProvider wishlistsProvider;
+    protected WishlistListProvider wishlistListProvider;
 
     @Inject
-    public WishlistListPresenter(WishlistsProvider wishlistsProvider, EventBus eventBus) {
+    public WishlistListPresenter(WishlistListProvider wishlistListProvider, EventBus eventBus) {
         this.eventBus = eventBus;
-        this.wishlistsProvider = wishlistsProvider;
+        this.wishlistListProvider = wishlistListProvider;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     }
 
     public void load(boolean pullToRefresh, Person person) {
-        subscribe(wishlistsProvider.getWishlistsOfPerson(person.getName()), pullToRefresh);
+        subscribe(wishlistListProvider.getWishlistsOfPerson(person.getName()), pullToRefresh);
     }
 
     public void onEventMainThread(WishlistAddedEvent event) {
