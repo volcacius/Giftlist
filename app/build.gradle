@@ -93,7 +93,7 @@ play {
 }
 
 repositories {
-    maven {url "https://clojars.org/repo/"}
+    maven { url "https://clojars.org/repo/" }
 }
 
 
@@ -129,8 +129,7 @@ dependencies {
     }
 
     //Mosby dependencies
-    compile 'com.hannesdorfmann.mosby:mvp:2.0.0'
-    compile 'com.hannesdorfmann.mosby:viewstate:2.0.0'
+    
 
     compile "com.google.dagger:dagger:$DAGGER_VERSION"
     provided "org.glassfish:javax.annotation:10.0-b28" //Required by Dagger2
@@ -138,8 +137,6 @@ dependencies {
     compile "frankiesardo:icepick:$ICEPICK_VERSION"
     provided "frankiesardo:icepick-processor:$ICEPICK_VERSION"
 
-    compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
-    compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
     apt 'com.hannesdorfmann.annotatedadapter:processor:1.1.1'
 
     // Instrumentation test dependencies
@@ -170,6 +167,11 @@ dependencies {
     apt daggerCompiler
     testApt daggerCompiler
     androidTestApt daggerCompiler
+    
+    compile 'com.hannesdorfmann.mosby:mvp:2.0.0'
+    compile 'com.hannesdorfmann.mosby:viewstate:2.0.0'
+    compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
+    compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.sqlbrite:sqlbrite:0.4.1'
     compile 'io.reactivex:rxandroid:1.1.0'
@@ -177,7 +179,6 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
-
 }
 
 // Log out test results to console
