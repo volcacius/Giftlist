@@ -31,6 +31,9 @@ android {
         versionCode 1000
         // Major -> Millions, Minor -> Thousands, Bugfix -> Hundreds. E.g 1.3.72 == 1,003,072
         versionName '0.1.0'
+
+        buildConfigField "String", "ETSY_API_KEY", "\"${etsy_api_key}\""
+        buildConfigField "String", "ETSY_SHARED_SECRET", "\"${etsy_shared_secret}\""
     }
 
     signingConfigs {
@@ -108,6 +111,7 @@ dependencies {
     final RUNNER_VERSION = '0.4'
     final ICEPICK_VERSION = '3.1.0'
     final EVENTBUS_VERSION = '2.4.0'
+    final OKHTTP_VERSION = '2.7.0'
 
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     def jUnit = "junit:junit:4.12"
@@ -123,13 +127,15 @@ dependencies {
     compile "com.squareup.retrofit:retrofit:$RETROFIT_VERSION"
     compile "com.squareup.retrofit:converter-gson:$RETROFIT_VERSION"
     compile "com.squareup.retrofit:adapter-rxjava:$RETROFIT_VERSION"
+    compile "com.squareup.okhttp:okhttp:$OKHTTP_VERSION"
+    compile "com.google.code.gson:gson:2.4"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
     }
 
     //Mosby dependencies
-    
+
 
     compile "com.google.dagger:dagger:$DAGGER_VERSION"
     provided "org.glassfish:javax.annotation:10.0-b28" //Required by Dagger2
@@ -167,7 +173,7 @@ dependencies {
     apt daggerCompiler
     testApt daggerCompiler
     androidTestApt daggerCompiler
-    
+
     compile 'com.hannesdorfmann.mosby:mvp:2.0.0'
     compile 'com.hannesdorfmann.mosby:viewstate:2.0.0'
     compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
@@ -185,5 +191,3 @@ dependencies {
 tasks.matching { it instanceof Test }.all {
     testLogging.events = ["failed", "passed", "skipped"]
 }
-
-

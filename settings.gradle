@@ -1,1 +1,1 @@
-include ':app', ':amazon-mobile-associates-1.0.73.0'
+include ':app'
