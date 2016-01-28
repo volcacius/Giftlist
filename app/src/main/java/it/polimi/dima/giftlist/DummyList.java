@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polimi.dima.giftlist.model.EtsyProduct;
 import it.polimi.dima.giftlist.model.Wishlist;
 
 /**
@@ -25,8 +26,8 @@ public class DummyList implements DummyInterface {
         mWishlists.add(l1);
         mWishlists.add(l2);
         mWishlists.add(l3);
-    }
 
+    }
 
     @Override
     public List<List<Wishlist>> getDummyList() {

@@ -3,14 +3,12 @@ package it.polimi.dima.giftlist.wishlistlist;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import dagger.Provides;
-import it.polimi.dima.giftlist.FirstModule;
 
 /**
  * Created by Elena on 12/01/2016.
  */
 @Singleton @Component(
-        modules = FirstModule.class)
+        modules = WishlistListModule.class)
 public interface WishlistListComponent {
 
     public void inject(WishlistListFragment fragment); //allows injecting non-private field members to provided object as argument

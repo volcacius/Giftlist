@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist;
+package it.polimi.dima.giftlist.wishlistlist;
 
 import android.content.Context;
 
@@ -6,19 +6,20 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.wishlistlist.ErrorMessageDeterminer;
-import it.polimi.dima.giftlist.wishlistlist.WishlistListAdapter;
+import it.polimi.dima.giftlist.DummyInterface;
+import it.polimi.dima.giftlist.DummyList;
+import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
  * Created by Elena on 12/01/2016.
  */
 @Module(
 )
-public class FirstModule {
+public class WishlistListModule {
 
     private Context context;
 
-    public FirstModule(Context context) {
+    public WishlistListModule(Context context) {
         this.context = context;
     }
 
@@ -26,7 +27,9 @@ public class FirstModule {
         return context;
     }
 
-    @Provides @Singleton public DummyInterface providesDummyInterface() {
+    @Provides
+    @Singleton
+    public DummyInterface providesDummyInterface() {
         return new DummyList();
     }
 

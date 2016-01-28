@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.wishlistlist;
+package it.polimi.dima.giftlist.util;
 
 /**
  * Created by Elena on 13/01/2016.

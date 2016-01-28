@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
@@ -20,10 +19,9 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import it.polimi.dima.giftlist.FirstModule;
 import it.polimi.dima.giftlist.R;
-import it.polimi.dima.giftlist.base.BaseViewStateLceFragment;
 import it.polimi.dima.giftlist.model.Wishlist;
+import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -31,14 +29,18 @@ import it.polimi.dima.giftlist.model.Wishlist;
 public class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLayout, List<Wishlist>, WishlistListView, WishlistListPresenter>
         implements WishlistListView, SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(R.id.fragment_wishlistlist_recyclerView) RecyclerView mRecyclerView;
-    @Inject ErrorMessageDeterminer errorMessageDeterminer;
+    @Bind(R.id.fragment_wishlistlist_recyclerView)
+    RecyclerView mRecyclerView;
+
+    @Inject
+    ErrorMessageDeterminer errorMessageDeterminer;
+
     WishlistListAdapter mWishlistListAdapter;
     WishlistListComponent mWishlistListComponent;
 
     protected void injectDependencies() {
         mWishlistListComponent =
-                DaggerWishlistListComponent.builder().firstModule(new FirstModule(getActivity())).build();
+                DaggerWishlistListComponent.builder().wishlistListModule(new WishlistListModule(getActivity())).build();
         mWishlistListComponent.inject(this);
     }
 

@@ -3,7 +3,6 @@ package it.polimi.dima.giftlist.wishlistlist;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import it.polimi.dima.giftlist.FirstModule;
 import it.polimi.dima.giftlist.R;
 
 /**
