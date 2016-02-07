@@ -61,7 +61,7 @@ public class EtsyRestDataSource implements Repository {
 
     @Override
     public Observable<List<EtsyProduct>> getItems(int offset) {
-        return mEtsyApi.getItems();
+        return mEtsyApi.getItems(offset);
                 //.onErrorResumeNext(Observable.error( new UnknownErrorException());
 
     }

@@ -15,12 +15,11 @@ import it.polimi.dima.giftlist.product.Rest.GetProductListUseCase;
 public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyProduct>> {
 
     private final GetProductListUseCase mProductListUseCase;
-    private List<EtsyProduct> mEtsyProducts;
+
 
     @Inject
     public ProductPresenter(GetProductListUseCase productListUseCase) {
         mProductListUseCase = productListUseCase;
-        mEtsyProducts = new ArrayList<>();
     }
 
 
@@ -37,7 +36,6 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
 
 
     public void loadRetrofit(boolean pullToRefresh) {
-
         subscribe(mProductListUseCase.execute(), pullToRefresh);
 
     }

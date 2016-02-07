@@ -22,6 +22,10 @@ public class EtsyProduct {
         this.description = description;
     }
 
+    public String getListing_idAsString() {
+        return "" + listing_id;
+    }
+
     public int getListing_id() {
         return listing_id;
     }

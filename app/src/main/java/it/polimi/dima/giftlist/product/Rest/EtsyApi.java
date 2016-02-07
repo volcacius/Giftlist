@@ -4,6 +4,7 @@ import java.util.List;
 
 import it.polimi.dima.giftlist.model.EtsyProduct;
 import retrofit.http.GET;
+import retrofit.http.Query;
 import rx.Observable;
 
 /**
@@ -14,6 +15,6 @@ public interface EtsyApi {
     String PARAM_API_KEY   = "api_key";
 
     @GET("v2/listings/active")
-    Observable<List<EtsyProduct>> getItems(); //(@Query("offset") int offset);
+    Observable<List<EtsyProduct>> getItems(@Query("offset") int offset);
 
 }

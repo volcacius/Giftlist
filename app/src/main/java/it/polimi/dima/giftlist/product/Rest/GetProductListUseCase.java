@@ -22,11 +22,13 @@ public class GetProductListUseCase implements UseCase<List<EtsyProduct>> {
     @Inject
     public GetProductListUseCase(Repository repository) {
         mRepository = repository;
+        currentOffset = 0;
     }
 
     @Override
     public Observable<List<EtsyProduct>> execute() {
-        return mRepository.getItems(currentOffset)
+        currentOffset = currentOffset + 1;
+        return mRepository.getItems(currentOffset*24)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
