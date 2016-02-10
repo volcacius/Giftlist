@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.model;
+package it.polimi.dima.giftlist.model.exceptions.rest;
 
 /**
  * Created by Elena on 27/01/2016.
