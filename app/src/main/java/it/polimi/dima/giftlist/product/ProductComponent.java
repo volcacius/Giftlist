@@ -12,11 +12,14 @@ import dagger.Component;
 @Component(modules = ProductModule.class)
 public interface ProductComponent {
 
-    void inject(ProductFragmentOld fragment); //allows injecting non-private field members to provided object as argument
-
-    void inject(ProductFragment fragment);
+    void inject(ProductFragment fragment); //allows injecting non-private field members to provided object as argument
 
     ProductPresenter providePresenter(); //returned object is an instance created by Dagger2 and all dependencies are provided by constructor injection.
 
+
+    //Useless at the moment******************
     ProductAdapter provideAdapter();
+
+    void inject(ProductFragmentOld fragment);
+    //***************************************
 }

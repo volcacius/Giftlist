@@ -99,7 +99,7 @@ public class ProductFragmentOld extends MvpLceViewStateFragment<SwipeRefreshLayo
     @Override
     public void loadData(boolean pullToRefresh) {
        // presenter.loadItemList(pullToRefresh);
-        presenter.loadRetrofit(pullToRefresh);
+        presenter.loadRetrofit("",pullToRefresh);
     }
 
     @Override public void showError(Throwable e, boolean pullToRefresh) {

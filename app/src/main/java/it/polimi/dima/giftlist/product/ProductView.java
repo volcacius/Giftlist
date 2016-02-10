@@ -10,4 +10,5 @@ import it.polimi.dima.giftlist.model.EtsyProduct;
  * Created by Elena on 27/01/2016.
  */
 public interface ProductView extends MvpLceView<List<EtsyProduct>> {
+    //useful for methods to change it dynamically from other activities
 }

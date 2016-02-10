@@ -2,6 +2,8 @@ package it.polimi.dima.giftlist.product;
 
 import android.content.Context;
 
+import com.squareup.picasso.Picasso;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -28,6 +30,12 @@ public class ProductModule {
     public Context provideContext() {
         return context;
     }
+
+    @Provides @Singleton
+    Picasso providesPicasso() {
+        return Picasso.with(context);
+    }
+
 
     @Provides
     @Singleton

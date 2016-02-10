@@ -8,6 +8,8 @@ import javax.inject.Inject;
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.model.EtsyProduct;
 import it.polimi.dima.giftlist.product.Rest.GetProductListUseCase;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Elena on 27/01/2016.
@@ -35,8 +37,9 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
     }
 
 
-    public void loadRetrofit(boolean pullToRefresh) {
-        subscribe(mProductListUseCase.execute(), pullToRefresh);
+    public void loadRetrofit(String category, boolean pullToRefresh) {
+        subscribe(mProductListUseCase.execute(category), pullToRefresh);
+
 
     }
 

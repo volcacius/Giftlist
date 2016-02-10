@@ -7,11 +7,22 @@ public class EtsyProduct {
 
     int listing_id;
     int category_id;
+    float price;
     String title;
     String description;
+    String imageUrl;
+
 
     public EtsyProduct(String item) {
         title = item;
+    }
+
+    public EtsyProduct(String title, String description, int listing_id, float price, String imageUrl) {
+        this.title = title;
+        this.description = description;
+        this.listing_id = listing_id;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 
     public String getDescription() {
@@ -24,6 +35,22 @@ public class EtsyProduct {
 
     public String getListing_idAsString() {
         return "" + listing_id;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
     }
 
     public int getListing_id() {

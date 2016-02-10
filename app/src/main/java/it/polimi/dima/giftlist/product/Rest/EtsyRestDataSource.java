@@ -13,6 +13,10 @@ import it.polimi.dima.giftlist.BuildConfig;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
 import it.polimi.dima.giftlist.base.Repository;
 import it.polimi.dima.giftlist.model.EtsyProduct;
+import it.polimi.dima.giftlist.model.exceptions.rest.NetworkErrorException;
+import it.polimi.dima.giftlist.model.exceptions.rest.ServerErrorException;
+import it.polimi.dima.giftlist.model.exceptions.rest.UnknownErrorException;
+import it.polimi.dima.giftlist.util.HttpErrors;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -43,7 +47,7 @@ public class EtsyRestDataSource implements Repository {
 
         Gson customGsonInstance = new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<List<EtsyProduct>>() {}.getType(),
-                        new EtsyResultsDeserializer<EtsyProduct>())
+                        new EtsyResultsDeserializer())
                 .create();
 
         Retrofit etsyApiAdapter = new Retrofit.Builder()
@@ -60,9 +64,20 @@ public class EtsyRestDataSource implements Repository {
 
 
     @Override
-    public Observable<List<EtsyProduct>> getItems(int offset) {
-        return mEtsyApi.getItems(offset);
-                //.onErrorResumeNext(Observable.error( new UnknownErrorException());
+    public Observable<List<EtsyProduct>> getItems(String category, int offset) {
+        return mEtsyApi.getItems(category, offset);/*
+                .onErrorResumeNext(throwable -> {
+                    String errorMessage = throwable.getMessage();
+                    switch (errorMessage){
+                        case HttpErrors.SERVER_ERROR: return Observable.error(new ServerErrorException());
+                     //   case HttpErrors.TIMEOUT: return Observable.error(new NetworkErrorException());
+                        default: return Observable.error(new UnknownErrorException());
+                    }
+                });*/
 
+                /*.flatMap(etsyProductList -> Observable.from(etsyProductList))
+                .doOnNext(etsyProduct -> etsyProduct.setImageUrl(null))
+                .toList();*/
     }
+
 }
