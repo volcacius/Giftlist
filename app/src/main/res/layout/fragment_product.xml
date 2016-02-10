@@ -35,6 +35,25 @@
                 android:gravity="top|center"
                 />
 
+            <TextView
+                android:id="@+id/product_image"
+                android:text="url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top|center"
+                />
+
+            <ImageView
+                android:id="@+id/product_thumb"
+                android:layout_width="240dp"
+                android:layout_height="330dp"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                />
+
+
+
             <ImageButton
                 android:id="@+id/next_button"
                 android:layout_width="wrap_content"
