@@ -9,5 +9,5 @@ import rx.Observable;
  * Created by Elena on 27/01/2016.
  */
 public interface Repository {
-    Observable<List<EtsyProduct>> getItems (String category, int offset);
+    Observable<List<EtsyProduct>> getItems (String category, String keywords, int offset);
 }

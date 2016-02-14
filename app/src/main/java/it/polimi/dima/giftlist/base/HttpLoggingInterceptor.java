@@ -5,20 +5,23 @@ package it.polimi.dima.giftlist.base;
  */
 
 import android.util.Log;
-import com.squareup.okhttp.Connection;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Protocol;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
+import okhttp3.Connection;
+import okhttp3.Headers;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.Interceptor;
+import okhttp3.Response;
 import okio.Buffer;
 import okio.BufferedSource;
 
@@ -30,7 +33,7 @@ import okio.BufferedSource;
  * The format of the logs created by this class should not be considered stable and may change
  * slightly between releases. If you need a stable logging format, use your own interceptor.
  */
-public final class HttpLoggingInterceptor implements Interceptor {
+public final class HttpLoggingInterceptor implements Interceptor{
     private static final Charset UTF8 = Charset.forName("UTF-8");
     private static final String TAG = "HttpLoggingInterceptor";
 
@@ -133,9 +136,9 @@ public final class HttpLoggingInterceptor implements Interceptor {
         boolean hasRequestBody = requestBody != null;
 
         Connection connection = chain.connection();
-        Protocol protocol = connection != null ? connection.getProtocol() : Protocol.HTTP_1_1;
+        Protocol protocol = connection != null ? connection.protocol() : Protocol.HTTP_1_1;
         String requestStartMessage =
-                "--> " + request.method() + ' ' + requestPath(request.httpUrl()) + ' ' + protocol(protocol);
+                "--> " + request.method() + ' ' + requestPath(request.url()) + ' ' + protocol(protocol);
         if (!logHeaders && hasRequestBody) {
             requestStartMessage += " (" + requestBody.contentLength() + "-byte body)";
         }
