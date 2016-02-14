@@ -1,9 +1,9 @@
 package it.polimi.dima.giftlist.product.Rest;
 
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.Interceptor;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 
@@ -23,9 +23,9 @@ public class EtsySigningInterceptor implements Interceptor {
 
         Request oldRequest = chain.request();
 
-        HttpUrl.Builder authorizedUrlBuilder = oldRequest.httpUrl().newBuilder()
-                .scheme(oldRequest.httpUrl().scheme())
-                .host(oldRequest.httpUrl().host());
+        HttpUrl.Builder authorizedUrlBuilder = oldRequest.url().newBuilder()
+                .scheme(oldRequest.url().scheme())
+                .host(oldRequest.url().host());
 
         authorizedUrlBuilder.addQueryParameter(EtsyApi.PARAM_API_KEY, mApiKey);
 

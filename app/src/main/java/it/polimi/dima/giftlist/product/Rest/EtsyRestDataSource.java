@@ -3,7 +3,7 @@ package it.polimi.dima.giftlist.product.Rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.okhttp.OkHttpClient;
+import okhttp3.OkHttpClient;
 
 import java.util.List;
 
@@ -13,13 +13,10 @@ import it.polimi.dima.giftlist.BuildConfig;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
 import it.polimi.dima.giftlist.base.Repository;
 import it.polimi.dima.giftlist.model.EtsyProduct;
-import it.polimi.dima.giftlist.model.exceptions.rest.NetworkErrorException;
-import it.polimi.dima.giftlist.model.exceptions.rest.ServerErrorException;
-import it.polimi.dima.giftlist.model.exceptions.rest.UnknownErrorException;
-import it.polimi.dima.giftlist.util.HttpErrors;
-import retrofit.GsonConverterFactory;
-import retrofit.Retrofit;
-import retrofit.RxJavaCallAdapterFactory;
+
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 /**
@@ -32,8 +29,6 @@ public class EtsyRestDataSource implements Repository {
 
     @Inject
     public EtsyRestDataSource() {
-        //This is for adding interceptors
-        OkHttpClient client = new OkHttpClient();
 
         //logging interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -42,8 +37,11 @@ public class EtsyRestDataSource implements Repository {
         //authentication interceptor: appends the api_key
         EtsySigningInterceptor signingIterceptor = new EtsySigningInterceptor(BuildConfig.ETSY_API_KEY);
 
-        client.interceptors().add(signingIterceptor);
-        client.interceptors().add(logging);
+        //This is for adding interceptors
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(signingIterceptor)
+                .addInterceptor(logging)
+                .build();
 
         Gson customGsonInstance = new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<List<EtsyProduct>>() {}.getType(),
@@ -64,8 +62,10 @@ public class EtsyRestDataSource implements Repository {
 
 
     @Override
-    public Observable<List<EtsyProduct>> getItems(String category, int offset) {
-        return mEtsyApi.getItems(category, offset);/*
+    public Observable<List<EtsyProduct>> getItems(String category, String keywords, int offset) {
+
+        return mEtsyApi.getItems(category, keywords, offset);
+        /*
                 .onErrorResumeNext(throwable -> {
                     String errorMessage = throwable.getMessage();
                     switch (errorMessage){

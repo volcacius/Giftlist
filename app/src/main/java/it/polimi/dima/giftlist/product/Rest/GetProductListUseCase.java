@@ -34,9 +34,9 @@ public class GetProductListUseCase implements UseCase<List<EtsyProduct>> {
         return null;
     }
 
-    public Observable<List<EtsyProduct>> execute(String category) {
+    public Observable<List<EtsyProduct>> execute(String category, String keywords) {
         currentOffset = currentOffset + 1;
-        return mRepository.getItems(category, currentOffset*25)
+        return mRepository.getItems(category, keywords, currentOffset*25)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
     }
