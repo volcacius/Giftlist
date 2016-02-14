@@ -43,31 +43,34 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     TextView mTitleTextView;
     @Bind(R.id.product_id)
     TextView mIdTextView;
-    @Bind(R.id.product_image)
-    TextView mImageTextView;
     @Bind(R.id.next_button)
     ImageButton mNextProduct;
     @Bind(R.id.product_thumb)
     ImageView mProductThumb;
+    @Bind(R.id.product_price)
+    TextView mPriceTextView;
 
     @BindColor(R.color.primary)           int mColorPrimary;
     @BindColor(R.color.gray)           int mColorGray;
 
     List<EtsyProduct> mEtsyProducts;
     int mCurrentIndex;
+    EtsyProduct mCurrentProduct;
+
     String categorySelected;
+    String keywords;
 
     private void setParameters() {
-        mTitleTextView.setText(mEtsyProducts.get(mCurrentIndex).getTitle());
-        mIdTextView.setText("" + mEtsyProducts.get(mCurrentIndex).getListing_id());
-        mImageTextView.setText(mEtsyProducts.get(mCurrentIndex).getImageUrl());
-        if (mEtsyProducts.get(mCurrentIndex).getImageUrl() == null) {
+        mTitleTextView.setText(mCurrentProduct.getTitle());
+        mIdTextView.setText("" + mCurrentProduct.getListing_id());
+        mPriceTextView.setText("" + mCurrentProduct.getPrice()+" "+mCurrentProduct.getCurrency());
+        if (mCurrentProduct.getImageUrl() == null) {
             ColorDrawable colorDrawable = new ColorDrawable(mColorPrimary);
             mProductThumb.setDrawingCacheEnabled(true);
             mProductThumb.setImageDrawable(colorDrawable);
 
         } else {
-            picasso.load(mEtsyProducts.get(mCurrentIndex).getImageUrl())
+            picasso.load(mCurrentProduct.getImageUrl())
                     .resize(240,330)
                     .centerCrop()
                     .into(mProductThumb);
@@ -81,9 +84,11 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     @OnClick(R.id.next_button)
     public void goNext(){
         mCurrentIndex = mCurrentIndex + 1;
+        mCurrentProduct = new EtsyProduct(mEtsyProducts.get(mCurrentIndex));
         if (mCurrentIndex == 24) {
             loadData(true);
         }
+
         setParameters();
     }
 
@@ -127,6 +132,8 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
 
         Bundle args = getArguments();
         categorySelected = args.getString("category");
+        keywords = args.getString("keywords");
+
         injectDependencies();
         //ButterKnife is done in onViewCreate, and also setLayoutManager
         return inflater.inflate(R.layout.fragment_product, container, false); //xml file name
@@ -152,13 +159,16 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     public void setData(List<EtsyProduct> data) {
         this.mEtsyProducts = data;
         mCurrentIndex = 0;
+        if(mCurrentProduct == null) {
+            mCurrentProduct = mEtsyProducts.get(mCurrentIndex);
+        }
         setParameters();
     }
 
     @Override
     public void loadData(boolean pullToRefresh) {
        // presenter.loadItemList(pullToRefresh);
-        presenter.loadRetrofit(categorySelected, pullToRefresh);
+        presenter.loadRetrofit(categorySelected, keywords, pullToRefresh);
 
     }
 

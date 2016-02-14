@@ -38,9 +38,11 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
 
 
     public void loadRetrofit(String category, boolean pullToRefresh) {
-        subscribe(mProductListUseCase.execute(category), pullToRefresh);
+        subscribe(mProductListUseCase.execute(category,""), pullToRefresh);
+    }
 
-
+    public void loadRetrofit(String category, String keywords, boolean pullToRefresh) {
+        subscribe(mProductListUseCase.execute(category, keywords), pullToRefresh);
     }
 
 
