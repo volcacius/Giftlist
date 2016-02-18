@@ -23,7 +23,7 @@
         <activity
             android:name="it.polimi.dima.giftlist.product.ProductActivity"
             android:parentActivityName="it.polimi.dima.giftlist.wishlistsettings.WishlistSettingsActivity"
-            android:screenOrientation="portrait"
+
             />
 
         <service android:name="it.polimi.dima.giftlist.data.SyncService"/>

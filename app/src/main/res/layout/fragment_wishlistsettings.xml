@@ -8,6 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
+        android:entries="@array/etsy_categories"
+        android:prompt="@string/etsy_prompt"
         android:spinnerMode="dropdown" />
 
     <Button
@@ -16,4 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="Start looking for products"/>
+
+    <EditText
+        android:id="@+id/keywords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/keyword_hint"/>
 </LinearLayout>
