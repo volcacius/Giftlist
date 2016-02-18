@@ -3,8 +3,16 @@ package it.polimi.dima.giftlist.product.Rest;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+
+import it.polimi.dima.giftlist.model.exceptions.rest.ServerErrorException;
+import it.polimi.dima.giftlist.model.exceptions.rest.UnknownErrorException;
+import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
+import it.polimi.dima.giftlist.product.converter.CurrentRates;
+import it.polimi.dima.giftlist.util.HttpErrors;
 import okhttp3.OkHttpClient;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,8 +35,15 @@ public class EtsyRestDataSource implements Repository {
     //private final GithubService mGithubService;
     public final static int MAX_ATTEMPS = 3;
 
+
+    CurrencyDownloader mCurrencyDownloader;
+
+    CurrentRates.RateList mRateList;
+
     @Inject
     public EtsyRestDataSource() {
+
+        mCurrencyDownloader = new CurrencyDownloader();
 
         //logging interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
@@ -64,7 +79,14 @@ public class EtsyRestDataSource implements Repository {
     @Override
     public Observable<List<EtsyProduct>> getItems(String category, String keywords, int offset) {
 
-        return mEtsyApi.getItems(category, keywords, offset);
+
+
+        return mEtsyApi.getItems(category, keywords, offset)
+                .flatMap(etsyProductList -> Observable.from(etsyProductList))
+                .doOnNext(etsyProduct -> etsyProduct.setPrice(convert(etsyProduct.getCurrency(), etsyProduct.getPrice())))
+                .doOnNext(etsyProduct -> etsyProduct.setCurrency("EUR"))
+                .toList();
+
         /*
                 .onErrorResumeNext(throwable -> {
                     String errorMessage = throwable.getMessage();
@@ -75,9 +97,22 @@ public class EtsyRestDataSource implements Repository {
                     }
                 });*/
 
-                /*.flatMap(etsyProductList -> Observable.from(etsyProductList))
-                .doOnNext(etsyProduct -> etsyProduct.setImageUrl(null))
-                .toList();*/
+
+    }
+
+    private float convert(String currency, Float price) {
+        if(mRateList == null)
+            mRateList = mCurrencyDownloader.getRateList();
+
+        return round(price / mRateList.getConversionRate(currency), 2);
+    }
+
+    public float round(float value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.floatValue();
     }
 
 }

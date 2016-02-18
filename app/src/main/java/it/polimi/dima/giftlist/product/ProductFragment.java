@@ -18,6 +18,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -26,8 +27,10 @@ import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import icepick.Icepick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.model.EtsyProduct;
+import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
@@ -98,8 +101,6 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     @Inject
     Picasso picasso;
 
-
-  //  ProductAdapter mProductAdapter;
     ProductComponent mProductComponent;
 
     protected void injectDependencies() {
@@ -117,7 +118,13 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //Icepick.restoreInstanceState(this, savedInstanceState);
         setRetainInstance(true);
+    }
+
+    @Override public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+       // Icepick.saveInstanceState(this, outState);
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -157,8 +164,16 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
 
     @Override
     public void setData(List<EtsyProduct> data) {
-        this.mEtsyProducts = data;
-        mCurrentIndex = 0;
+        System.out.println("called setData");
+        if (data != null) {
+            this.mEtsyProducts = new ArrayList<>();
+            for (EtsyProduct d : data) {
+                mEtsyProducts.add(new EtsyProduct(d));
+            }
+            mCurrentIndex = 0;
+
+        } else System.out.println("null data");
+
         if(mCurrentProduct == null) {
             mCurrentProduct = mEtsyProducts.get(mCurrentIndex);
         }

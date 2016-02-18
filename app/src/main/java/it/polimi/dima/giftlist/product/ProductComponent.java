@@ -16,10 +16,4 @@ public interface ProductComponent {
 
     ProductPresenter providePresenter(); //returned object is an instance created by Dagger2 and all dependencies are provided by constructor injection.
 
-
-    //Useless at the moment******************
-    ProductAdapter provideAdapter();
-
-    void inject(ProductFragmentOld fragment);
-    //***************************************
 }

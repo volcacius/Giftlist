@@ -12,7 +12,7 @@ import it.polimi.dima.giftlist.DummyInterface;
 import it.polimi.dima.giftlist.DummyList;
 import it.polimi.dima.giftlist.base.Repository;
 import it.polimi.dima.giftlist.product.Rest.EtsyRestDataSource;
-import it.polimi.dima.giftlist.product.converter.CurrencyRates;
+import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
@@ -46,17 +46,17 @@ public class ProductModule {
 
     @Provides
     @Singleton
-    public Repository providesRepository() {
-        return new EtsyRestDataSource();
+    public CurrencyDownloader providesCurrencyDownloader() {
+        return new CurrencyDownloader();
     }
+
+
 
     @Provides
     @Singleton
-    public CurrencyRates providesCurrencyRates() {
-        return new CurrencyRates();
+    public Repository providesRepository() {
+        return new EtsyRestDataSource();
     }
-
-
 
     @Provides
     @Singleton

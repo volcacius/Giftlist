@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.model.EtsyProduct;
 import it.polimi.dima.giftlist.product.Rest.GetProductListUseCase;
+import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -23,6 +24,7 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
     public ProductPresenter(GetProductListUseCase productListUseCase) {
         mProductListUseCase = productListUseCase;
     }
+
 
 
     @Override
