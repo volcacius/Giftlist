@@ -79,7 +79,10 @@ public class EtsyRestDataSource implements Repository {
     @Override
     public Observable<List<EtsyProduct>> getItems(String category, String keywords, int offset) {
 
-
+        if(mRateList == null) {
+            mRateList = mCurrencyDownloader.getRateList();
+            return mEtsyApi.getItems(category, keywords, offset);
+        }
 
         return mEtsyApi.getItems(category, keywords, offset)
                 .flatMap(etsyProductList -> Observable.from(etsyProductList))
@@ -101,9 +104,6 @@ public class EtsyRestDataSource implements Repository {
     }
 
     private float convert(String currency, Float price) {
-        if(mRateList == null)
-            mRateList = mCurrencyDownloader.getRateList();
-
         return round(price / mRateList.getConversionRate(currency), 2);
     }
 

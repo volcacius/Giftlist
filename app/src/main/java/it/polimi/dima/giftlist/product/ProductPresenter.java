@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.product;
 
+import com.hannesdorfmann.mosby.mvp.viewstate.MvpViewStateActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
     }
 
     public void loadRetrofit(String category, String keywords, boolean pullToRefresh) {
+        System.out.println("loadRetrofit");
         subscribe(mProductListUseCase.execute(category, keywords), pullToRefresh);
     }
 

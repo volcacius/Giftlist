@@ -7,14 +7,16 @@ public class ErrorMessageDeterminer {
 
     public String getErrorMessage(Throwable e, boolean pullToRefresh) {
         String message = e.getMessage();
+        message = message.split("\"")[0];
         switch (message) {
             case HttpErrors.TIMEOUT:
+                return "You may have connection issues";
+            case HttpErrors.UNRESOLVED_HOST:
                 return "You may have connection issues";
             case HttpErrors.SERVER_ERROR:
                 return "Sorry, there are problems on the server side";
             default:
-                System.out.print(message);
-                return "An unknown error has occurred";
+                return "An unknown error has occurred :(";
         }
     }
 }

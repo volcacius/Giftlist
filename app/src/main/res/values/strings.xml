@@ -9,4 +9,41 @@
 
     <string name="empty_ribots">There aren\'t any ribots</string>
     <string name="error_loading_ribots">There was a problem loading the ribots</string>
+
+    <string name="keyword_hint">Enter keywords separed by a comma</string>
+
+    <string name="etsy_prompt">Choose a category</string>
+    <string-array name="etsy_categories">
+        <item>accessories</item>
+        <item>art</item>
+        <item>bags_and_purses</item>
+        <item>bath_and_beauty</item>
+        <item>books_and_zines</item>
+        <item>candles</item>
+        <item>ceramics_and_pottery</item>
+        <item>children</item>
+        <item>clothing</item>
+        <item>crochet</item>
+        <item>dolls_and_miniatures</item>
+        <item>everything_else</item>
+        <item>furniture</item>
+        <item>geekery</item>
+        <item>glass</item>
+        <item>holidays</item>
+        <item>housewares</item>
+        <item>jewelry</item>
+        <item>knitting</item>
+        <item>music</item>
+        <item>needlecraft</item>
+        <item>paper_goods</item>
+        <item>patterns</item>
+        <item>pets</item>
+        <item>plants_and_edibles</item>
+        <item>quilts</item>
+        <item>supplies</item>
+        <item>toys</item>
+        <item>vintage</item>
+        <item>weddings</item>
+        <item>woodworking</item>
+    </string-array>
 </resources>

@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.product.Rest;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -28,19 +30,20 @@ public class EtsyResultsDeserializer implements JsonDeserializer {
         for(int currentProduct = 0; currentProduct < resultsArray.size(); currentProduct++) {
 
             JsonElement jsonProduct = resultsArray.get(currentProduct);
+            try{
+                //TODO Add try - catch Attempt to invoke virtual method 'java.lang.String com.google.gson.JsonElement.getAsString()' on a null object reference
+                String title = jsonProduct.getAsJsonObject().get("title").getAsString();
+                String description = jsonProduct.getAsJsonObject().get("description").getAsString();
+                String currency = jsonProduct.getAsJsonObject().get("currency_code").getAsString();
+                float price = jsonProduct.getAsJsonObject().get("price").isJsonNull() ? 0 : jsonProduct.getAsJsonObject().get("price").getAsFloat();
+                int listing_id = jsonProduct.getAsJsonObject().get("listing_id").getAsInt();
 
-            String title = jsonProduct.getAsJsonObject().get("title").getAsString();
-            String description = jsonProduct.getAsJsonObject().get("description").getAsString();
-            String currency = jsonProduct.getAsJsonObject().get("currency_code").getAsString();
-            float price = jsonProduct.getAsJsonObject().get("price").getAsFloat();
-            int listing_id = jsonProduct.getAsJsonObject().get("listing_id").getAsInt();
+                JsonElement images = jsonProduct.getAsJsonObject().get("Images");
+                JsonArray imagesArray = images.getAsJsonArray();
+                JsonElement jsonImage = imagesArray.get(0);
+                String url_170x135 = jsonImage.getAsJsonObject().get("url_570xN").getAsString();
 
-            JsonElement images = jsonProduct.getAsJsonObject().get("Images");
-            JsonArray imagesArray = images.getAsJsonArray();
-            JsonElement jsonImage = imagesArray.get(0);
-            String url_170x135 = jsonImage.getAsJsonObject().get("url_570xN").getAsString();
-
-            //TODO later, to get more images
+                //TODO later, to get more images
             /*
             for(int currentImage = 0; currentImage < imagesArray.size(); currentImage++) {
 
@@ -50,9 +53,11 @@ public class EtsyResultsDeserializer implements JsonDeserializer {
             }*/
 
 
-
-            EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currency, url_170x135);
-            etsyProductsList.add(p);
+                EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currency, url_170x135);
+                etsyProductsList.add(p);
+            } catch (NullPointerException e) {
+                System.out.println("null json object " + e.getMessage());
+            }
         }
 
 

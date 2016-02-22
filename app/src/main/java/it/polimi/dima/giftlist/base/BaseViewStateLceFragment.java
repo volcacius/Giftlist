@@ -29,6 +29,14 @@ public abstract class BaseViewStateLceFragment<CV extends View, M, V extends Mvp
 
     @LayoutRes protected abstract int getLayoutRes();
 
+    @Override public void onViewStateInstanceRestored(boolean instanceStateRetained) {
+        // Not needed in general. override it in subclass if you need this callback
+    }
+
+    @Override public void onNewViewStateInstance() {
+        loadData(false);
+    }
+
     @Nullable @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
