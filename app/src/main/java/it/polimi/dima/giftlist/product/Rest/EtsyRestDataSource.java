@@ -4,16 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import de.greenrobot.event.EventBus;
 import it.polimi.dima.giftlist.model.exceptions.rest.ServerErrorException;
 import it.polimi.dima.giftlist.model.exceptions.rest.UnknownErrorException;
 import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
 import it.polimi.dima.giftlist.product.converter.CurrentRates;
+import it.polimi.dima.giftlist.product.converter.RetrofitEvent;
 import it.polimi.dima.giftlist.util.HttpErrors;
 import okhttp3.OkHttpClient;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import javax.inject.Inject;
 
@@ -35,16 +38,18 @@ public class EtsyRestDataSource implements Repository {
     //private final GithubService mGithubService;
     public final static int MAX_ATTEMPS = 3;
 
-
     CurrencyDownloader mCurrencyDownloader;
 
     CurrentRates.RateList mRateList;
 
+    EventBus mEventBus;
+
     @Inject
     public EtsyRestDataSource() {
 
-        mCurrencyDownloader = new CurrencyDownloader();
 
+        mCurrencyDownloader = new CurrencyDownloader();
+        mEventBus = EventBus.getDefault();
         //logging interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -80,27 +85,15 @@ public class EtsyRestDataSource implements Repository {
     public Observable<List<EtsyProduct>> getItems(String category, String keywords, int offset) {
 
         if(mRateList == null) {
+
             mRateList = mCurrencyDownloader.getRateList();
-            return mEtsyApi.getItems(category, keywords, offset);
+            //return mEtsyApi.getItems(category, keywords, offset);
         }
 
         return mEtsyApi.getItems(category, keywords, offset)
                 .flatMap(etsyProductList -> Observable.from(etsyProductList))
-                .doOnNext(etsyProduct -> etsyProduct.setPrice(convert(etsyProduct.getCurrency(), etsyProduct.getPrice())))
-                .doOnNext(etsyProduct -> etsyProduct.setCurrency("EUR"))
+                .doOnNext(etsyProduct -> etsyProduct.setConvertedPrice(convert(etsyProduct.getCurrency(), etsyProduct.getPrice())))
                 .toList();
-
-        /*
-                .onErrorResumeNext(throwable -> {
-                    String errorMessage = throwable.getMessage();
-                    switch (errorMessage){
-                        case HttpErrors.SERVER_ERROR: return Observable.error(new ServerErrorException());
-                     //   case HttpErrors.TIMEOUT: return Observable.error(new NetworkErrorException());
-                        default: return Observable.error(new UnknownErrorException());
-                    }
-                });*/
-
-
     }
 
     private float convert(String currency, Float price) {
@@ -113,6 +106,10 @@ public class EtsyRestDataSource implements Repository {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.floatValue();
+    }
+
+    public void onEvent(RetrofitEvent event) {
+        mRateList = mCurrencyDownloader.getRateList();
     }
 
 }

@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import de.greenrobot.event.EventBus;
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.model.EtsyProduct;
 import it.polimi.dima.giftlist.product.Rest.GetProductListUseCase;
 import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
+import it.polimi.dima.giftlist.product.converter.RetrofitEvent;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -20,24 +22,30 @@ import rx.schedulers.Schedulers;
 public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyProduct>> {
 
     private final GetProductListUseCase mProductListUseCase;
-
+    EventBus mEventBus;
 
     @Inject
     public ProductPresenter(GetProductListUseCase productListUseCase) {
         mProductListUseCase = productListUseCase;
+        mEventBus = EventBus.getDefault();
+
     }
 
+    public void onEvent(RetrofitEvent event) {
+        getView().loadData(true);
+    }
 
 
     @Override
     public void attachView(ProductView view) {
         super.attachView(view);
-        //eventBus.register(this);
+        mEventBus.register(this);
     }
 
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
+        mEventBus.unregister(this);
     }
 
 
@@ -46,7 +54,6 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
     }
 
     public void loadRetrofit(String category, String keywords, boolean pullToRefresh) {
-        System.out.println("loadRetrofit");
         subscribe(mProductListUseCase.execute(category, keywords), pullToRefresh);
     }
 

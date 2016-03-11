@@ -28,8 +28,10 @@ import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.model.EtsyProduct;
+import it.polimi.dima.giftlist.product.converter.RetrofitEvent;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
@@ -48,6 +50,8 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     ImageView mProductThumb;
     @Bind(R.id.product_price)
     TextView mPriceTextView;
+    @Bind(R.id.product_price_converted)
+    TextView mConvertedPriceTextView;
     @Bind(R.id.reload_button)
     Button mReloadButton;
 
@@ -65,6 +69,9 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
         mTitleTextView.setText(mCurrentProduct.getTitle());
         mIdTextView.setText("" + mCurrentProduct.getListing_id());
         mPriceTextView.setText("" + mCurrentProduct.getPrice()+" "+mCurrentProduct.getCurrency());
+        if(mCurrentProduct.getConvertedPrice()!=0 && mCurrentProduct.getCurrency()!="EUR") {
+            mConvertedPriceTextView.setText("(" + mCurrentProduct.getConvertedPrice() + " EUR)");
+        }
         if (mCurrentProduct.getImageUrl() == null) {
             ColorDrawable colorDrawable = new ColorDrawable(mColorPrimary);
             mProductThumb.setDrawingCacheEnabled(true);
@@ -227,10 +234,9 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     }
 
     @Override public void onNewViewStateInstance() {
-        loadData(true);
+        //loadData(true);
         System.out.println("created");
     }
-
 
     @Override
     public void onRefresh() {
