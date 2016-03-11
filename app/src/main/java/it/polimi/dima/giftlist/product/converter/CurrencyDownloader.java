@@ -17,8 +17,10 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.Semaphore;
 
 
+import de.greenrobot.event.EventBus;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
 
 import okhttp3.OkHttpClient;
@@ -38,8 +40,11 @@ public class CurrencyDownloader {
     boolean updated;
     ConverterApi mConverterApi;
     CurrentRates.RateList mRateList;
+    EventBus mEventBus;
 
     public CurrencyDownloader() {
+
+//        mEventBus.getDefault().register(this);
         //logging interceptor
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -68,13 +73,14 @@ public class CurrencyDownloader {
             @Override
             public void onResponse(Call<CurrentRates> call, Response<CurrentRates> response) {
                 mRateList = response.body().getWrapper().getRateList();
-                updated = true;
+                EventBus.getDefault().post(new RetrofitEvent(true));
+
             }
 
             @Override
             public void onFailure(Call<CurrentRates> call, Throwable t) {
                 System.out.println("fail " + t.getMessage());
-                updated = false;
+                EventBus.getDefault().post(new RetrofitEvent(false));
             }
         });
 
