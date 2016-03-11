@@ -8,8 +8,7 @@ public class EtsyProduct {
     int listing_id;
     int category_id;
     float price;
-
-
+    float convertedPrice;
 
     String currency;
     String title;
@@ -26,6 +25,7 @@ public class EtsyProduct {
         this.description = product.getDescription();
         this.listing_id = product.getListing_id();
         this.price = product.getPrice();
+        this.convertedPrice = product.getConvertedPrice();
         this.currency = product.getCurrency();
         this.imageUrl = product.getImageUrl();
     }
@@ -72,6 +72,14 @@ public class EtsyProduct {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public float getConvertedPrice() {
+        return convertedPrice;
+    }
+
+    public void setConvertedPrice(float price) {
+        this.convertedPrice = price;
     }
 
     public int getListing_id() {

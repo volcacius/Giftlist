@@ -12,7 +12,7 @@
         android:drawablePadding="16dp"
         android:textSize="20sp"
         android:textColor="#656565"
-        android:text="An error has occurred! click here to retry"
+        android:text=""
         android:gravity="center"
         />
 
