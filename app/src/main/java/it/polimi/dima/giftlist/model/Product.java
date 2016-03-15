@@ -3,15 +3,15 @@ package it.polimi.dima.giftlist.model;
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class Item {
+public class Product {
 
-    private String mName;
+    private String name;
 
     public String getName() {
-        return mName;
+        return name;
     }
 
     public void setName(String name) {
-        mName = name;
+        this.name = name;
     }
 }

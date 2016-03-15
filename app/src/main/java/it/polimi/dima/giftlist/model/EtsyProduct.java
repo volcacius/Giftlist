@@ -3,7 +3,7 @@ package it.polimi.dima.giftlist.model;
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class EtsyProduct {
+public class EtsyProduct extends Product {
 
     int listing_id;
     int category_id;
@@ -11,17 +11,17 @@ public class EtsyProduct {
     float convertedPrice;
 
     String currency;
-    String title;
+    String name;
     String description;
     String imageUrl;
 
 
-    public EtsyProduct(String item) {
-        title = item;
+    public EtsyProduct(String name) {
+        this.name = name;
     }
 
     public EtsyProduct(EtsyProduct product) {
-        this.title = product.getTitle();
+        this.name = product.getName();
         this.description = product.getDescription();
         this.listing_id = product.getListing_id();
         this.price = product.getPrice();
@@ -30,8 +30,8 @@ public class EtsyProduct {
         this.imageUrl = product.getImageUrl();
     }
 
-    public EtsyProduct(String title, String description, int listing_id, float price, String currency, String imageUrl) {
-        this.title = title;
+    public EtsyProduct(String name, String description, int listing_id, float price, String currency, String imageUrl) {
+        this.name = name;
         this.description = description;
         this.listing_id = listing_id;
         this.price = price;
@@ -97,13 +97,4 @@ public class EtsyProduct {
     public void setCategory_id(int category_id) {
         this.category_id = category_id;
     }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
 }

@@ -66,7 +66,7 @@ public class ProductFragment extends MvpLceViewStateFragment<SwipeRefreshLayout,
     String keywords;
 
     private void setParameters() {
-        mTitleTextView.setText(mCurrentProduct.getTitle());
+        mTitleTextView.setText(mCurrentProduct.getName());
         mIdTextView.setText("" + mCurrentProduct.getListing_id());
         mPriceTextView.setText("" + mCurrentProduct.getPrice()+" "+mCurrentProduct.getCurrency());
         if(mCurrentProduct.getConvertedPrice()!=0 && mCurrentProduct.getCurrency()!="EUR") {

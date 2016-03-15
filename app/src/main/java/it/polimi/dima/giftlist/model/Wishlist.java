@@ -8,33 +8,33 @@ import java.util.List;
 public class Wishlist {
 
 
-    private String mWishlistTitle;
-    private List<Item> mItemList;
+    private String wishlistTitle;
+    private List<Product> productList;
     private int id;
 
-    public Wishlist(List<Item> mItemList, int id) {
-        this.mItemList = mItemList;
+    public Wishlist(List<Product> productList, int id) {
+        this.productList = productList;
         this.id = id;
     }
 
     public Wishlist(String wishlistTitle) {
-        mWishlistTitle = wishlistTitle;
+        this.wishlistTitle = wishlistTitle;
     }
 
     public String getWishlistTitle() {
-        return mWishlistTitle;
+        return wishlistTitle;
     }
 
     public void setWishlistTitle(String wishlistTitle) {
-        mWishlistTitle = wishlistTitle;
+        this.wishlistTitle = wishlistTitle;
     }
 
-    public List<Item> getItemList() {
-        return mItemList;
+    public List<Product> getProductList() {
+        return productList;
     }
 
-    public void setItemList(List<Item> itemList) {
-        mItemList = itemList;
+    public void setItemList(List<Product> productList) {
+        this.productList = productList;
     }
 
     public int getId() {

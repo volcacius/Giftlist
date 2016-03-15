@@ -49,6 +49,6 @@ public class ProductAdapter  extends SupportAnnotatedAdapter implements ProductA
     @Override
     public void bindViewHolder(ProductAdapterHolders.WishlistViewHolder vh, int position) {
         EtsyProduct etsyProduct = mEtsyProductList.get(position);
-        vh.name.setText(etsyProduct.getTitle());
+        vh.name.setText(etsyProduct.getName());
     }
 }
