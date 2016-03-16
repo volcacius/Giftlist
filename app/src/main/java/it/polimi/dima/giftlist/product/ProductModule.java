@@ -32,25 +32,17 @@ public class ProductModule {
         return context;
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     Picasso providesPicasso() {
         return Picasso.with(context);
     }
-
 
     @Provides
     @Singleton
     public DummyInterface providesDummyInterface() {
         return new DummyList();
     }
-
-    @Provides
-    @Singleton
-    public CurrencyDownloader providesCurrencyDownloader() {
-        return new CurrencyDownloader();
-    }
-
-
 
     @Provides
     @Singleton
