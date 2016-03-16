@@ -1,20 +1,16 @@
 package it.polimi.dima.giftlist.product.Rest;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.dima.giftlist.model.EtsyProduct;
+import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
 
 /**
  * Created by Elena on 28/01/2016.

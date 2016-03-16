@@ -1,35 +1,15 @@
 package it.polimi.dima.giftlist.product.converter;
 
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.util.Xml;
-import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-
-
-import java.io.IOException;
-import java.io.InputStream;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.concurrent.Semaphore;
-
-
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.EventBus;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
 
+import it.polimi.dima.giftlist.domain.event.RetrofitEvent;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
-import retrofit2.CallAdapter;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 /**

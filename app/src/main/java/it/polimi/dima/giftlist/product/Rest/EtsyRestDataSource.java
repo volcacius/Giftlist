@@ -7,25 +7,22 @@ import com.google.gson.reflect.TypeToken;
 import org.greenrobot.eventbus.Subscribe;
 
 import org.greenrobot.eventbus.EventBus;
-import it.polimi.dima.giftlist.model.exceptions.rest.ServerErrorException;
-import it.polimi.dima.giftlist.model.exceptions.rest.UnknownErrorException;
+
+import it.polimi.dima.giftlist.domain.repository.ItemRepository;
 import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
 import it.polimi.dima.giftlist.product.converter.CurrentRates;
-import it.polimi.dima.giftlist.product.converter.RetrofitEvent;
-import it.polimi.dima.giftlist.util.HttpErrors;
+import it.polimi.dima.giftlist.domain.event.RetrofitEvent;
 import okhttp3.OkHttpClient;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import javax.inject.Inject;
 
 import it.polimi.dima.giftlist.BuildConfig;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
-import it.polimi.dima.giftlist.base.Repository;
-import it.polimi.dima.giftlist.model.EtsyProduct;
+import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -35,7 +32,7 @@ import rx.Observable;
 /**
  * Created by Elena on 27/01/2016.
  */
-public class EtsyRestDataSource implements Repository {
+public class EtsyRestDataSource implements ItemRepository {
 
     private final EtsyApi mEtsyApi;
     //private final GithubService mGithubService;
