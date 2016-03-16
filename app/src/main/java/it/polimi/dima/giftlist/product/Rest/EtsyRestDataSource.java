@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import de.greenrobot.event.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import org.greenrobot.eventbus.EventBus;
 import it.polimi.dima.giftlist.model.exceptions.rest.ServerErrorException;
 import it.polimi.dima.giftlist.model.exceptions.rest.UnknownErrorException;
 import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
@@ -34,6 +36,7 @@ import rx.Observable;
  * Created by Elena on 27/01/2016.
  */
 public class EtsyRestDataSource implements Repository {
+
     private final EtsyApi mEtsyApi;
     //private final GithubService mGithubService;
     public final static int MAX_ATTEMPS = 3;
@@ -108,6 +111,7 @@ public class EtsyRestDataSource implements Repository {
         return bd.floatValue();
     }
 
+    @Subscribe
     public void onEvent(RetrofitEvent event) {
         mRateList = mCurrencyDownloader.getRateList();
     }
