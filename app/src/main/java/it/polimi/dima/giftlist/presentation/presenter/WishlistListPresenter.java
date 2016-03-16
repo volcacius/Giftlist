@@ -6,6 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import it.polimi.dima.giftlist.DummyInterface;
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.presentation.model.Wishlist;
@@ -64,10 +66,12 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
         subscribe(observable, pullToRefresh);
     }
 
+    @Subscribe
     public void onEventMainThread(WishlistAddedEvent event) {
         //TODO
     }
 
+    @Subscribe
     public void onEventMainThread(WishlistRemovedEvent event) {
         //TODO
     }

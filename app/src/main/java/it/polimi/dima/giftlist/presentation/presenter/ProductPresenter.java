@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
 import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
 import it.polimi.dima.giftlist.presentation.view.ProductView;
@@ -26,6 +28,7 @@ public class ProductPresenter extends BaseRxLcePresenter<ProductView, List<EtsyP
 
     }
 
+    @Subscribe
     public void onEvent(RetrofitEvent event) {
         getView().loadData(true);
     }
