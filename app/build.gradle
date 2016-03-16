@@ -119,7 +119,7 @@ dependencies {
     final ESPRESSO_VERSION = '2.2.1'
     final RUNNER_VERSION = '0.4'
     final ICEPICK_VERSION = '3.1.0'
-    final EVENTBUS_VERSION = '2.4.0'
+    final EVENTBUS_VERSION = '3.0.0'
     final OKHTTP_VERSION = '3.1.2'
 
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
@@ -132,7 +132,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:cardview-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
-    compile "de.greenrobot:eventbus:$EVENTBUS_VERSION"
+    compile "org.greenrobot:eventbus:$EVENTBUS_VERSION"
     compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
     compile ("com.squareup.retrofit2:converter-simplexml:$RETROFIT_VERSION"){
