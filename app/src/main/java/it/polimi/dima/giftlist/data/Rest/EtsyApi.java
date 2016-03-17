@@ -1,8 +1,8 @@
-package it.polimi.dima.giftlist.product.Rest;
+package it.polimi.dima.giftlist.data.rest;
 
 import java.util.List;
 
-import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;

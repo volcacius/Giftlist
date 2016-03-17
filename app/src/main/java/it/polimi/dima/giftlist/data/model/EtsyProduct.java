@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.presentation.model;
+package it.polimi.dima.giftlist.data.model;
 
 /**
  * Created by Alessandro on 08/01/16.

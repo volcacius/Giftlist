@@ -1,6 +1,6 @@
 package it.polimi.dima.giftlist.presentation.event;
 
-import it.polimi.dima.giftlist.presentation.model.Wishlist;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 
 /**
  * Created by Alessandro on 08/01/16.

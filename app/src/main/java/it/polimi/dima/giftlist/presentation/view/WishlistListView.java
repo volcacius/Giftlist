@@ -4,7 +4,7 @@ import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 
 import java.util.List;
 
-import it.polimi.dima.giftlist.presentation.model.Wishlist;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 
 /**
  * Created by Alessandro on 08/01/16.

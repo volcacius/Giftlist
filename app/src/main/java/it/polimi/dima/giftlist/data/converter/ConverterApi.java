@@ -1,10 +1,6 @@
-package it.polimi.dima.giftlist.product.converter;
+package it.polimi.dima.giftlist.data.converter;
 
-import java.util.List;
-
-import okhttp3.Call;
 import retrofit2.http.GET;
-import rx.Observable;
 
 /**
  * Created by Elena on 14/02/2016.

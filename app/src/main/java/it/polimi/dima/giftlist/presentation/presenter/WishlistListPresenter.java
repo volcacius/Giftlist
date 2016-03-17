@@ -5,12 +5,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import it.polimi.dima.giftlist.DummyInterface;
+import it.polimi.dima.giftlist.data.DummyInterface;
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
-import it.polimi.dima.giftlist.presentation.model.Wishlist;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
 import it.polimi.dima.giftlist.presentation.event.WishlistRemovedEvent;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;

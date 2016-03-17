@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import it.polimi.dima.giftlist.domain.repository.ItemRepository;
-import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.repository.ItemRepository;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import rx.Observable;
 
 /**

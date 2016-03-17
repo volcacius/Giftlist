@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.product.Rest;
+package it.polimi.dima.giftlist.data.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,10 +8,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import org.greenrobot.eventbus.EventBus;
 
-import it.polimi.dima.giftlist.domain.repository.ItemRepository;
-import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
-import it.polimi.dima.giftlist.product.converter.CurrentRates;
-import it.polimi.dima.giftlist.domain.event.RetrofitEvent;
+import it.polimi.dima.giftlist.data.converter.CurrencyDownloader;
+import it.polimi.dima.giftlist.data.converter.CurrentRates;
+import it.polimi.dima.giftlist.data.repository.ItemRepository;
+import it.polimi.dima.giftlist.data.event.RetrofitEvent;
 import okhttp3.OkHttpClient;
 
 import java.math.BigDecimal;
@@ -22,7 +22,7 @@ import javax.inject.Inject;
 
 import it.polimi.dima.giftlist.BuildConfig;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
-import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;

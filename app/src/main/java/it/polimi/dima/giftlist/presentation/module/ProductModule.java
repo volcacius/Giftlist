@@ -8,10 +8,10 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.DummyInterface;
-import it.polimi.dima.giftlist.DummyList;
-import it.polimi.dima.giftlist.domain.repository.ItemRepository;
-import it.polimi.dima.giftlist.product.Rest.EtsyRestDataSource;
+import it.polimi.dima.giftlist.data.DummyInterface;
+import it.polimi.dima.giftlist.data.DummyList;
+import it.polimi.dima.giftlist.data.repository.ItemRepository;
+import it.polimi.dima.giftlist.data.rest.EtsyRestDataSource;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**

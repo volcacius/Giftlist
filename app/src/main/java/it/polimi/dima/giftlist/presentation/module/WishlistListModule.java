@@ -6,8 +6,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.DummyInterface;
-import it.polimi.dima.giftlist.DummyList;
+import it.polimi.dima.giftlist.data.DummyInterface;
+import it.polimi.dima.giftlist.data.DummyList;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**

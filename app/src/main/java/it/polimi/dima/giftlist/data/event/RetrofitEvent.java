@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.domain.event;
+package it.polimi.dima.giftlist.data.event;
 
 /**
  * Created by Elena on 22/02/2016.

@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.product.Rest;
+package it.polimi.dima.giftlist.data.rest;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -10,7 +10,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 
 /**
  * Created by Elena on 28/01/2016.

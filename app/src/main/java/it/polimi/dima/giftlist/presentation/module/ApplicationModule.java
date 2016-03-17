@@ -10,7 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.product.converter.CurrencyDownloader;
+import it.polimi.dima.giftlist.data.converter.CurrencyDownloader;
 
 /**
  * Created by Alessandro on 15/03/16.

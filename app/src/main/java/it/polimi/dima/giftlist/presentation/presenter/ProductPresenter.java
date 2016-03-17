@@ -8,10 +8,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import it.polimi.dima.giftlist.base.BaseRxLcePresenter;
-import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.presentation.view.ProductView;
 import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
-import it.polimi.dima.giftlist.domain.event.RetrofitEvent;
+import it.polimi.dima.giftlist.data.event.RetrofitEvent;
 
 /**
  * Created by Elena on 27/01/2016.

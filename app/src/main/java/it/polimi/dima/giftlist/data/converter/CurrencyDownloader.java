@@ -1,10 +1,10 @@
-package it.polimi.dima.giftlist.product.converter;
+package it.polimi.dima.giftlist.data.converter;
 
 
 import org.greenrobot.eventbus.EventBus;
 import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
 
-import it.polimi.dima.giftlist.domain.event.RetrofitEvent;
+import it.polimi.dima.giftlist.data.event.RetrofitEvent;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;

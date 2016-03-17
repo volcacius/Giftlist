@@ -1,8 +1,8 @@
-package it.polimi.dima.giftlist.domain.repository;
+package it.polimi.dima.giftlist.data.repository;
 
 import java.util.List;
 
-import it.polimi.dima.giftlist.presentation.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import rx.Observable;
 
 /**

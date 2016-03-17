@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.product.converter;
+package it.polimi.dima.giftlist.data.converter;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;

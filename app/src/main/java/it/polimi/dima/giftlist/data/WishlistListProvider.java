@@ -3,7 +3,7 @@ package it.polimi.dima.giftlist.data;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import it.polimi.dima.giftlist.presentation.model.Wishlist;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.exception.WishlistNotFoundException;
 import rx.Observable;
 import rx.functions.Func1;

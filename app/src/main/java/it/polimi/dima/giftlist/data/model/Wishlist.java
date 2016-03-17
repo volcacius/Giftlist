@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.presentation.model;
+package it.polimi.dima.giftlist.data.model;
 
 import java.util.List;
 

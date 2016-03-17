@@ -21,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.presentation.component.DaggerWishlistListComponent;
-import it.polimi.dima.giftlist.presentation.model.Wishlist;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
