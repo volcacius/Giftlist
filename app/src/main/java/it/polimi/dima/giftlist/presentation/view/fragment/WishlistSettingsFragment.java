@@ -10,17 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import javax.inject.Inject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import it.polimi.dima.giftlist.R;
-import it.polimi.dima.giftlist.presentation.view.activity.ProductActivity;
+import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
+import it.polimi.dima.giftlist.presentation.view.activity.ProductListActivity;
 
 /**
  * Created by Elena on 10/02/2016.
  */
-public class WishlistSettingsFragment extends Fragment {
+public class WishlistSettingsFragment extends BaseFragment {
 
     @Bind(R.id.etsy_categories)
     Spinner mEtsyCategories;
@@ -33,7 +36,7 @@ public class WishlistSettingsFragment extends Fragment {
 
     @OnClick(R.id.start_product_activity)
     public void startProductActivity(){
-        ProductActivity.start(this.getContext(), mCategorySelected, mKeywordsEditText.getText().toString());
+        intentStarter.startProductListActivity(this.getContext(), mCategorySelected, mKeywordsEditText.getText().toString());
     }
 
     @Override
@@ -43,7 +46,10 @@ public class WishlistSettingsFragment extends Fragment {
 
     }
 
-
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_wishlistsettings;
+    }
 
     @Nullable
     @Override
@@ -59,6 +65,11 @@ public class WishlistSettingsFragment extends Fragment {
     @OnItemSelected(R.id.etsy_categories)
     public void onItemSelected(int position) {
         mCategorySelected = String.valueOf(mEtsyCategories.getSelectedItem());
+    }
+
+    @Override
+    public void injectDependencies() {
+
     }
 
 }
