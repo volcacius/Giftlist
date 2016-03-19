@@ -9,8 +9,8 @@ import it.polimi.dima.giftlist.presentation.view.fragment.WishlistListFragment;
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class WishlistListActivity extends AppCompatActivity{
-
+public class WishlistListActivity extends AppCompatActivity {
+/*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +22,5 @@ public class WishlistListActivity extends AppCompatActivity{
                     .commit();
         }
     }
-
+*/
 }

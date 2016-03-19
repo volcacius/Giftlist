@@ -1,3 +1,4 @@
+
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
@@ -23,7 +24,6 @@ import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.presentation.component.DaggerWishlistListComponent;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
-import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
@@ -32,16 +32,17 @@ import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLayout, List<Wishlist>, WishlistListView, WishlistListPresenter>
+public abstract class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLayout, List<Wishlist>, WishlistListView, WishlistListPresenter>
         implements WishlistListView, SwipeRefreshLayout.OnRefreshListener {
 
+    /*
     @Bind(R.id.fragment_wishlistlist_recyclerView)
     RecyclerView mRecyclerView;
 
     @Inject
     ErrorMessageDeterminer errorMessageDeterminer;
 
-    WishlistListAdapter mWishlistListAdapter;
+    //WishlistListAdapter mWishlistListAdapter;
     WishlistListComponent mWishlistListComponent;
 
     protected void injectDependencies() {
@@ -151,4 +152,6 @@ public class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLa
     public void showRemovingFailed(Wishlist wishlist) {
 
     }
+    */
 }
+
