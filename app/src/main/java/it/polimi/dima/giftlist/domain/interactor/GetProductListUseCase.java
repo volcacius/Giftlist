@@ -4,37 +4,36 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import it.polimi.dima.giftlist.data.repository.ItemRepository;
-import it.polimi.dima.giftlist.data.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.data.repository.ProductRepository;
+import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
+import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import rx.Observable;
 
 /**
  * Created by Elena on 27/01/2016.
  */
-public class GetProductListUseCase implements UseCase<List<EtsyProduct>> {
+public class GetProductListUseCase extends UseCase<List<Product>> {
 
-    private final ItemRepository mItemRepository;
-    private int currentOffset;
+    private final int DEFAULT_OFFSET = 25;
+    private final ProductRepository productRepository;
+    private final String category;
+    private final String keywords;
 
     @Inject
-    public GetProductListUseCase(ItemRepository itemRepository) {
-        mItemRepository = itemRepository;
-        currentOffset = -1;
+    public GetProductListUseCase(String category,
+                                 String keywords,
+                                 ProductRepository productRepository,
+                                 ThreadExecutor threadExecutor,
+                                 PostExecutionThread postExecutionThread) {
+        super(threadExecutor, postExecutionThread);
+        this.productRepository = productRepository;
+        this.category = category;
+        this.keywords = keywords;
     }
 
     @Override
-    public Observable<List<EtsyProduct>> execute() {
-       /* currentOffset = currentOffset + 1;
-        return mItemRepository.getItems(currentOffset*25)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread());*/
-        return null;
-    }
-
-    public Observable<List<EtsyProduct>> execute(String category, String keywords) {
-        currentOffset = currentOffset + 1;
-        return mItemRepository.getItems(category, keywords, currentOffset*25);
-               // .subscribeOn(Schedulers.newThread())
-                // .observeOn(AndroidSchedulers.mainThread());
+    protected Observable<List<Product>> buildUseCaseObservable() {
+        return this.productRepository.getProductList(category, keywords, DEFAULT_OFFSET);
     }
 }
