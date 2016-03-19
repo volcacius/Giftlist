@@ -11,7 +11,7 @@ import it.polimi.dima.giftlist.presentation.module.ApplicationModule;
  */
 public class GiftlistApplication extends Application {
 
-    private ApplicationComponent mApplicationComponent;
+    private ApplicationComponent applicationComponent;
 
     @Override
     public void onCreate() {
@@ -20,12 +20,12 @@ public class GiftlistApplication extends Application {
     }
 
     private void initializeInjector() {
-        mApplicationComponent = DaggerApplicationComponent.builder()
+        applicationComponent = DaggerApplicationComponent.builder()
                      .applicationModule(new ApplicationModule(this))
                      .build();
     }
 
     public ApplicationComponent getApplicationComponent() {
-        return mApplicationComponent;
+        return applicationComponent;
     }
 }
