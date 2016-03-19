@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.rest;
+package it.polimi.dima.giftlist.data.net;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;

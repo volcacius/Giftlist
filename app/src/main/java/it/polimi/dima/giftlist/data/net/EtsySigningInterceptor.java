@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.rest;
+package it.polimi.dima.giftlist.data.net;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;

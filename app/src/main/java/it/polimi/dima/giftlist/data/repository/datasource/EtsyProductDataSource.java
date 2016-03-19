@@ -12,9 +12,9 @@ import it.polimi.dima.giftlist.data.converter.CurrencyDownloader;
 import it.polimi.dima.giftlist.data.converter.CurrentRates;
 import it.polimi.dima.giftlist.data.repository.ProductRepository;
 import it.polimi.dima.giftlist.data.event.RetrofitEvent;
-import it.polimi.dima.giftlist.data.rest.EtsyApi;
-import it.polimi.dima.giftlist.data.rest.EtsyResultsDeserializer;
-import it.polimi.dima.giftlist.data.rest.EtsySigningInterceptor;
+import it.polimi.dima.giftlist.data.net.EtsyApi;
+import it.polimi.dima.giftlist.data.net.EtsyResultsDeserializer;
+import it.polimi.dima.giftlist.data.net.EtsySigningInterceptor;
 import okhttp3.OkHttpClient;
 
 import java.math.BigDecimal;
