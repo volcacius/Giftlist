@@ -121,6 +121,7 @@ dependencies {
     final ICEPICK_VERSION = '3.1.0'
     final EVENTBUS_VERSION = '3.0.0'
     final OKHTTP_VERSION = '3.1.2'
+    final FRAGMENT_ARGS_VERSION = '3.0.2'
 
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     def jUnit = "junit:junit:4.12"
@@ -143,6 +144,8 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
     compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
     compile "com.google.code.gson:gson:2.4"
+    compile "com.hannesdorfmann.fragmentargs:annotation:$FRAGMENT_ARGS_VERSION"
+    apt "com.hannesdorfmann.fragmentargs:processor:$FRAGMENT_ARGS_VERSION"
 
     compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
         transitive = true;
