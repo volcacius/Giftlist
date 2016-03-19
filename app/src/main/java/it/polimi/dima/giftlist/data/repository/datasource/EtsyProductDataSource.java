@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.rest;
+package it.polimi.dima.giftlist.data.repository.datasource;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -10,8 +10,11 @@ import org.greenrobot.eventbus.EventBus;
 
 import it.polimi.dima.giftlist.data.converter.CurrencyDownloader;
 import it.polimi.dima.giftlist.data.converter.CurrentRates;
-import it.polimi.dima.giftlist.data.repository.ItemRepository;
+import it.polimi.dima.giftlist.data.repository.ProductRepository;
 import it.polimi.dima.giftlist.data.event.RetrofitEvent;
+import it.polimi.dima.giftlist.data.rest.EtsyApi;
+import it.polimi.dima.giftlist.data.rest.EtsyResultsDeserializer;
+import it.polimi.dima.giftlist.data.rest.EtsySigningInterceptor;
 import okhttp3.OkHttpClient;
 
 import java.math.BigDecimal;
@@ -21,7 +24,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import it.polimi.dima.giftlist.BuildConfig;
-import it.polimi.dima.giftlist.base.HttpLoggingInterceptor;
+import it.polimi.dima.giftlist.util.HttpLoggingInterceptor;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 
 import retrofit2.Retrofit;
@@ -32,7 +35,7 @@ import rx.Observable;
 /**
  * Created by Elena on 27/01/2016.
  */
-public class EtsyRestDataSource implements ItemRepository {
+public class EtsyProductDataSource implements ProductRepository {
 
     private final EtsyApi mEtsyApi;
     //private final GithubService mGithubService;
@@ -45,7 +48,7 @@ public class EtsyRestDataSource implements ItemRepository {
     EventBus mEventBus;
 
     @Inject
-    public EtsyRestDataSource() {
+    public EtsyProductDataSource() {
 
 
         mCurrencyDownloader = new CurrencyDownloader();
@@ -82,12 +85,12 @@ public class EtsyRestDataSource implements ItemRepository {
 
 
     @Override
-    public Observable<List<EtsyProduct>> getItems(String category, String keywords, int offset) {
+    public Observable<List<EtsyProduct>> getProductList(String category, String keywords, int offset) {
 
         if(mRateList == null) {
 
             mRateList = mCurrencyDownloader.getRateList();
-            //return mEtsyApi.getItems(category, keywords, offset);
+            //return mEtsyApi.getProductList(category, keywords, offset);
         }
 
         return mEtsyApi.getItems(category, keywords, offset)
