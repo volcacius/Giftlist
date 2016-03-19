@@ -12,6 +12,7 @@ import it.polimi.dima.giftlist.scope.PerActivity;
 /**
  * Created by Elena on 12/01/2016.
  */
+//Dagger ignores the annotation put atop the @Component. I put it there just for readability
 @PerActivity
 @Component(dependencies = {ApplicationComponent.class}, modules = {WishlistListModule.class})
 public interface WishlistListComponent {

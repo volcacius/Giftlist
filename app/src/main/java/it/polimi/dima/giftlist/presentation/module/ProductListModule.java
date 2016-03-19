@@ -56,18 +56,6 @@ public class ProductListModule {
 
     @Provides
     @PerActivity
-    public ErrorMessageDeterminer providesErrorMessageDeterminer(){
-        return new ErrorMessageDeterminer();
-    }
-
-    @Provides
-    @PerActivity
-    EventBus providesEventBus() {
-        return EventBus.getDefault();
-    }
-
-    @Provides
-    @PerActivity
     Picasso providesPicasso() {
         return Picasso.with(context);
     }

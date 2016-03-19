@@ -32,7 +32,6 @@ import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
-import it.polimi.dima.giftlist.presentation.component.DaggerProductListComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.view.ProductListView;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
@@ -124,11 +123,7 @@ public class EtsyProductListFragment extends BaseViewStateLceFragment<SwipeRefre
 
     @Override
     protected void injectDependencies() {
-        mProductListComponent =
-                DaggerProductListComponent.builder()
-                        .applicationComponent(getApplicationComponent())
-                        .productListModule(new ProductListModule(this.getContext(), category, keywords))
-                        .build();
+        mProductListComponent = getApplicationComponent().plus(new ProductListModule(this.getContext(), category, keywords));
         mProductListComponent.inject(this);
     }
 
