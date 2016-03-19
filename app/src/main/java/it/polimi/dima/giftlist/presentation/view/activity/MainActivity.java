@@ -13,26 +13,14 @@ import it.polimi.dima.giftlist.presentation.view.fragment.WishlistSettingsFragme
 /**
  * Created by Elena on 10/02/2016.
  */
-public class WishlistSettingsActivity extends AppCompatActivity {
-
-    @Inject
-    SharedPreferences mSharedPreferences;
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlistlist);
-
-        ((GiftlistApplication) getApplication()).getApplicationComponent().inject(this);
-
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_frame, new WishlistSettingsFragment())
-                    .commit();
+            addFragment(R.id.activity_frame, new WishlistSettingsFragment());
         }
-
-
     }
-
-
 }

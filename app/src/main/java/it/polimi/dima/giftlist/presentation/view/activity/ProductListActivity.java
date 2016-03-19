@@ -6,12 +6,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import it.polimi.dima.giftlist.R;
-import it.polimi.dima.giftlist.presentation.view.fragment.ProductFragment;
+import it.polimi.dima.giftlist.presentation.view.fragment.EtsyProductListFragment;
 
 /**
  * Created by Elena on 19/01/2016.
  */
-public class ProductActivity extends AppCompatActivity{
+public class ProductListActivity extends AppCompatActivity {
 
     private static final String EXTRA_CATEGORY_SELECTED = "category";
     private static final String EXTRA_KEYWORDS = "keywords";
@@ -27,7 +27,7 @@ public class ProductActivity extends AppCompatActivity{
             Bundle args = new Bundle();
             args.putString(EXTRA_CATEGORY_SELECTED,category);
             args.putString(EXTRA_KEYWORDS,keywords);
-            ProductFragment fragment = new ProductFragment();
+            EtsyProductListFragment fragment = new EtsyProductListFragment();
             fragment.setArguments(args);
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.activity_frame, fragment)
@@ -37,11 +37,11 @@ public class ProductActivity extends AppCompatActivity{
 
     }
 
-    public static void start(Context context, String categorySelected, String keywords) {
-        Intent productIntent = new Intent(context, ProductActivity.class);
-        productIntent.putExtra(EXTRA_CATEGORY_SELECTED, categorySelected);
-        productIntent.putExtra(EXTRA_KEYWORDS, keywords);
-        context.startActivity(productIntent);
+    public static Intent getCallingIntent(Context context, String category, String keywords) {
+        Intent callingIntent = new Intent(context, ProductListActivity.class);
+        callingIntent.putExtra(EXTRA_CATEGORY_SELECTED, category);
+        callingIntent.putExtra(EXTRA_KEYWORDS, category);
+        return callingIntent;
     }
 
 
