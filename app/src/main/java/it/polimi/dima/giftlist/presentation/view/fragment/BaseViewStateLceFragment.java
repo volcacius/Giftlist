@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.base;
+package it.polimi.dima.giftlist.presentation.view.fragment;
 
 /**
  * Created by Elena on 08/01/2016.
@@ -10,10 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
+
+import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
+
+import javax.inject.Inject;
+
 import icepick.Icepick;
+import it.polimi.dima.giftlist.GiftlistApplication;
+import it.polimi.dima.giftlist.presentation.component.ApplicationComponent;
+import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**
  * Base LCE ViewState Fragment for this app that uses Butterknife, Icepick and dependency injection
@@ -22,48 +30,59 @@ import icepick.Icepick;
 public abstract class BaseViewStateLceFragment<CV extends View, M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
         extends MvpLceViewStateFragment<CV, M, V, P> {
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //FragmentArgs.inject(this);
+        FragmentArgs.inject(this);
     }
 
-    @LayoutRes protected abstract int getLayoutRes();
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
-    @Override public void onViewStateInstanceRestored(boolean instanceStateRetained) {
+    @Override
+    public void onViewStateInstanceRestored(boolean instanceStateRetained) {
         // Not needed in general. override it in subclass if you need this callback
     }
 
-    @Override public void onNewViewStateInstance() {
+    @Override
+    public void onNewViewStateInstance() {
         loadData(false);
     }
 
-    @Nullable @Override
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Icepick.restoreInstanceState(this, savedInstanceState);
         return inflater.inflate(getLayoutRes(), container, false);
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         injectDependencies();
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
 
     /**
-     * Inject the dependencies
+     * Inject the dependencies, needs to be override
      */
     protected void injectDependencies() {
+    }
 
+    protected ApplicationComponent getApplicationComponent() {
+        return ((GiftlistApplication) getActivity().getApplication()).getApplicationComponent();
     }
 }
