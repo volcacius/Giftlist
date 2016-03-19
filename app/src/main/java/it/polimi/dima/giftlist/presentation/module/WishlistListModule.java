@@ -18,24 +18,14 @@ import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 public class WishlistListModule {
 
     private Context context;
-
     public WishlistListModule(Context context) {
         this.context = context;
     }
 
-    @Provides public Context provideContext() {
+    @Provides
+    public Context provideContext() {
         return context;
     }
 
-    @Provides
-    @Singleton
-    public DummyInterface providesDummyInterface() {
-        return new DummyList();
-    }
 
-    @Provides
-    @Singleton
-    public ErrorMessageDeterminer providesErrorMessageDeterminer(){
-        return new ErrorMessageDeterminer();
-    }
 }
