@@ -5,7 +5,12 @@ package it.polimi.dima.giftlist.data.model;
  */
 public class Product {
 
-    private String name;
+    String name;
+    float price;
+    float convertedPrice;
+    String currency;
+    String description;
+    String imageUrl;
 
     public String getName() {
         return name;
@@ -13,5 +18,29 @@ public class Product {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public float getConvertedPrice() {
+        return convertedPrice;
+    }
+
+    public void setConvertedPrice(float price) {
+        this.convertedPrice = price;
     }
 }
