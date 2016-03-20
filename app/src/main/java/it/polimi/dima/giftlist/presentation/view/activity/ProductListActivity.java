@@ -30,15 +30,21 @@ public class ProductListActivity extends BaseActivity implements HasComponent<Pr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlistlist);
+        //I need category and keywords both for createComponent() and to launch the fragment
+        //If it's the first time creating the activity, I get them from the Intent.
+        //If the activity is recreated e.g. after rotation, they are restored by IcePick in the super.onCreate call
         if (savedInstanceState == null) {
             category = getIntent().getStringExtra(EXTRA_CATEGORY_SELECTED);
             keywords = getIntent().getStringExtra(EXTRA_KEYWORDS);
-            createComponent();
+        }
+        createComponent();
+        if (savedInstanceState == null) {
             Bundle args = new Bundle();
             args.putString(EXTRA_CATEGORY_SELECTED,category);
             args.putString(EXTRA_KEYWORDS,keywords);
             addFragment(R.id.activity_frame, new ProductListFragment(), args);
         }
+
     }
 
     @DebugLog
