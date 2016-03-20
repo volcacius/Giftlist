@@ -40,7 +40,7 @@ public class ProductListActivity extends AppCompatActivity {
     public static Intent getCallingIntent(Context context, String category, String keywords) {
         Intent callingIntent = new Intent(context, ProductListActivity.class);
         callingIntent.putExtra(EXTRA_CATEGORY_SELECTED, category);
-        callingIntent.putExtra(EXTRA_KEYWORDS, category);
+        callingIntent.putExtra(EXTRA_KEYWORDS, keywords);
         return callingIntent;
     }
 
