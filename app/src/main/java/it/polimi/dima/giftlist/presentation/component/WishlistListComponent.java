@@ -1,13 +1,8 @@
 package it.polimi.dima.giftlist.presentation.component;
 
-import javax.inject.Singleton;
-
 import dagger.Component;
-import it.polimi.dima.giftlist.presentation.module.ApplicationModule;
-import it.polimi.dima.giftlist.presentation.view.fragment.WishlistListFragment;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
-import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
-import it.polimi.dima.giftlist.scope.PerActivity;
+import it.polimi.dima.giftlist.di.PerActivity;
 
 /**
  * Created by Elena on 12/01/2016.

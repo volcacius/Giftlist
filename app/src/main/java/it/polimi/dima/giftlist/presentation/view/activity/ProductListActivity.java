@@ -5,38 +5,43 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
-import it.polimi.dima.giftlist.presentation.view.fragment.EtsyProductListFragment;
+import it.polimi.dima.giftlist.di.HasComponent;
+import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
+import it.polimi.dima.giftlist.presentation.module.ProductListModule;
+import it.polimi.dima.giftlist.presentation.view.fragment.ProductListFragment;
 
 /**
  * Created by Elena on 19/01/2016.
  */
-public class ProductListActivity extends AppCompatActivity {
+public class ProductListActivity extends BaseActivity implements HasComponent<ProductListComponent> {
 
     private static final String EXTRA_CATEGORY_SELECTED = "category";
     private static final String EXTRA_KEYWORDS = "keywords";
+
+    private String category;
+    private String keywords;
+
+    //The component has to be declared in the activity and not in the fragment since its lifecycle must be tied to the activity
+    ProductListComponent productListComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlistlist);
-
         if (savedInstanceState == null) {
-            String category = getIntent().getStringExtra(EXTRA_CATEGORY_SELECTED);
-            String keywords = getIntent().getStringExtra(EXTRA_KEYWORDS);
+            category = getIntent().getStringExtra(EXTRA_CATEGORY_SELECTED);
+            keywords = getIntent().getStringExtra(EXTRA_KEYWORDS);
+            createComponent();
             Bundle args = new Bundle();
             args.putString(EXTRA_CATEGORY_SELECTED,category);
             args.putString(EXTRA_KEYWORDS,keywords);
-            EtsyProductListFragment fragment = new EtsyProductListFragment();
-            fragment.setArguments(args);
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.activity_frame, fragment)
-                    .commit();
+            addFragment(R.id.activity_frame, new ProductListFragment(), args);
         }
-
-
     }
 
+    @DebugLog
     public static Intent getCallingIntent(Context context, String category, String keywords) {
         Intent callingIntent = new Intent(context, ProductListActivity.class);
         callingIntent.putExtra(EXTRA_CATEGORY_SELECTED, category);
@@ -44,5 +49,13 @@ public class ProductListActivity extends AppCompatActivity {
         return callingIntent;
     }
 
+    //I need to expose to component so that I can perform injection from the fragment
+    @Override
+    public ProductListComponent getComponent() {
+        return productListComponent;
+    }
 
+    protected void createComponent() {
+        productListComponent = getApplicationComponent().plus(new ProductListModule(this, category, keywords));
+    }
 }

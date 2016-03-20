@@ -4,23 +4,13 @@ import android.content.Context;
 
 import com.squareup.picasso.Picasso;
 
-import org.greenrobot.eventbus.EventBus;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.data.DummyInterface;
-import it.polimi.dima.giftlist.data.DummyList;
 import it.polimi.dima.giftlist.data.repository.ProductRepository;
-import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
 import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
-import it.polimi.dima.giftlist.domain.interactor.UseCase;
-import it.polimi.dima.giftlist.scope.PerActivity;
-import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
+import it.polimi.dima.giftlist.di.PerActivity;
 
 /**
  * Created by Elena on 27/01/2016.

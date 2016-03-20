@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.squareup.picasso.Picasso;
-
 import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Singleton;
@@ -23,7 +21,6 @@ import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
 import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
-import it.polimi.dima.giftlist.scope.PerActivity;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**

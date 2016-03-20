@@ -75,7 +75,7 @@ public abstract class BaseFragment extends Fragment {
   }
 
   /**
-   * Inject the dependencies
+   * Inject the dependencies. The component itself is declared in the Application class to its lifecycle is fine since it's tied to the Application
    */
   protected void injectDependencies() {
     this.getApplicationComponent().inject(this);

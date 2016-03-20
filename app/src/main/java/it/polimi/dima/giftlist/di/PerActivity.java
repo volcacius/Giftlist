@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.scope;
+package it.polimi.dima.giftlist.di;
 
 /**
  * Created by Alessandro on 18/03/16.

@@ -27,8 +27,10 @@ public class WishlistSettingsFragment extends BaseFragment {
 
     @Bind(R.id.etsy_categories)
     Spinner mEtsyCategories;
+
     @Bind(R.id.start_product_activity)
     Button mStartActivityButton;
+
     @Bind(R.id.keywords)
     EditText mKeywordsEditText;
 
@@ -43,7 +45,6 @@ public class WishlistSettingsFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-
     }
 
     @Override
@@ -65,11 +66,6 @@ public class WishlistSettingsFragment extends BaseFragment {
     @OnItemSelected(R.id.etsy_categories)
     public void onItemSelected(int position) {
         mCategorySelected = String.valueOf(mEtsyCategories.getSelectedItem());
-    }
-
-    @Override
-    public void injectDependencies() {
-
     }
 
 }

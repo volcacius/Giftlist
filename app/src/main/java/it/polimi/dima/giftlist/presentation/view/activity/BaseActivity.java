@@ -28,7 +28,6 @@ public class BaseActivity extends AppCompatActivity {
         injectDependencies();
         super.onCreate(savedInstanceState);
         Icepick.restoreInstanceState(this, savedInstanceState);
-
     }
 
     @Override
@@ -37,7 +36,10 @@ public class BaseActivity extends AppCompatActivity {
         Icepick.saveInstanceState(this, outState);
     }
 
-    protected void addFragment(int containerViewId, Fragment fragment) {
+    protected void addFragment(int containerViewId, Fragment fragment, Bundle args) {
+        if (args != null) {
+            fragment.setArguments(args);
+        }
         getSupportFragmentManager().beginTransaction()
         .add(containerViewId, fragment)
         .commit();
