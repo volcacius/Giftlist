@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.net;
+package it.polimi.dima.giftlist.data.net.etsy;
 
 import java.util.List;
 
