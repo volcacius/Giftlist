@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.repository;
+package it.polimi.dima.giftlist.domain.repository;
 
 import java.util.List;
 
