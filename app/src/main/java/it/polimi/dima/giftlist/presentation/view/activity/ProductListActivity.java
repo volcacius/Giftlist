@@ -3,7 +3,6 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
