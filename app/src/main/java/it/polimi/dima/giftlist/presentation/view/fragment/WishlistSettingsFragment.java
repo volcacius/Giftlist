@@ -58,6 +58,7 @@ public class WishlistSettingsFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_wishlistsettings, container, false); //xml file name
         ButterKnife.bind(this,v);
+        //TODO questo override è da eliminare, trovare un modo più pulito per settare il valore di default della view
         mKeywordsEditText.setText("");
 
         return v;

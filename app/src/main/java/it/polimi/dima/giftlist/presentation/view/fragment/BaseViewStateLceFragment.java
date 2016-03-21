@@ -16,13 +16,8 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 
-import javax.inject.Inject;
-
 import icepick.Icepick;
-import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.di.HasComponent;
-import it.polimi.dima.giftlist.presentation.component.ApplicationComponent;
-import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**
  * Base LCE ViewState Fragment for this app that uses Butterknife, Icepick and dependency injection
@@ -40,9 +35,9 @@ public abstract class BaseViewStateLceFragment<CV extends View, M, V extends Mvp
     @LayoutRes
     protected abstract int getLayoutRes();
 
+    // Not needed in general. override it in subclass if you need this callback
     @Override
     public void onViewStateInstanceRestored(boolean instanceStateRetained) {
-        // Not needed in general. override it in subclass if you need this callback
         super.onViewStateInstanceRestored(instanceStateRetained);
     }
 
