@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.presentation.module;
+package it.polimi.dima.giftlist;
 
 import android.app.Application;
 import android.content.Context;
@@ -106,95 +106,5 @@ public class ApplicationModule {
     @Singleton
     IntentStarter providesIntentStarter() {
         return new IntentStarter();
-    }
-
-    @Provides
-    @Singleton
-    HttpLoggingInterceptor providesHttpLoggingInterceptor() {
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return httpLoggingInterceptor;
-    }
-
-    @Provides
-    @Singleton
-    EtsySigningInterceptor providesEtsySigningInterceptor() {
-        return new EtsySigningInterceptor(BuildConfig.ETSY_API_KEY);
-    }
-
-    @Provides
-    @Singleton
-    @Named("EtsyOkHttp")
-    OkHttpClient providesEtsyOkHttpClient(EtsySigningInterceptor etsySigningInterceptor, HttpLoggingInterceptor httpLoggingInterceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(etsySigningInterceptor)
-                .addInterceptor(httpLoggingInterceptor)
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    @Named("CurrencyOkHttp")
-    OkHttpClient providesCurrencyOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(httpLoggingInterceptor)
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    EtsyResultsDeserializer providesEtsyResultsDeserializer() {
-        return new EtsyResultsDeserializer();
-    }
-
-    @Provides
-    @Singleton
-    @Named("EtsyGson")
-    Gson providesEtsyGsonInstance(EtsyResultsDeserializer etsyResultsDeserializer) {
-        return new GsonBuilder()
-                .registerTypeAdapter(new TypeToken<List<EtsyProduct>>() {}.getType(), etsyResultsDeserializer)
-                .create();
-    }
-
-    @Provides
-    @Singleton
-    @Named("EtsyRetrofit")
-    Retrofit providesEtsyApiAdapter(@Named("EtsyGson") Gson EtsyGsonInstance, @Named("EtsyOkHttp") OkHttpClient etsyOkHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl(EtsyApi.END_POINT)
-                .addConverterFactory(GsonConverterFactory.create(EtsyGsonInstance))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(etsyOkHttpClient)
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    EtsyApi providesEtsyApi(@Named("EtsyRetrofit") Retrofit etsyApiAdapter) {
-        return etsyApiAdapter.create(EtsyApi.class);
-    }
-
-    @Provides
-    @Singleton
-    @Named("CurrencyRetrofit")
-    Retrofit providesCurrencyApiAdapter(@Named("CurrencyOkHttp") OkHttpClient currencyOkHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl(CurrencyApi.BASE_URL)
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(currencyOkHttpClient)
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    CurrencyApi providesCurrencyApi(@Named("CurrencyRetrofit") Retrofit currencyApiAdapter) {
-        return currencyApiAdapter.create(CurrencyApi.class);
-    }
-
-    @Provides
-    @Singleton
-    CurrencyDataSource providesCurrencyDataSource(CurrencyApi currencyApi, EventBus eventBus) {
-        return new CurrencyDataSource(currencyApi, eventBus);
     }
 }

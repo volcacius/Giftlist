@@ -5,13 +5,15 @@ import android.content.Context;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.module.CurrencyModule;
+import it.polimi.dima.giftlist.data.module.EtsyModule;
 import it.polimi.dima.giftlist.data.repository.datasource.CurrencyDataSource;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
 import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
-import it.polimi.dima.giftlist.presentation.module.ApplicationModule;
 import it.polimi.dima.giftlist.presentation.module.ProductListModule;
 import it.polimi.dima.giftlist.presentation.view.activity.BaseActivity;
 import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
@@ -21,7 +23,7 @@ import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
  */
 //Dagger ignores the annotation put atop the @Component. I put it there just for readability
 @Singleton
-@Component(modules = {ApplicationModule.class})
+@Component(modules = {ApplicationModule.class, CurrencyModule.class, EtsyModule.class})
 public interface ApplicationComponent {
 
     void inject(BaseActivity baseActivity);
