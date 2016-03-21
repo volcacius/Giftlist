@@ -31,6 +31,9 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
 
     /**
      * Subscribes the presenter himself as subscriber on the observable
+     * This pattern of calling onCompleted, onError and onNext of the Presenter from the inner subscriber class
+     * allows, if necessary, to override them from classes that extends the Presenter while leaving the subscriber untouched.
+     * To get an idea, see e.g. https://ideone.com/mIeavZ
      *
      * @param pullToRefresh Pull to refresh?
      */
@@ -65,7 +68,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
     @Override
     public void attachView(V view) {
         super.attachView(view);
-        eventBus.register(this);
+//        eventBus.register(this);
     }
 
     @Override
