@@ -6,7 +6,7 @@ import com.squareup.picasso.Picasso;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.data.repository.ProductRepository;
+import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
 import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;

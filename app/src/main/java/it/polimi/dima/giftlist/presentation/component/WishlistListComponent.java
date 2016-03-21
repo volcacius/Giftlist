@@ -1,6 +1,7 @@
 package it.polimi.dima.giftlist.presentation.component;
 
 import dagger.Component;
+import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.di.PerActivity;
 

@@ -1,6 +1,5 @@
 package it.polimi.dima.giftlist.presentation.view.activity;
 
-import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +9,7 @@ import javax.inject.Inject;
 
 import icepick.Icepick;
 import it.polimi.dima.giftlist.GiftlistApplication;
-import it.polimi.dima.giftlist.presentation.component.ApplicationComponent;
+import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**

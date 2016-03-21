@@ -2,8 +2,6 @@ package it.polimi.dima.giftlist;
 
 import android.app.Application;
 
-import it.polimi.dima.giftlist.presentation.component.ApplicationComponent;
-import it.polimi.dima.giftlist.presentation.component.DaggerApplicationComponent;
 import it.polimi.dima.giftlist.presentation.module.ApplicationModule;
 
 /**
