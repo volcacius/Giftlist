@@ -1,28 +1,16 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
-    }
-
-    dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
+//The order in which the plugins are applied matters
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.jakewharton.hugo'
-
-repositories {
-    mavenCentral()
-    maven { url 'https://maven.fabric.io/public' }
-}
-
-apply from: '../config/quality/quality.gradle'
-apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.neenbedankt.android-apt'
-//TODO uncomment line below after adding fabric api secret and key to fabric.properties
+apply plugin: 'com.jakewharton.hugo'
+apply plugin: 'com.github.triplet.play'
+apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'io.fabric'
+apply from: '../config/quality/quality.gradle'
 
+//Repositories exclusive to the app module
+//Common repository are provided in the project build.gradle under allprojects
+repositories {
+}
 
 android {
     compileSdkVersion 23
@@ -36,7 +24,6 @@ android {
         versionCode 1000
         // Major -> Millions, Minor -> Thousands, Bugfix -> Hundreds. E.g 1.3.72 == 1,003,072
         versionName '0.1.0'
-
         buildConfigField "String", "ETSY_API_KEY", "\"${etsy_api_key}\""
         buildConfigField "String", "ETSY_SHARED_SECRET", "\"${etsy_shared_secret}\""
     }
@@ -63,15 +50,13 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
             ext.betaDistributionReleaseNotesFilePath =
                     file('../crashlytics_release_notes.txt').absolutePath
         }
-
         debug {
+            signingConfig signingConfigs.debug
             versionNameSuffix " Debug"
             debuggable true
         }
@@ -91,13 +76,14 @@ android {
     lintOptions {
         warning 'InvalidPackage'
     }
-
+    //Required by retrolambda to inform the IDE of the language level
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
+//configuration of the triplet play publisher plugin
 play {
     serviceAccountEmail = 'your-service-account-email'
     pk12File = file('key.p12')
@@ -105,13 +91,8 @@ play {
     track = 'alpha'
 }
 
-repositories {
-    maven { url "https://clojars.org/repo/" }
-}
-
-
 dependencies {
-    final PLAY_SERVICES_VERSION = '8.3.0'
+    final PLAY_SERVICES_VERSION = '8.4.0'
     final SUPPORT_LIBRARY_VERSION = '23.1.1'
     final RETROFIT_VERSION = '2.0.0-beta4'
     final DAGGER_VERSION = '2.0.2'
@@ -119,16 +100,28 @@ dependencies {
     final HAMCREST_VERSION = '1.3'
     final ESPRESSO_VERSION = '2.2.1'
     final RUNNER_VERSION = '0.4'
-    final ICEPICK_VERSION = '3.1.0'
+    final ICEPICK_VERSION = '3.2.0'
     final EVENTBUS_VERSION = '3.0.0'
     final OKHTTP_VERSION = '3.1.2'
     final FRAGMENT_ARGS_VERSION = '3.0.2'
+    final SWIPE_CARD_VERSION = '1.0.9@aar'
+    final JUNIT_VERSION = '4.12'
+    final MOCKITO_VERSION = '1.10.19'
+    final MOSBY_VERSION = '2.0.1'
+    final ANNOTATED_ADAPTER_VERSION = '1.1.1'
+    final PICASSO_VERSION = '2.5.2'
+    final JAVAX_ANNOTATION_VERSION = '10.0-b28'
+    final SQL_BRITE_VERSION = '0.4.1'
+    final RX_JAVA_VERSION = '1.1.0'
+    final RX_ANDROID_VERSION = '1.1.0'
+    final BUTTERKNIFE_VERSION = '7.0.1'
+    final TIMBER_VERSION = '4.1.0'
+    final CRASHLYTICS_VERSION = '2.5.5@aar'
+    final ROBOELECTRIC_VERSION = '3.0'
 
-    def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
-    def jUnit = "junit:junit:4.12"
-    def mockito = "org.mockito:mockito-core:1.10.19"
-
-    // App Dependencies
+    // "compile" refers to the dependencies required to compile the production source of the project.
+    //The .jar in the libs folder are included as dependencies
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
     compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:recyclerview-v7:$SUPPORT_LIBRARY_VERSION"
@@ -145,28 +138,31 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
     compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
     compile "com.google.code.gson:gson:2.4"
-    compile 'com.lorentzos.swipecards:library:1.0.9@aar'
+    compile "com.google.dagger:dagger:$DAGGER_VERSION"
+    compile "com.lorentzos.swipecards:library:$SWIPE_CARD_VERSION"
+    compile "frankiesardo:icepick:$ICEPICK_VERSION"
     compile "com.hannesdorfmann.fragmentargs:annotation:$FRAGMENT_ARGS_VERSION"
-    apt "com.hannesdorfmann.fragmentargs:processor:$FRAGMENT_ARGS_VERSION"
-
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+    compile "com.hannesdorfmann.mosby:mvp:$MOSBY_VERSION"
+    compile "com.hannesdorfmann.mosby:viewstate:$MOSBY_VERSION"
+    compile "com.hannesdorfmann.annotatedadapter:annotation:$ANNOTATED_ADAPTER_VERSION"
+    compile "com.hannesdorfmann.annotatedadapter:support-recyclerview:$ANNOTATED_ADAPTER_VERSION"
+    compile "com.squareup.picasso:picasso:$PICASSO_VERSION"
+    compile "com.squareup.sqlbrite:sqlbrite:$SQL_BRITE_VERSION"
+    compile "io.reactivex:rxandroid:$RX_ANDROID_VERSION"
+    compile "io.reactivex:rxjava:$RX_JAVA_VERSION"
+    compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    compile "com.jakewharton.timber:timber:$TIMBER_VERSION"
+    compile("com.crashlytics.sdk.android:crashlytics:$CRASHLYTICS_VERSION") {
         transitive = true;
     }
 
-    //Mosby dependencies
-
-
-    compile "com.google.dagger:dagger:$DAGGER_VERSION"
-    provided "org.glassfish:javax.annotation:10.0-b28" //Required by Dagger2
-
-    compile "frankiesardo:icepick:$ICEPICK_VERSION"
     provided "frankiesardo:icepick-processor:$ICEPICK_VERSION"
-
-    apt 'com.hannesdorfmann.annotatedadapter:processor:1.1.1'
+    //Required by Dagger 2
+    provided "org.glassfish:javax.annotation:$JAVAX_ANNOTATION_VERSION"
 
     // Instrumentation test dependencies
-    androidTestCompile jUnit
-    androidTestCompile mockito
+    androidTestCompile "junit:junit:$JUNIT_VERSION"
+    androidTestCompile "org.mockito:mockito-core:$MOCKITO_VERSION"
     androidTestCompile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
     androidTestCompile("com.android.support.test.espresso:espresso-contrib:$ESPRESSO_VERSION") {
         exclude group: 'com.android.support', module: 'appcompat'
@@ -180,30 +176,23 @@ dependencies {
     androidTestCompile "com.crittercism.dexmaker:dexmaker-dx:$DEXMAKER_VERSION"
     androidTestCompile "com.crittercism.dexmaker:dexmaker-mockito:$DEXMAKER_VERSION"
 
-    // Unit tests dependencies
-    testCompile jUnit
-    testCompile mockito
+    // The dependencies required to compile the test source of the project.
+    // By default, also includes the compiled production classes and the compile time dependencies.
+    testCompile "junit:junit:$JUNIT_VERSION"
+    testCompile "org.mockito:mockito-core:$MOCKITO_VERSION"
     testCompile "org.hamcrest:hamcrest-core:$HAMCREST_VERSION"
     testCompile "org.hamcrest:hamcrest-library:$HAMCREST_VERSION"
     testCompile "org.hamcrest:hamcrest-integration:$HAMCREST_VERSION"
-    testCompile 'org.robolectric:robolectric:3.0'
+    testCompile "org.robolectric:robolectric:$ROBOELECTRIC_VERSION"
 
     // APT dependencies
-    apt daggerCompiler
-    testApt daggerCompiler
-    androidTestApt daggerCompiler
-
-    compile 'com.hannesdorfmann.mosby:mvp:2.0.0'
-    compile 'com.hannesdorfmann.mosby:viewstate:2.0.0'
-    compile 'com.hannesdorfmann.annotatedadapter:annotation:1.1.1'
-    compile 'com.hannesdorfmann.annotatedadapter:support-recyclerview:1.1.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.sqlbrite:sqlbrite:0.4.1'
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.jakewharton.timber:timber:4.1.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    //testApt and androidTestApt are gradle configurations provided by apt plugin
+    //to specify that testing code requires to access the code generated by those dependencies
+    apt "com.hannesdorfmann.annotatedadapter:processor:$ANNOTATED_ADAPTER_VERSION"
+    apt "com.hannesdorfmann.fragmentargs:processor:$FRAGMENT_ARGS_VERSION"
+    apt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+    testApt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+    androidTestApt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
 }
 
 // Log out test results to console

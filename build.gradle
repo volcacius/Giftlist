@@ -1,3 +1,4 @@
+//The buildscript dependencies are those required by the building environment itself
 buildscript {
     repositories {
         mavenCentral()
@@ -5,11 +6,17 @@ buildscript {
         maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
+        //base android gradle plugin
         classpath 'com.android.tools.build:gradle:1.5.0'
+        //Upload directly from Gradle to the Play Store
         classpath 'com.github.triplet.gradle:play-publisher:1.1.4'
+        //Plugin required to process code-generating annotations.
+        //It also introduces the "apt" gradle configuration for dependencies
+        //that generate code
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        //noinspection GradleDynamicVersion
+        //Required by Fabric
         classpath 'io.fabric.tools:gradle:1.+'
+        //Required by retrolambda
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
@@ -20,5 +27,6 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://clojars.org/repo/" }
     }
 }
