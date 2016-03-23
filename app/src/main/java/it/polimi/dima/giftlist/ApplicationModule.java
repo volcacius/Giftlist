@@ -19,20 +19,16 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.BuildConfig;
-import it.polimi.dima.giftlist.UIThread;
 import it.polimi.dima.giftlist.data.DummyInterface;
 import it.polimi.dima.giftlist.data.DummyList;
 import it.polimi.dima.giftlist.data.net.currency.CurrencyApi;
 import it.polimi.dima.giftlist.data.repository.datasource.CurrencyDataSource;
-import it.polimi.dima.giftlist.data.executor.JobExecutor;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyApi;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyResultsDeserializer;
 import it.polimi.dima.giftlist.data.net.etsy.EtsySigningInterceptor;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
-import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
-import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 import it.polimi.dima.giftlist.util.HttpLoggingInterceptor;
@@ -41,6 +37,9 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Alessandro on 15/03/16.
@@ -74,20 +73,9 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    ThreadExecutor provideThreadExecutor(JobExecutor jobExecutor) {
-        return jobExecutor;
-    }
-
-    @Provides
-    @Singleton
-    PostExecutionThread providePostExecutionThread(UIThread uiThread) {
-        return uiThread;
-    }
-
-    @Provides
-    @Singleton
-    public ProductRepository providesRepository(EtsyApi etsyApi, CurrencyDataSource currencyDataSource, EventBus eventBus) {
-        return new EtsyProductDataSource(etsyApi, currencyDataSource, eventBus);
+    @Named("MainThread")
+    Scheduler provideMainThread() {
+        return AndroidSchedulers.mainThread();
     }
 
     @Provides
