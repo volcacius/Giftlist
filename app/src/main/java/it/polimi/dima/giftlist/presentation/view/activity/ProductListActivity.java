@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
+import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductListModule;

@@ -21,11 +21,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
-import it.polimi.dima.giftlist.presentation.component.DaggerWishlistListComponent;
 import it.polimi.dima.giftlist.data.model.Wishlist;
-import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
-import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
-import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 
@@ -94,7 +90,7 @@ public abstract class WishlistListFragment extends MvpLceViewStateFragment<Swipe
     }
 
     @Override public WishlistListPresenter createPresenter() {
-        return mWishlistListComponent.providePresenter();
+        return mWishlistListComponent.provideProductListPresenter();
     }
 
     @Override public void setData(List<Wishlist> data) {

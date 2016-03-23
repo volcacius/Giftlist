@@ -5,7 +5,7 @@ package it.polimi.dima.giftlist.util;
  */
 public class ErrorMessageDeterminer {
 
-    public String getErrorMessage(Throwable e, boolean pullToRefresh) {
+    public String getErrorMessage(Throwable e) {
         String message = e.getMessage();
         message = message.split("\"")[0];
         switch (message) {
