@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import it.polimi.dima.giftlist.data.model.Currency;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.net.currency.CurrencyApi;
 import it.polimi.dima.giftlist.data.net.currency.CurrencyXmlModel;
@@ -22,7 +23,7 @@ import rx.Observable;
 public class CurrencyDataSource implements CurrencyRepository {
 
     CurrencyApi currencyApi;
-    Observable<List<CurrencyXmlModel.Currency>> currencyList;
+    Observable<List<Currency>> currencyList;
     EventBus eventBus;
 
     @Inject
@@ -31,30 +32,21 @@ public class CurrencyDataSource implements CurrencyRepository {
         this.eventBus = eventBus;
     }
 
+    //.cache() avoids a call to the API each time someone subscribe to the observable and instead caches the results of the API observable
     private void fetchRates() {
-        eventBus.register(this);
-        Observable<CurrencyXmlModel> currencyXmlModelObservable = currencyApi.getCurrencies();
-        currencyList = currencyXmlModelObservable
-                .flatMap(currencyXmlModel ->
-                                Observable.from(
-                                        currencyXmlModel.getCurrencyXmlListWrapper().getCurrencyXmlList().getCurrencyList()
-                                )
-                ).toList();
+        currencyList = currencyApi
+                        .getCurrencies()
+                        .cache()
+                        .flatMap(currencyXmlModel -> Observable.from(currencyXmlModel.getCurrencyXmlListWrapper().getCurrencyXmlList().getCurrencyList()))
+                        .toList();
+
     }
 
     @Override
-    public Observable<List<CurrencyXmlModel.Currency>> getCurrencyList() {
+    public Observable<List<Currency>> getCurrencyList() {
         if (currencyList == null) {
             fetchRates();
         }
         return currencyList;
-    }
-
-    @Override
-    public Observable<CurrencyXmlModel.Currency> getCurrency(CurrencyType currencyType) {
-        if (currencyList == null) {
-            fetchRates();
-        }
-        return null;
     }
 }
