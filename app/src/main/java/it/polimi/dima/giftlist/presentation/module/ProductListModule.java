@@ -4,13 +4,16 @@ import android.content.Context;
 
 import com.squareup.picasso.Picasso;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
+import it.polimi.dima.giftlist.data.model.CurrencyType;
+import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
-import it.polimi.dima.giftlist.domain.executor.PostExecutionThread;
-import it.polimi.dima.giftlist.domain.executor.ThreadExecutor;
 import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
 import it.polimi.dima.giftlist.di.PerActivity;
+import it.polimi.dima.giftlist.presentation.view.adapter.ProductListAdapter;
 
 /**
  * Created by Elena on 27/01/2016.
@@ -38,15 +41,19 @@ public class ProductListModule {
 
     @Provides
     @PerActivity
-    GetProductListUseCase provideGetUserListUseCase(ProductRepository productRepository,
-                                      ThreadExecutor threadExecutor,
-                                      PostExecutionThread postExecutionThread) {
-        return new GetProductListUseCase(category, keywords, productRepository, threadExecutor, postExecutionThread);
+    GetProductListUseCase provideGetUserListUseCase(ProductRepository productRepository, CurrencyRepository currencyRepository) {
+        return new GetProductListUseCase(productRepository, currencyRepository, category, keywords);
     }
 
     @Provides
     @PerActivity
     Picasso providesPicasso() {
         return Picasso.with(context);
+    }
+
+    @Provides
+    @PerActivity
+    ProductListAdapter providesProductListAdapter(Picasso picasso) {
+        return new ProductListAdapter(context, picasso);
     }
 }
