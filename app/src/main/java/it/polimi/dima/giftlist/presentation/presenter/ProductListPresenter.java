@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,15 +22,6 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Li
     public ProductListPresenter(EventBus eventBus, GetProductListUseCase getProductListUseCase) {
         super(eventBus, getProductListUseCase);
     }
-
-    /*
-    //TODO: merge this into the usecase or the oncompleted in some way
-    @Subscribe
-    public void onEvent(RetrofitEvent event) {
-        getView().loadData(true);
-    }
-    */
-
 }
 
 

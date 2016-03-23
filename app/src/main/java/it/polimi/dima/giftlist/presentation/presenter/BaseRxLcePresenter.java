@@ -9,6 +9,12 @@ import rx.Subscriber;
 
 /**
  * Created by Alessandro on 08/01/16.
+ * One of the responsability of the presenter is to update to view it manages, if it is attached,
+ * when some ements arrive from the bus, i.e. not the traditional data flow from the use cases,
+ * to which it is subscribed through rx, but side effects of stuff happening in other UIs it does not manage.
+ * Events vs Rx is like UDP versus TCP: events does not require to manage a subscription,
+ * which would be more complicated since subscribing to activities and fragments mean having to keep up
+ * with their lifecycles.
  */
 public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends UseCase<M>>
         extends com.hannesdorfmann.mosby.mvp.MvpBasePresenter<V>
@@ -37,7 +43,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      *
      * @param pullToRefresh Pull to refresh?
      */
-    public void subscribe(final boolean pullToRefresh) {
+    public void subscribe(boolean pullToRefresh) {
         if (isViewAttached()) {
             getView().showLoading(pullToRefresh);
         }
@@ -77,7 +83,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         if (!retainInstance) {
             unsubscribe();
         }
-        eventBus.unregister(this);
+        //eventBus.unregister(this);
     }
 
     private final class BaseSubscriber extends Subscriber<M> {
