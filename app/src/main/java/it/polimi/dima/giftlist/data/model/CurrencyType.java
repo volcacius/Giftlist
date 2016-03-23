@@ -40,7 +40,7 @@ public enum CurrencyType {
 
     private final String text;
 
-    private CurrencyType(final String text) {
+    CurrencyType(final String text) {
         this.text = text;
     }
 

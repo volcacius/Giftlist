@@ -4,9 +4,11 @@ import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
+import org.simpleframework.xml.convert.Convert;
 
 import java.util.List;
 
+import it.polimi.dima.giftlist.data.model.Currency;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 
 /**
@@ -37,7 +39,7 @@ public class CurrencyXmlModel {
     public static class CurrencyXmlList {
 
         @Attribute(name = "time", required = false)
-        Long time;
+        String time;
 
         @ElementList(inline = true)
         List<Currency> currencyList;
@@ -46,41 +48,8 @@ public class CurrencyXmlModel {
             return currencyList;
         }
 
-        public Long getTime() {
+        public String getTime() {
             return time;
-        }
-    }
-
-
-    @Root(name = "Cube")
-    public static class Currency {
-
-        @Attribute(name = "currency")
-        CurrencyType currencyType;
-
-        @Attribute(name = "rate")
-        float rate;
-
-        Long time;
-
-        public CurrencyType getCurrencyType() {
-            return currencyType;
-        }
-
-        public float getRate() {
-            return rate;
-        }
-
-        public void setRate(float rate) {
-            this.rate = rate;
-        }
-
-        public Long getTime() {
-            return time;
-        }
-
-        public void setTime(Long time) {
-            this.time = time;
         }
     }
 }
