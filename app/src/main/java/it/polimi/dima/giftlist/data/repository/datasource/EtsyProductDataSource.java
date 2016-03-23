@@ -23,38 +23,17 @@ import rx.Observable;
  */
 public class EtsyProductDataSource implements ProductRepository {
 
-    public final static int MAX_ATTEMPS = 3;
-
     EtsyApi mEtsyApi;
-    CurrencyDataSource mCurrencyDataSource;
     EventBus mEventBus;
 
     @Inject
-    public EtsyProductDataSource(EtsyApi etsyApi, CurrencyDataSource currencyDataSource, EventBus eventBus) {
+    public EtsyProductDataSource(EtsyApi etsyApi, EventBus eventBus) {
         mEtsyApi = etsyApi;
-        mCurrencyDataSource = currencyDataSource;
         mEventBus = eventBus;
     }
 
     @Override
     public Observable<List<EtsyProduct>> getProductList(String category, String keywords, int offset) {
-        return mEtsyApi.getItems(category, keywords, offset)
-                .flatMap(etsyProductList -> Observable.from(etsyProductList))
-                //.doOnNext(etsyProduct -> etsyProduct.setConvertedPrice(convert(etsyProduct.getCurrency(), etsyProduct.getPrice())))
-                .toList();
+        return mEtsyApi.getItems(category, keywords, offset);
     }
-
-    /*
-    private float convert(String currency, Float price) {
-        return round(price / mRateList.getConversionRate(currency), 2);
-    }
-
-    public float round(float value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.floatValue();
-    }
-    */
 }

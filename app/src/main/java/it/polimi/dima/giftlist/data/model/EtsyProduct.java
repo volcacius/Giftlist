@@ -5,24 +5,23 @@ package it.polimi.dima.giftlist.data.model;
  */
 public class EtsyProduct extends Product {
 
-    int listingId;
     int categoryId;
 
-    public EtsyProduct(String name, String description, int listingId, float price, String currency, String imageUrl) {
+    public EtsyProduct(String name, String description, int id, float price, CurrencyType currencyType, String imageUrl) {
         this.name = name;
         this.description = description;
-        this.listingId = listingId;
+        this.id = id;
         this.price = price;
-        this.currency = currency;
+        this.currencyType = currencyType;
         this.imageUrl = imageUrl;
     }
 
     public int getListingId() {
-        return listingId;
+        return id;
     }
 
     public void setListingId(int listingId) {
-        this.listingId = listingId;
+        this.id = id;
     }
 
     public int getCategoryId() {

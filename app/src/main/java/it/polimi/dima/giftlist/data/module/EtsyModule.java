@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import javax.inject.Named;
@@ -16,6 +18,9 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyApi;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyResultsDeserializer;
 import it.polimi.dima.giftlist.data.net.etsy.EtsySigningInterceptor;
+import it.polimi.dima.giftlist.data.repository.datasource.CurrencyDataSource;
+import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
+import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import it.polimi.dima.giftlist.util.HttpLoggingInterceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -31,6 +36,7 @@ public class EtsyModule {
     @Provides
     @Singleton
     @Named("EtsyHttpLog")
+    //TODO: enable log only in debug build
     HttpLoggingInterceptor providesHttpLoggingInterceptor() {
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
         httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -84,5 +90,11 @@ public class EtsyModule {
     @Singleton
     EtsyApi providesEtsyApi(@Named("EtsyRetrofit") Retrofit etsyApiAdapter) {
         return etsyApiAdapter.create(EtsyApi.class);
+    }
+
+    @Provides
+    @Singleton
+    public ProductRepository providesEtsyRepository(EtsyApi etsyApi, EventBus eventBus) {
+        return new EtsyProductDataSource(etsyApi, eventBus);
     }
 }

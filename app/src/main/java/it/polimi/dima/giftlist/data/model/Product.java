@@ -8,7 +8,8 @@ public class Product {
     String name;
     float price;
     float convertedPrice;
-    String currency;
+    int id;
+    CurrencyType currencyType;
     String description;
     String imageUrl;
 
@@ -20,8 +21,8 @@ public class Product {
         this.name = name;
     }
 
-    public String getCurrency() {
-        return currency;
+    public CurrencyType getCurrencyType() {
+        return currencyType;
     }
 
     public String getDescription() {
@@ -42,5 +43,9 @@ public class Product {
 
     public void setConvertedPrice(float price) {
         this.convertedPrice = price;
+    }
+
+    public int getId() {
+        return id;
     }
 }
