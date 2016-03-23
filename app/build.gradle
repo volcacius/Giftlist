@@ -145,6 +145,7 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava:$RETROFIT_VERSION"
     compile "com.squareup.okhttp3:okhttp:$OKHTTP_VERSION"
     compile "com.google.code.gson:gson:2.4"
+    compile 'com.lorentzos.swipecards:library:1.0.9@aar'
     compile "com.hannesdorfmann.fragmentargs:annotation:$FRAGMENT_ARGS_VERSION"
     apt "com.hannesdorfmann.fragmentargs:processor:$FRAGMENT_ARGS_VERSION"
 
