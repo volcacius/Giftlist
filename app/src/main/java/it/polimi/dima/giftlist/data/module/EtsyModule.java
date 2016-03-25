@@ -29,34 +29,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by Alessandro on 21/03/16.
+ * EtsyModule contains provides methods both for the debug and the release build,
+ * so it's added to dagger graph in both cases.
  */
 @Module
 public class EtsyModule {
 
     @Provides
     @Singleton
-    @Named("EtsyHttpLog")
-    //TODO: enable log only in debug build
-    HttpLoggingInterceptor providesHttpLoggingInterceptor() {
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return httpLoggingInterceptor;
-    }
-
-    @Provides
-    @Singleton
     EtsySigningInterceptor providesEtsySigningInterceptor() {
         return new EtsySigningInterceptor(BuildConfig.ETSY_API_KEY);
-    }
-
-    @Provides
-    @Singleton
-    @Named("EtsyOkHttp")
-    OkHttpClient providesEtsyOkHttpClient(EtsySigningInterceptor etsySigningInterceptor, @Named("EtsyHttpLog") HttpLoggingInterceptor httpLoggingInterceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(etsySigningInterceptor)
-                .addInterceptor(httpLoggingInterceptor)
-                .build();
     }
 
     @Provides
@@ -72,18 +54,6 @@ public class EtsyModule {
         return new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<List<EtsyProduct>>() {}.getType(), etsyResultsDeserializer)
                 .create();
-    }
-
-    @Provides
-    @Singleton
-    @Named("EtsyRetrofit")
-    Retrofit providesEtsyApiAdapter(@Named("EtsyGson") Gson EtsyGsonInstance, @Named("EtsyOkHttp") OkHttpClient etsyOkHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl(EtsyApi.END_POINT)
-                .addConverterFactory(GsonConverterFactory.create(EtsyGsonInstance))
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(etsyOkHttpClient)
-                .build();
     }
 
     @Provides

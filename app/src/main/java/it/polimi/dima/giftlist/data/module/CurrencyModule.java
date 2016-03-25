@@ -28,21 +28,11 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 
 /**
  * Created by Alessandro on 21/03/16.
+ * EtsyModule contains provides methods both for the debug and the release build,
+ * so it's added to dagger graph in both cases.
  */
 @Module
 public class CurrencyModule {
-
-    @Provides
-    @Singleton
-    @Named("CurrencyRetrofit")
-    Retrofit providesCurrencyApiAdapter(@Named("CurrencyOkHttp") OkHttpClient currencyOkHttpClient, @Named("CurrencyXml") SimpleXmlConverterFactory simpleXmlConverterFactory) {
-        return new Retrofit.Builder()
-                .baseUrl(CurrencyApi.BASE_URL)
-                .addConverterFactory(simpleXmlConverterFactory)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-                .client(currencyOkHttpClient)
-                .build();
-    }
 
     @Provides
     @Singleton
@@ -68,16 +58,6 @@ public class CurrencyModule {
 
     @Provides
     @Singleton
-    //TODO: enable log only in debug build
-    @Named("CurrencyHttpLog")
-    HttpLoggingInterceptor providesHttpLoggingInterceptor() {
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        return httpLoggingInterceptor;
-    }
-
-    @Provides
-    @Singleton
     CurrencyApi providesCurrencyApi(@Named("CurrencyRetrofit") Retrofit currencyApiAdapter) {
         return currencyApiAdapter.create(CurrencyApi.class);
     }
@@ -86,15 +66,6 @@ public class CurrencyModule {
     @Singleton
     CurrencyDataSource providesCurrencyDataSource(CurrencyApi currencyApi, EventBus eventBus) {
         return new CurrencyDataSource(currencyApi, eventBus);
-    }
-
-    @Provides
-    @Singleton
-    @Named("CurrencyOkHttp")
-    OkHttpClient providesCurrencyOkHttpClient(@Named("CurrencyHttpLog") HttpLoggingInterceptor httpLoggingInterceptor) {
-        return new OkHttpClient.Builder()
-                .addInterceptor(httpLoggingInterceptor)
-                .build();
     }
 
     @Provides
