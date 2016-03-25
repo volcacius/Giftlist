@@ -117,7 +117,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
             @Override
             public void onAdapterAboutToEmpty(int i) {
-                presenter.subscribe(NO_PULL_TO_REFRESH);
+                loadData(NO_PULL_TO_REFRESH);
             }
 
             @Override
@@ -151,7 +151,6 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Override
     public void loadData(boolean pullToRefresh) {
         presenter.subscribe(NO_PULL_TO_REFRESH);
-
     }
 
     @Override
