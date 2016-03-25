@@ -15,8 +15,10 @@ import com.hannesdorfmann.fragmentargs.FragmentArgs;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
+import com.squareup.leakcanary.RefWatcher;
 
 import icepick.Icepick;
+import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.di.HasComponent;
 
 /**
@@ -71,6 +73,13 @@ public abstract class BaseViewStateLceFragment<CV extends View, M, V extends Mvp
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RefWatcher refWatcher = GiftlistApplication.getRefWatcher(getActivity());
+        refWatcher.watch(this);
     }
 
     /**

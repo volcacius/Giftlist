@@ -26,12 +26,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
+import com.squareup.leakcanary.RefWatcher;
 
 import javax.inject.Inject;
 
 import icepick.Icepick;
-import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.ApplicationComponent;
+import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**
@@ -72,6 +73,13 @@ public abstract class BaseFragment extends Fragment {
   @Override public void onDestroyView() {
     super.onDestroyView();
     ButterKnife.unbind(this);
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    RefWatcher refWatcher = GiftlistApplication.getRefWatcher(getActivity());
+    refWatcher.watch(this);
   }
 
   /**

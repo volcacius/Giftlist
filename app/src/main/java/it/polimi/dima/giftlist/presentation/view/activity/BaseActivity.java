@@ -8,8 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import javax.inject.Inject;
 
 import icepick.Icepick;
-import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.ApplicationComponent;
+import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**

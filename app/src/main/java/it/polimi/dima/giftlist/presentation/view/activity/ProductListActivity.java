@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import hugo.weaving.DebugLog;
+import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.di.HasComponent;
