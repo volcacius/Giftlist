@@ -5,6 +5,8 @@ import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import org.greenrobot.eventbus.EventBus;
 
 import it.polimi.dima.giftlist.domain.interactor.UseCase;
+import it.polimi.dima.giftlist.presentation.exception.NoMoreResultsFoundException;
+import it.polimi.dima.giftlist.presentation.exception.NoResultsFoundException;
 import rx.Subscriber;
 
 /**

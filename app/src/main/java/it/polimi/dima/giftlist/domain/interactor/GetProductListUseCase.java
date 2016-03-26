@@ -10,6 +10,8 @@ import it.polimi.dima.giftlist.data.model.Currency;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
+import it.polimi.dima.giftlist.presentation.exception.NoMoreResultsFoundException;
+import it.polimi.dima.giftlist.presentation.exception.NoResultsFoundException;
 import rx.Observable;
 import rx.functions.Func2;
 
@@ -43,7 +45,6 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     protected Observable<List<Product>> buildUseCaseObservable() {
         Observable<List<Product>> productList = productRepository.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE);
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();
-        searchOffset++;
         return Observable.combineLatest(productList, currencyList, new Func2<List<Product>, List<Currency>, List<Product>>() {
             @Override
             public List<Product> call(List<Product> productList, List<Currency> currencies) {
@@ -55,6 +56,17 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
                     }
                 }
                 return productList;
+            }
+        }).flatMap(etsyProducts -> {
+            if (etsyProducts.isEmpty() && searchOffset == 0) {
+                return Observable.error(new NoResultsFoundException());
+            } else if (etsyProducts.isEmpty() && searchOffset > 0) {
+                return Observable.error(new NoMoreResultsFoundException());
+            } else {
+                //Increment the search offset only if the query was successful,
+                //otherwhise it must stay the same so that at a query retry (e.g. if network was down) the same offset is used
+                searchOffset++;
+                return Observable.just(etsyProducts);
             }
         });
     }
