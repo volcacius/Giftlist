@@ -28,6 +28,7 @@ android {
         versionName '0.1.0'
         buildConfigField "String", "ETSY_API_KEY", "\"${etsy_api_key}\""
         buildConfigField "String", "ETSY_SHARED_SECRET", "\"${etsy_shared_secret}\""
+        buildConfigField "String", "EBAY_APP_NAME", "\"${ebay_app_name}\""
     }
 
     signingConfigs {
