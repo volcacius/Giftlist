@@ -10,9 +10,12 @@ import com.squareup.leakcanary.RefWatcher;
 
 import it.polimi.dima.giftlist.data.module.CurrencyModule;
 import it.polimi.dima.giftlist.data.module.DebugCurrencyModule;
+import it.polimi.dima.giftlist.data.module.DebugEbayModule;
 import it.polimi.dima.giftlist.data.module.DebugEtsyModule;
+import it.polimi.dima.giftlist.data.module.EbayModule;
 import it.polimi.dima.giftlist.data.module.EtsyModule;
 import it.polimi.dima.giftlist.data.module.ReleaseCurrencyModule;
+import it.polimi.dima.giftlist.data.module.ReleaseEbayModule;
 import it.polimi.dima.giftlist.data.module.ReleaseEtsyModule;
 import jp.wasabeef.takt.Takt;
 
@@ -43,6 +46,8 @@ public class GiftlistApplication extends Application {
                                         .debugCurrencyModule(new DebugCurrencyModule())
                                         .debugEtsyModule(new DebugEtsyModule())
                                         .etsyModule(new EtsyModule())
+                                        .debugEbayModule(new DebugEbayModule())
+                                        .ebayModule(new EbayModule())
                                         .currencyModule(new CurrencyModule())
                                         .build();
             Takt.stock(this).play();
@@ -58,6 +63,8 @@ public class GiftlistApplication extends Application {
                     .releaseCurrencyModule(new ReleaseCurrencyModule())
                     .releaseEtsyModule(new ReleaseEtsyModule())
                     .etsyModule(new EtsyModule())
+                    .releaseEbayModule(new ReleaseEbayModule())
+                    .ebayModule(new EbayModule())
                     .currencyModule(new CurrencyModule())
                     .build();
         }

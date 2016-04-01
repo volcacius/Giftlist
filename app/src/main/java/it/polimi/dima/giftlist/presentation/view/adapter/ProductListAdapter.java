@@ -11,8 +11,16 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.Subscribe;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -21,7 +29,9 @@ import butterknife.BindColor;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.presentation.event.ImageUrlRetrievedEvent;
 
 /**
  * Created by Alessandro on 21/03/16.
@@ -124,4 +134,7 @@ public class ProductListAdapter extends BaseAdapter {
             ButterKnife.bind(this, productListView);
         }
     }
+
+
+
 }

@@ -4,11 +4,17 @@ import android.content.Context;
 
 import com.squareup.picasso.Picasso;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
+
 import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
+import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
+import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
@@ -41,8 +47,8 @@ public class ProductListModule {
 
     @Provides
     @PerActivity
-    GetProductListUseCase provideGetUserListUseCase(ProductRepository productRepository, CurrencyRepository currencyRepository) {
-        return new GetProductListUseCase(productRepository, currencyRepository, category, keywords);
+    GetProductListUseCase provideGetProductListUseCase(EbayProductDataSource etsyRepository,  CurrencyRepository currencyRepository, EventBus eventBus) {
+        return new GetProductListUseCase(etsyRepository, currencyRepository, category, keywords, eventBus);
     }
 
     @Provides
