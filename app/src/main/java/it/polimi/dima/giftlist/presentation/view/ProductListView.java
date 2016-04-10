@@ -11,4 +11,8 @@ import it.polimi.dima.giftlist.data.model.Product;
  * Created by Elena on 27/01/2016.
  */
 public interface ProductListView extends MvpLceView<List<Product>> {
+
+    public void showNoResultsFound();
+
+    public void showNoMoreResultsFound();
 }

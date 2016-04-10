@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.data.model;
 
+import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
+
 /**
  * Created by Alessandro on 08/01/16.
  */

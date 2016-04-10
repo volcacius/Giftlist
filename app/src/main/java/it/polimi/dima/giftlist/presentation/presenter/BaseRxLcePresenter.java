@@ -45,7 +45,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      *
      * @param pullToRefresh Pull to refresh?
      */
-    public void subscribe(boolean pullToRefresh) {
+    public void load(boolean pullToRefresh) {
         if (isViewAttached()) {
             getView().showLoading(pullToRefresh);
         }
@@ -76,7 +76,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
     @Override
     public void attachView(V view) {
         super.attachView(view);
-//        eventBus.register(this);
+        eventBus.register(this);
     }
 
     @Override
@@ -85,7 +85,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         if (!retainInstance) {
             unsubscribe();
         }
-        //eventBus.unregister(this);
+        eventBus.unregister(this);
     }
 
     private final class BaseSubscriber extends Subscriber<M> {

@@ -32,7 +32,7 @@ public class CurrencyDataSource implements CurrencyRepository {
         this.eventBus = eventBus;
     }
 
-    //.cache() avoids a call to the API each time someone subscribe to the observable and instead caches the results of the API observable
+    //.cache() avoids a call to the API each time someone load to the observable and instead caches the results of the API observable
     private void fetchRates() {
         currencyList = currencyApi
                         .getCurrencies()

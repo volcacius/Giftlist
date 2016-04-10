@@ -126,6 +126,7 @@ dependencies {
     final BLOCK_CANARY_VERSION = '1.2.0'
     final LEAK_CANARY_VERSION = '1.4-beta2'
     final STETHO_VERSION = '1.3.1'
+    final STOREIO_VERSION = '1.8.0'
 
     // "compile" refers to the dependencies required to compile the production source of the project.
     //The .jar in the libs folder are included as dependencies
@@ -159,6 +160,9 @@ dependencies {
     compile "io.reactivex:rxandroid:$RX_ANDROID_VERSION"
     compile "io.reactivex:rxjava:$RX_JAVA_VERSION"
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
+    compile "com.pushtorefresh.storio:sqlite:$STOREIO_VERSION"
+    compile "com.pushtorefresh.storio:content-resolver:$STOREIO_VERSION"
+    compile "com.pushtorefresh.storio:sqlite-annotations:$STOREIO_VERSION"
     compile("com.crashlytics.sdk.android:crashlytics:$CRASHLYTICS_VERSION") {
         transitive = true;
     }
@@ -212,6 +216,7 @@ dependencies {
     apt "com.hannesdorfmann.annotatedadapter:processor:$ANNOTATED_ADAPTER_VERSION"
     apt "com.hannesdorfmann.fragmentargs:processor:$FRAGMENT_ARGS_VERSION"
     apt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
+    apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STOREIO_VERSION"
     testApt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     androidTestApt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
 }

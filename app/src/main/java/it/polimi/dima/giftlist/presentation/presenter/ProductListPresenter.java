@@ -1,7 +1,5 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,6 +8,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
+import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.exception.NoMoreResultsFoundException;
 import it.polimi.dima.giftlist.presentation.exception.NoResultsFoundException;
 import it.polimi.dima.giftlist.presentation.view.ProductListView;
@@ -20,12 +20,14 @@ import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
  */
 public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, List<Product>, GetProductListUseCase> {
 
+    private static final boolean NO_PULL_TO_REFRESH = false;
+
     @Inject
     public ProductListPresenter(EventBus eventBus, GetProductListUseCase getProductListUseCase) {
         super(eventBus, getProductListUseCase);
     }
 
-    /*
+
     @Override
     protected void onError(Throwable e, boolean pullToRefresh) {
         if (isViewAttached()) {
@@ -39,7 +41,11 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Li
         }
         unsubscribe();
     }
-    */
+
+    @Subscribe
+    private void onProductAddedEvent(ProductAddedEvent event) {
+        event.getProduct();
+    }
 }
 
 

@@ -5,15 +5,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -23,6 +22,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.view.ProductListView;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
@@ -35,7 +35,7 @@ import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
  */
 @FragmentWithArgs
 public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdapterView, List<Product>, ProductListView, ProductListPresenter>
-        implements ProductListView {
+        implements ProductListView, SwipeFlingAdapterView.onFlingListener {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
 
@@ -57,6 +57,22 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     IntentStarter intentStarter;
     @Inject
     ProductListAdapter productListAdapter;
+    @Inject
+    EventBus eventBus;
+
+    @OnClick(R.id.next_button)
+    public void goNext() {
+        productListAdapter.removeFirstProduct();
+    }
+
+    @OnClick(R.id.reload_button)
+    public void reloadItems() {
+        loadData(NO_PULL_TO_REFRESH);
+    }
+
+    /*
+     * Init methods
+     */
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,16 +83,6 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Override
     protected void injectDependencies() {
         this.getComponent(ProductListComponent.class).inject(this);
-    }
-
-    @OnClick(R.id.next_button)
-    public void goNext() {
-        productListAdapter.removeFirstProduct();
-    }
-
-    @OnClick(R.id.reload_button)
-    public void reloadItems() {
-        loadData(true);
     }
 
     @NonNull
@@ -100,32 +106,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
         super.onViewCreated(view, savedInstanceState);
         flingContainer.setAdapter(productListAdapter);
         flingContainer.setEmptyView(loadingView);
-        flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
-            @Override
-            public void removeFirstObjectInAdapter() {
-                productListAdapter.removeFirstProduct();
-            }
-
-            @Override
-            public void onLeftCardExit(Object o) {
-
-            }
-
-            @Override
-            public void onRightCardExit(Object o) {
-
-            }
-
-            @Override
-            public void onAdapterAboutToEmpty(int i) {
-                loadData(NO_PULL_TO_REFRESH);
-            }
-
-            @Override
-            public void onScroll(float v) {
-
-            }
-        });
+        flingContainer.setFlingListener(this);
     }
 
     @NonNull
@@ -134,6 +115,14 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
         return new RetainingLceViewState<>();
     }
 
+    /*
+     * LCE methods overrides
+     */
+
+    //I need to have data as a list of products so that when I call showContent, which calls getData,
+    //data is not null, even if it hasn't been retrieved from the API yet, but an empty list created
+    //during the adapter creation. Then, if the list is still empty, flingContainer sets the view to the empty view,
+    //which is loading.
     @Override
     public List<Product> getData() {
         return productListAdapter.getProductList();
@@ -151,7 +140,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @Override
     public void loadData(boolean pullToRefresh) {
-        presenter.subscribe(NO_PULL_TO_REFRESH);
+        presenter.load(pullToRefresh);
     }
 
     @Override
@@ -170,10 +159,52 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
         reloadButton.setEnabled(false);
     }
 
-    //called by BaseRxLcePresenter in method load()
     @Override
     public void showLoading(boolean pullToRefresh) {
         nextProduct.setEnabled(false);
         super.showLoading(NO_PULL_TO_REFRESH);
+    }
+
+    /*
+     * SwipeFlingAdapterView methods overrides
+     */
+
+    @Override
+    public void removeFirstObjectInAdapter() {
+        productListAdapter.removeFirstProduct();
+    }
+
+    @Override
+    public void onLeftCardExit(Object o) {
+        eventBus.post(new ProductAddedEvent((Product) o));
+    }
+
+    @Override
+    public void onRightCardExit(Object o) {
+
+    }
+
+    @Override
+    public void onAdapterAboutToEmpty(int i) {
+        loadData(NO_PULL_TO_REFRESH);
+    }
+
+    @Override
+    public void onScroll(float v) {
+
+    }
+
+    /*
+     * Product list  view methods
+     */
+
+    @Override
+    public void showNoResultsFound() {
+
+    }
+
+    @Override
+    public void showNoMoreResultsFound() {
+
     }
 }
