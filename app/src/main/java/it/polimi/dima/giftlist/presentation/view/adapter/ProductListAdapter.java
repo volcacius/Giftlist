@@ -30,6 +30,7 @@ import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.ImageUrlRetrievedEvent;
 
@@ -86,6 +87,12 @@ public class ProductListAdapter extends BaseAdapter {
         if(currentProduct.getConvertedPrice() != 0 && !currentProduct.getCurrencyType().equals(CurrencyType.EUR)) {
             productListViewHolder.convertedPriceTextView.setText("(" + currentProduct.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
         }
+        if(currentProduct instanceof EbayProduct) {
+            productListViewHolder.repositoryTextView.setText(R.string.checkbox_ebay);
+        }
+        if(currentProduct instanceof EtsyProduct) {
+            productListViewHolder.repositoryTextView.setText(R.string.checkbox_etsy);
+        }
         if (currentProduct.getImageUrl() == null) {
             ColorDrawable colorDrawable = new ColorDrawable(productListViewHolder.colorPrimary);
             productListViewHolder.productThumb.setDrawingCacheEnabled(true);
@@ -127,6 +134,8 @@ public class ProductListAdapter extends BaseAdapter {
         TextView priceTextView;
         @Bind(R.id.product_price_converted)
         TextView convertedPriceTextView;
+        @Bind(R.id.text_repository)
+        TextView repositoryTextView;
         @BindColor(R.color.primary)
         int colorPrimary;
 

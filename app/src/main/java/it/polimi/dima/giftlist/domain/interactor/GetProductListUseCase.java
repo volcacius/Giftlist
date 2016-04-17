@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.domain.interactor;
 
+import com.fernandocejas.frodo.annotation.RxLogObservable;
+
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.DataInputStream;
@@ -8,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +34,7 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
-    private ProductRepository productRepository;
+    private List<ProductRepository> productRepositoryList;
     private CurrencyRepository currencyRepository;
     private String category;
     private String keywords;
@@ -39,13 +42,13 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     protected EventBus eventBus;
 
     @Inject
-    public GetProductListUseCase(ProductRepository productRepository,
+    public GetProductListUseCase(List<ProductRepository> productRepositoryList,
                                  CurrencyRepository currencyRepository,
                                  String category,
                                  String keywords,
                                  EventBus eventBus) {
         this.currencyRepository = currencyRepository;
-        this.productRepository = productRepository;
+        this.productRepositoryList = productRepositoryList;
         this.category = category;
         this.keywords = keywords;
         this.searchOffset = STARTING_OFFSET;
@@ -54,40 +57,52 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
         this.eventBus = eventBus;
     }
 
+    @RxLogObservable
     @Override
     protected Observable<List<Product>> buildUseCaseObservable() {
-        Observable<List<Product>> productList = productRepository.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE);
+
+        List<Observable<List<Product>>> productListList = getProductListList();
+        Observable<List<Product>> productList = Observable.merge(productListList);
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();
         searchOffset++;
-        return Observable.combineLatest(productList, currencyList, new Func2<List<Product>, List<Currency>, List<Product>>() {
-            @Override
-            public List<Product> call(List<Product> productList, List<Currency> currencies) {
+        return Observable
+                .combineLatest(productList, currencyList, new Func2<List<Product>, List<Currency>, List<Product>>() {
+                    @Override
+                    public List<Product> call(List<Product> productList, List<Currency> currencies) {
 
-                if(productList.get(0).getClass().equals(EbayProduct.class)){
-                    Thread thread = new Thread(new Runnable(){
-                        @Override
-                        public void run(){
-                            for (Product p : productList) {
-                                p.setImageUrl(getHQImageUrl((EbayProduct) p));
+                        if (productList.get(0).getClass().equals(EbayProduct.class)) {
+                            Thread thread = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    for (Product p : productList) {
+                                        p.setImageUrl(getHQImageUrl((EbayProduct) p));
+                                    }
+                                    eventBus.post(new ImageUrlRetrievedEvent());
+
+                                }
+                            });
+                            thread.start();
+                        }
+
+                        for (Product p : productList) {
+
+                            for (Currency c : currencies) {
+                                if (c.getCurrencyType().equals(p.getCurrencyType())) {
+                                    p.setConvertedPrice(round(p.getPrice() / c.getRate(), DIGITS));
+                                }
                             }
-                            eventBus.post(new ImageUrlRetrievedEvent());
-
                         }
-                    });
-                    thread.start();
-                }
-
-                for (Product p : productList) {
-
-                    for (Currency c : currencies) {
-                        if (c.getCurrencyType().equals(p.getCurrencyType())) {
-                            p.setConvertedPrice(round(p.getPrice() / c.getRate(), DIGITS));
-                        }
+                        return productList;
                     }
-                }
-                return productList;
-            }
-        });
+                });
+    }
+
+    private List<Observable<List<Product>>> getProductListList() {
+        List<Observable<List<Product>>> productListList = new ArrayList<>();
+        for (ProductRepository pr : productRepositoryList) {
+            productListList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
+        }
+        return productListList;
     }
 
     private float round(float value, int places) {

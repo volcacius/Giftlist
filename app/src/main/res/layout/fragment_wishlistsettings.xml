@@ -4,7 +4,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
     <Spinner
-        android:id="@+id/etsy_categories"
+        android:id="@+id/spinner_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
@@ -13,15 +13,27 @@
         android:spinnerMode="dropdown" />
 
     <Button
-        android:id="@+id/start_product_activity"
+        android:id="@+id/button_start_product_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:text="Start looking for products"/>
 
     <EditText
-        android:id="@+id/keywords"
+        android:id="@+id/text_keywords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/keyword_hint"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_ebay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/checkbox_ebay"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_etsy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/checkbox_etsy"/>
 </LinearLayout>

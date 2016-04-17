@@ -14,6 +14,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +46,8 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Bind(R.id.contentView)
     SwipeFlingAdapterView flingContainer;
 
+    //@Arg
+    //HashMap<Class, Boolean> enabledProductRepositoryMap;
     @Arg
     String category;
     @Arg

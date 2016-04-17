@@ -6,13 +6,13 @@ import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.inject.Named;
+import java.util.Map;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
@@ -32,23 +32,43 @@ public class ProductListModule {
     //keywords and category has to be initialized by default to something since they are used in the @Provides, otherwise Dagger won't build
     private String keywords = EMPTY_STRING;
     private String category = EMPTY_STRING;
+    private Map<Class, Boolean> enabledRepositoryMap = new HashMap<Class, Boolean>();
     private Context context;
 
-    public ProductListModule(Context context, String category) {
+    public ProductListModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category) {
         this.context = context;
+        this.enabledRepositoryMap = enabledRepositoryMap;
         this.category = category;
     }
 
-    public ProductListModule(Context context, String category, String keywords) {
+    public ProductListModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, String keywords) {
         this.context = context;
+        this.enabledRepositoryMap = enabledRepositoryMap;
         this.category = category;
         this.keywords = keywords;
     }
 
     @Provides
     @PerActivity
-    GetProductListUseCase provideGetProductListUseCase(EbayProductDataSource etsyRepository,  CurrencyRepository currencyRepository, EventBus eventBus) {
-        return new GetProductListUseCase(etsyRepository, currencyRepository, category, keywords, eventBus);
+    GetProductListUseCase provideGetProductListUseCase(List<ProductRepository> productRepositoryList,
+                                                       CurrencyRepository currencyRepository,
+                                                       EventBus eventBus) {
+        return new GetProductListUseCase(productRepositoryList, currencyRepository, category, keywords, eventBus);
+    }
+
+    //Edit this method to add new product data sources
+    @Provides
+    @PerActivity
+    List<ProductRepository> provideProductRepositoryList(EbayProductDataSource ebayProductDataSource,
+                                                        EtsyProductDataSource etsyProductDataSource) {
+        List<ProductRepository> productRepositoryList = new ArrayList<ProductRepository>();
+        if (enabledRepositoryMap.get(EbayProductDataSource.class)) {
+            productRepositoryList.add(ebayProductDataSource);
+        }
+        if (enabledRepositoryMap.get(EtsyProductDataSource.class)) {
+            productRepositoryList.add(etsyProductDataSource);
+        }
+        return productRepositoryList;
     }
 
     @Provides
