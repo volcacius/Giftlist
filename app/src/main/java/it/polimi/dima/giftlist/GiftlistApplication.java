@@ -72,7 +72,7 @@ public class GiftlistApplication extends Application {
 
     private void terminateApplication() {
         if (BuildConfig.DEBUG) {
-            Takt.stock(this).play();
+            Takt.stock(this).stop();
         }
     }
 
