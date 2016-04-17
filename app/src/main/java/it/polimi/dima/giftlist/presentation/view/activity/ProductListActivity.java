@@ -12,6 +12,7 @@ import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductListModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductListFragment;
+import it.polimi.dima.giftlist.presentation.view.fragment.ProductListFragmentBuilder;
 
 /**
  * Created by Elena on 19/01/2016.
@@ -42,11 +43,7 @@ public class ProductListActivity extends BaseActivity implements HasComponent<Pr
         }
         createComponent();
         if (savedInstanceState == null) {
-            Bundle args = new Bundle();
-            //args.putSerializable(EXTRA_REPOSITORIES_SELECTED, enabledRepositoryMap);
-            args.putString(EXTRA_CATEGORY_SELECTED,category);
-            args.putString(EXTRA_KEYWORDS,keywords);
-            addFragment(R.id.activity_frame, new ProductListFragment(), args);
+            addFragment(R.id.activity_frame, new ProductListFragmentBuilder(category, enabledRepositoryMap, keywords).build());
         }
 
     }

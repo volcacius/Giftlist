@@ -46,8 +46,8 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Bind(R.id.contentView)
     SwipeFlingAdapterView flingContainer;
 
-    //@Arg
-    //HashMap<Class, Boolean> enabledProductRepositoryMap;
+    @Arg
+    HashMap<Class, Boolean> enabledProductRepositoryMap;
     @Arg
     String category;
     @Arg

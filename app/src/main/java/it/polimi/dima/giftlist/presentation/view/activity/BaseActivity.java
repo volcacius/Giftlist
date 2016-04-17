@@ -35,10 +35,10 @@ public class BaseActivity extends AppCompatActivity {
         Icepick.saveInstanceState(this, outState);
     }
 
-    protected void addFragment(int containerViewId, Fragment fragment, Bundle args) {
-        if (args != null) {
-            fragment.setArguments(args);
-        }
+    //TODO: approfondire differenza fra add fragment e replace fragment
+    //Attenzione anche alla questione event bus
+    //http://stackoverflow.com/questions/18634207/difference-between-add-replace-and-addtobackstack
+    protected void addFragment(int containerViewId, Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
         .add(containerViewId, fragment)
         .commit();
