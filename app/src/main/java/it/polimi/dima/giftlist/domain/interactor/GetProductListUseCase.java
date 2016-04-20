@@ -34,7 +34,7 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
-    private List<ProductRepository> productRepositoryList;
+    private List<ProductRepository<Product>> productRepositoryList;
     private CurrencyRepository currencyRepository;
     private String category;
     private String keywords;
@@ -42,7 +42,7 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     protected EventBus eventBus;
 
     @Inject
-    public GetProductListUseCase(List<ProductRepository> productRepositoryList,
+    public GetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
                                  CurrencyRepository currencyRepository,
                                  String category,
                                  String keywords,
@@ -99,7 +99,7 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
 
     private List<Observable<List<Product>>> getProductListList() {
         List<Observable<List<Product>>> productListList = new ArrayList<>();
-        for (ProductRepository pr : productRepositoryList) {
+        for (ProductRepository<Product> pr : productRepositoryList) {
             productListList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
         }
         return productListList;

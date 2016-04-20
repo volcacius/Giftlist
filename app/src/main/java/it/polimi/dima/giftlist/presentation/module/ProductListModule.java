@@ -11,8 +11,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Named;
+
 import dagger.Module;
 import dagger.Provides;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
@@ -50,7 +54,7 @@ public class ProductListModule {
 
     @Provides
     @PerActivity
-    GetProductListUseCase provideGetProductListUseCase(List<ProductRepository> productRepositoryList,
+    GetProductListUseCase provideGetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
                                                        CurrencyRepository currencyRepository,
                                                        EventBus eventBus) {
         return new GetProductListUseCase(productRepositoryList, currencyRepository, category, keywords, eventBus);
@@ -59,9 +63,9 @@ public class ProductListModule {
     //Edit this method to add new product data sources
     @Provides
     @PerActivity
-    List<ProductRepository> provideProductRepositoryList(EbayProductDataSource ebayProductDataSource,
-                                                        EtsyProductDataSource etsyProductDataSource) {
-        List<ProductRepository> productRepositoryList = new ArrayList<ProductRepository>();
+    List<ProductRepository<Product>> provideProductRepositoryList(@Named("EbayRepository") ProductRepository<Product> ebayProductDataSource,
+                                                                  @Named("EtsyRepository")ProductRepository<Product> etsyProductDataSource) {
+        List<ProductRepository<Product>> productRepositoryList = new ArrayList<>();
         if (enabledRepositoryMap.get(EbayProductDataSource.class)) {
             productRepositoryList.add(ebayProductDataSource);
         }

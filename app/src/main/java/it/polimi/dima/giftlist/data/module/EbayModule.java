@@ -15,6 +15,7 @@ import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.BuildConfig;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.ebay.EbayApi;
 import it.polimi.dima.giftlist.data.net.ebay.EbayResultsDeserializer;
 import it.polimi.dima.giftlist.data.net.ebay.EbaySigningInterceptor;
@@ -57,7 +58,8 @@ public class EbayModule {
 
     @Provides
     @Singleton
-    public ProductRepository providesEbayRepository(EbayApi ebayApi, EventBus eventBus) {
+    @Named("EbayRepository")
+    public ProductRepository<Product> providesEbayRepository(EbayApi ebayApi, EventBus eventBus) {
         return new EbayProductDataSource(ebayApi, eventBus);
     }
 }
