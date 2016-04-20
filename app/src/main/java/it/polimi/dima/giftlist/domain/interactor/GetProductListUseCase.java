@@ -60,32 +60,23 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     @RxLogObservable
     @Override
     protected Observable<List<Product>> buildUseCaseObservable() {
-
-        List<Observable<List<Product>>> productListList = getProductListList();
-        Observable<List<Product>> productList = Observable.merge(productListList);
+        Observable<List<Product>> productList = getProductList();
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();
         searchOffset++;
-        return Observable
-                .combineLatest(productList, currencyList, new Func2<List<Product>, List<Currency>, List<Product>>() {
+        return Observable.combineLatest(productList, currencyList, new Func2<List<Product>, List<Currency>, List<Product>>() {
                     @Override
                     public List<Product> call(List<Product> productList, List<Currency> currencies) {
-
-                        if (productList.get(0).getClass().equals(EbayProduct.class)) {
-                            Thread thread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    for (Product p : productList) {
-                                        p.setImageUrl(getHQImageUrl((EbayProduct) p));
-                                    }
-                                    eventBus.post(new ImageUrlRetrievedEvent());
-
-                                }
-                            });
-                            thread.start();
-                        }
-
                         for (Product p : productList) {
-
+                            if (p.getClass().equals(EbayProduct.class)) {
+                                Thread thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        p.setImageUrl(getHQImageUrl((EbayProduct) p));
+                                        eventBus.post(new ImageUrlRetrievedEvent());
+                                    }
+                                });
+                                thread.start();
+                            }
                             for (Currency c : currencies) {
                                 if (c.getCurrencyType().equals(p.getCurrencyType())) {
                                     p.setConvertedPrice(round(p.getPrice() / c.getRate(), DIGITS));
@@ -94,15 +85,18 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
                         }
                         return productList;
                     }
-                });
+        });
     }
 
-    private List<Observable<List<Product>>> getProductListList() {
+    //The result of merge observable emits a list of products on each onNext, each list corresponding to a different source
+    //The returned observable, after flatmap and tolist, merges the lists into a single one
+    @RxLogObservable
+    private Observable<List<Product>> getProductList() {
         List<Observable<List<Product>>> productListList = new ArrayList<>();
         for (ProductRepository<Product> pr : productRepositoryList) {
             productListList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
         }
-        return productListList;
+        return Observable.merge(productListList).flatMap(products -> Observable.from(products)).toList();
     }
 
     private float round(float value, int places) {
@@ -115,7 +109,6 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     }
 
     private String getHQImageUrl(EbayProduct product) {
-
         StringBuffer myString = new StringBuffer();
         try {
             String thisLine;
@@ -126,20 +119,14 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
                 thisLine = theHTML.readLine();
                 myString.append(thisLine);
                 count++;
-
             }
-
         } catch (MalformedURLException e) {
-
         } catch (IOException e) {
-
         }
 
         //String to match:
         //<meta  property="og:image" content="http://i.ebayimg.com/images/i/322010611314-0-1/s-l1000.jpg" />
-
         String pattern = "(<meta  property=\"og:image\" content=\"([^\"]*)\" />)";
-
         Pattern pat = Pattern.compile(pattern);
         Matcher m = pat.matcher(myString);
         if (m.find()) {
@@ -148,6 +135,5 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
         else {
             return product.getImageUrl();
         }
-
     }
 }
