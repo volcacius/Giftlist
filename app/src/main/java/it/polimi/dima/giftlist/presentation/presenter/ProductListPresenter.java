@@ -16,7 +16,7 @@ import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
 /**
  * Created by Elena on 27/01/2016.
  */
-public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, List<Product>, GetProductListUseCase> {
+public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Product, GetProductListUseCase> {
 
     @Inject
     public ProductListPresenter(EventBus eventBus, GetProductListUseCase getProductListUseCase) {

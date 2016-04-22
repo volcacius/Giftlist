@@ -29,7 +29,7 @@ import rx.functions.Func2;
 /**
  * Created by Elena on 27/01/2016.
  */
-public class GetProductListUseCase extends UseCase<List<Product>> {
+public class GetProductListUseCase extends UseCase<Product> {
 
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
@@ -59,44 +59,29 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
 
     @RxLogObservable
     @Override
-    protected Observable<List<Product>> buildUseCaseObservable() {
-        Observable<List<Product>> productList = getProductList();
+    protected Observable<Product> buildUseCaseObservable() {
+        List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
+        for (ProductRepository<Product> pr : productRepositoryList) {
+            productListObservableList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
+        }
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();
         searchOffset++;
-        return Observable.combineLatest(productList, currencyList, new Func2<List<Product>, List<Currency>, List<Product>>() {
+        return Observable.merge(productListObservableList)
+                .flatMap(products -> Observable.from(products))
+                .withLatestFrom(currencyList, new Func2<Product, List<Currency>, Product>() {
                     @Override
-                    public List<Product> call(List<Product> productList, List<Currency> currencies) {
-                        for (Product p : productList) {
-                            if (p.getClass().equals(EbayProduct.class)) {
-                                Thread thread = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        p.setImageUrl(getHQImageUrl((EbayProduct) p));
-                                        eventBus.post(new ImageUrlRetrievedEvent());
-                                    }
-                                });
-                                thread.start();
-                            }
-                            for (Currency c : currencies) {
-                                if (c.getCurrencyType().equals(p.getCurrencyType())) {
-                                    p.setConvertedPrice(round(p.getPrice() / c.getRate(), DIGITS));
-                                }
+                    public Product call(Product product, List<Currency> currencies) {
+                        if (product.getClass().equals(EbayProduct.class)) {
+                            product.setImageUrl(getHQImageUrl((EbayProduct) product));
+                        }
+                        for (Currency c : currencies) {
+                            if (c.getCurrencyType().equals(product.getCurrencyType())) {
+                                product.setConvertedPrice(round(product.getPrice() / c.getRate(), DIGITS));
                             }
                         }
-                        return productList;
+                        return product;
                     }
         });
-    }
-
-    //The result of merge observable emits a list of products on each onNext, each list corresponding to a different source
-    //The returned observable, after flatmap and tolist, merges the lists into a single one
-    @RxLogObservable
-    private Observable<List<Product>> getProductList() {
-        List<Observable<List<Product>>> productListList = new ArrayList<>();
-        for (ProductRepository<Product> pr : productRepositoryList) {
-            productListList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
-        }
-        return Observable.merge(productListList).flatMap(products -> Observable.from(products)).toList();
     }
 
     private float round(float value, int places) {

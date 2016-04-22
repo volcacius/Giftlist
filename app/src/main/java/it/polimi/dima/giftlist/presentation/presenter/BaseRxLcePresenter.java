@@ -3,8 +3,10 @@ package it.polimi.dima.giftlist.presentation.presenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import it.polimi.dima.giftlist.domain.interactor.UseCase;
+import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
 import rx.Subscriber;
 
 /**
@@ -20,12 +22,15 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         extends com.hannesdorfmann.mosby.mvp.MvpBasePresenter<V>
         implements com.hannesdorfmann.mosby.mvp.MvpPresenter<V> {
 
+    private static final boolean NO_PULL_TO_REFRESH = false;
     protected EventBus eventBus;
     protected U useCase;
+    private boolean isSubscriptionPending;
 
     public BaseRxLcePresenter(EventBus eventBus, U useCase) {
         this.eventBus = eventBus;
         this.useCase = useCase;
+        this.isSubscriptionPending = false;
     }
 
     /**
@@ -41,13 +46,12 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      * allows, if necessary, to override them from classes that extends the Presenter while leaving the subscriber untouched.
      * To get an idea, see e.g. https://ideone.com/mIeavZ
      *
+     * ShowLoading is not called here, otherwise it would show the loading view when subscribing in background, even if the
+     * is still stuff in the adapter. ShowLoading is called only as an empty view of the adapter
+     *
      * @param pullToRefresh Pull to refresh?
      */
     public void subscribe(boolean pullToRefresh) {
-        if (isViewAttached()) {
-            getView().showLoading(pullToRefresh);
-        }
-        unsubscribe();
         useCase.execute(new BaseSubscriber(pullToRefresh));
     }
 
@@ -56,6 +60,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
             getView().showContent();
         }
         unsubscribe();
+        checkPendingSubscription();
     }
 
     protected void onError(Throwable e, boolean pullToRefresh) {
@@ -63,18 +68,20 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
             getView().showError(e, pullToRefresh);
         }
         unsubscribe();
+        checkPendingSubscription();
     }
 
     protected void onNext(M data) {
         if (isViewAttached()) {
             getView().setData(data);
+            getView().showContent();
         }
     }
 
     @Override
     public void attachView(V view) {
         super.attachView(view);
-//        eventBus.register(this);
+        eventBus.register(this);
     }
 
     @Override
@@ -83,7 +90,28 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         if (!retainInstance) {
             unsubscribe();
         }
-        //eventBus.unregister(this);
+        eventBus.unregister(this);
+    }
+
+    //This is way to manage messages back from the view layer. When the adapter is emptying,
+    //it sends a message to the presenter to remind it to load more data. If a subscription isn't ongoing,
+    //subscribe. Otherwise, if a subscription is already open and there is no pending future subscription,
+    //set a subscription as pending.
+    @Subscribe
+    public void onAdapterEmptyEvent(AdapterEmptyEvent event) {
+        if (useCase.isUnsubscribed()) {
+            subscribe(NO_PULL_TO_REFRESH);
+        } else if (!isSubscriptionPending) {
+            isSubscriptionPending = true;
+        }
+    }
+
+    //Check if there is a pending subscription to register
+    private void checkPendingSubscription() {
+        if (isSubscriptionPending) {
+            subscribe(NO_PULL_TO_REFRESH);
+            isSubscriptionPending = false;
+        }
     }
 
     private final class BaseSubscriber extends Subscriber<M> {

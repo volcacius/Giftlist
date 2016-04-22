@@ -120,8 +120,8 @@ public class ProductListAdapter extends BaseAdapter {
         this.productList = productList;
     }
 
-    public void appendProductList(List<Product> data) {
-        this.productList.addAll(data);
+    public void appendProductList(Product data) {
+        this.productList.add(data);
     }
 
     static class ProductListViewHolder {
