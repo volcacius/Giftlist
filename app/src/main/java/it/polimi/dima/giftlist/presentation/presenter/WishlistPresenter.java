@@ -24,6 +24,26 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, Wishlist
         super(eventBus, getWishlistUseCase);
     }
 
+    @Override
+    public void subscribe(boolean pullToRefresh) {
+
+    }
+
+    @Override
+    protected void onCompleted() {
+
+    }
+
+    @Override
+    protected void onError(Throwable e, boolean pullToRefresh) {
+
+    }
+
+    @Override
+    protected void onNext(Wishlist data) {
+
+    }
+
     @Subscribe
     public void onProductAddedEvent(ProductAddedEvent event) {
         if (isViewAttached()) {

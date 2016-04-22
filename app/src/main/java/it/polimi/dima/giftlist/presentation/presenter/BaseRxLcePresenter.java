@@ -22,15 +22,12 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         extends com.hannesdorfmann.mosby.mvp.MvpBasePresenter<V>
         implements com.hannesdorfmann.mosby.mvp.MvpPresenter<V> {
 
-    private static final boolean NO_PULL_TO_REFRESH = false;
     protected EventBus eventBus;
     protected U useCase;
-    private boolean isSubscriptionPending;
 
     public BaseRxLcePresenter(EventBus eventBus, U useCase) {
         this.eventBus = eventBus;
         this.useCase = useCase;
-        this.isSubscriptionPending = false;
     }
 
     /**
@@ -51,32 +48,14 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      *
      * @param pullToRefresh Pull to refresh?
      */
-    public void subscribe(boolean pullToRefresh) {
-        useCase.execute(new BaseSubscriber(pullToRefresh));
-    }
+    public abstract void subscribe(boolean pullToRefresh);
 
-    protected void onCompleted() {
-        if (isViewAttached()) {
-            getView().showContent();
-        }
-        unsubscribe();
-        checkPendingSubscription();
-    }
+    abstract protected void onCompleted();
 
-    protected void onError(Throwable e, boolean pullToRefresh) {
-        if (isViewAttached()) {
-            getView().showError(e, pullToRefresh);
-        }
-        unsubscribe();
-        checkPendingSubscription();
-    }
+    abstract protected void onError(Throwable e, boolean pullToRefresh);
 
-    protected void onNext(M data) {
-        if (isViewAttached()) {
-            getView().setData(data);
-            getView().showContent();
-        }
-    }
+    abstract protected void onNext(M data);
+
 
     @Override
     public void attachView(V view) {
@@ -93,28 +72,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         eventBus.unregister(this);
     }
 
-    //This is way to manage messages back from the view layer. When the adapter is emptying,
-    //it sends a message to the presenter to remind it to load more data. If a subscription isn't ongoing,
-    //subscribe. Otherwise, if a subscription is already open and there is no pending future subscription,
-    //set a subscription as pending.
-    @Subscribe
-    public void onAdapterEmptyEvent(AdapterEmptyEvent event) {
-        if (useCase.isUnsubscribed()) {
-            subscribe(NO_PULL_TO_REFRESH);
-        } else if (!isSubscriptionPending) {
-            isSubscriptionPending = true;
-        }
-    }
-
-    //Check if there is a pending subscription to register
-    private void checkPendingSubscription() {
-        if (isSubscriptionPending) {
-            subscribe(NO_PULL_TO_REFRESH);
-            isSubscriptionPending = false;
-        }
-    }
-
-    private final class BaseSubscriber extends Subscriber<M> {
+    final class BaseSubscriber extends Subscriber<M> {
 
         private boolean pullToRefresh;
 
