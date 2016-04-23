@@ -13,6 +13,8 @@
     <string name="keyword_hint">Enter keywords separed by a comma</string>
 
     <string name="etsy_prompt">Choose a category</string>
+    <string name="checkbox_ebay">Ebay</string>
+    <string name="checkbox_etsy">Etsy</string>
     <string-array name="etsy_categories">
         <item>accessories</item>
         <item>art</item>

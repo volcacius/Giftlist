@@ -2,43 +2,53 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import javax.inject.Inject;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import it.polimi.dima.giftlist.R;
-import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
-import it.polimi.dima.giftlist.presentation.view.activity.ProductListActivity;
+import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
+import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 
 /**
  * Created by Elena on 10/02/2016.
  */
 public class WishlistSettingsFragment extends BaseFragment {
 
-    @Bind(R.id.etsy_categories)
-    Spinner mEtsyCategories;
+    private static final String EMPTY_STRING = "";
 
-    @Bind(R.id.start_product_activity)
-    Button mStartActivityButton;
+    @Bind(R.id.checkbox_ebay)
+    CheckBox ebayCheckbox;
 
-    @Bind(R.id.keywords)
-    EditText mKeywordsEditText;
+    @Bind(R.id.checkbox_etsy)
+    CheckBox etsyCheckbox;
 
-    String mCategorySelected = "";
+    @Bind(R.id.spinner_category)
+    Spinner categorySpinner;
 
-    @OnClick(R.id.start_product_activity)
+    @Bind(R.id.button_start_product_activity)
+    Button startProductActivityButton;
+
+    @Bind(R.id.text_keywords)
+    EditText keywordsEditText;
+
+    String categorySelected;
+    HashMap<Class,Boolean> enabledRepositoryMap;
+
+    @OnClick(R.id.button_start_product_activity)
     public void startProductActivity(){
-        intentStarter.startProductListActivity(this.getContext(), mCategorySelected, mKeywordsEditText.getText().toString());
+        intentStarter.startProductListActivity(this.getContext(),
+                                                enabledRepositoryMap,
+                                                categorySelected,
+                                                keywordsEditText.getText().toString());
     }
 
     @Override
@@ -52,6 +62,7 @@ public class WishlistSettingsFragment extends BaseFragment {
         return R.layout.fragment_wishlistsettings;
     }
 
+    /*
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -59,14 +70,36 @@ public class WishlistSettingsFragment extends BaseFragment {
         View v = inflater.inflate(R.layout.fragment_wishlistsettings, container, false); //xml file name
         ButterKnife.bind(this,v);
         //TODO questo override è da eliminare, trovare un modo più pulito per settare il valore di default della view
-        mKeywordsEditText.setText("");
-
+        keywordsEditText.setText("");
         return v;
     }
+    */
 
-    @OnItemSelected(R.id.etsy_categories)
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        keywordsEditText.setText(EMPTY_STRING);
+        categorySelected = EMPTY_STRING;
+        enabledRepositoryMap = new HashMap<>();
+        enabledRepositoryMap.put(EbayProductDataSource.class, Boolean.FALSE);
+        enabledRepositoryMap.put(EtsyProductDataSource.class, Boolean.FALSE);
+    }
+
+    @OnItemSelected(R.id.spinner_category)
     public void onItemSelected(int position) {
-        mCategorySelected = String.valueOf(mEtsyCategories.getSelectedItem());
+        categorySelected = String.valueOf(categorySpinner.getSelectedItem());
+    }
+
+    @OnClick(R.id.checkbox_ebay)
+    public void onCheckBoxEbay(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        enabledRepositoryMap.put(EbayProductDataSource.class, checked);
+    }
+
+    @OnClick(R.id.checkbox_etsy)
+    public void onCheckBoxEtsy(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        enabledRepositoryMap.put(EtsyProductDataSource.class, checked);
     }
 
 }

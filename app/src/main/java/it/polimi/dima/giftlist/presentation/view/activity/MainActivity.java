@@ -20,7 +20,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlistlist);
         if (savedInstanceState == null) {
-            addFragment(R.id.activity_frame, new WishlistSettingsFragment(), null);
+            addFragment(R.id.activity_frame, new WishlistSettingsFragment());
         }
     }
 }

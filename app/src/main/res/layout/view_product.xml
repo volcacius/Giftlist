@@ -48,4 +48,12 @@
         android:gravity="bottom|center"
         />
 
+    <TextView
+        android:id="@+id/text_repository"
+        android:text=""
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom|center"
+        />
+
 </LinearLayout>

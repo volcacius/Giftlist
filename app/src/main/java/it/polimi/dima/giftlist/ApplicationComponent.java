@@ -1,6 +1,7 @@
 package it.polimi.dima.giftlist;
 
 import it.polimi.dima.giftlist.data.repository.datasource.CurrencyDataSource;
+import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductListModule;
@@ -17,6 +18,7 @@ public interface ApplicationComponent {
     void inject(BaseActivity baseActivity);
     void inject(BaseFragment baseFragment);
     void inject(EtsyProductDataSource etsyProductDataSource);
+    void inject(EbayProductDataSource ebayProductDataSource);
     void inject(CurrencyDataSource currencyDataSource);
 
 

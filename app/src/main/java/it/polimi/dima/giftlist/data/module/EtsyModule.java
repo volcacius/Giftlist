@@ -15,6 +15,7 @@ import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.BuildConfig;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyApi;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyResultsDeserializer;
 import it.polimi.dima.giftlist.data.net.etsy.EtsySigningInterceptor;
@@ -64,7 +65,8 @@ public class EtsyModule {
 
     @Provides
     @Singleton
-    public ProductRepository providesEtsyRepository(EtsyApi etsyApi, EventBus eventBus) {
+    @Named("EtsyRepository")
+    public ProductRepository<Product> providesEtsyRepository(EtsyApi etsyApi, EventBus eventBus) {
         return new EtsyProductDataSource(etsyApi, eventBus);
     }
 }

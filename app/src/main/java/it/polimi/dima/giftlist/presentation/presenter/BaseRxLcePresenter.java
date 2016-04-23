@@ -3,10 +3,10 @@ package it.polimi.dima.giftlist.presentation.presenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import it.polimi.dima.giftlist.domain.interactor.UseCase;
-import it.polimi.dima.giftlist.presentation.exception.NoMoreResultsFoundException;
-import it.polimi.dima.giftlist.presentation.exception.NoResultsFoundException;
+import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
 import rx.Subscriber;
 
 /**
@@ -43,35 +43,19 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      * allows, if necessary, to override them from classes that extends the Presenter while leaving the subscriber untouched.
      * To get an idea, see e.g. https://ideone.com/mIeavZ
      *
+     * ShowLoading is not called here, otherwise it would show the loading view when subscribing in background, even if the
+     * is still stuff in the adapter. ShowLoading is called only as an empty view of the adapter
+     *
      * @param pullToRefresh Pull to refresh?
      */
-    public void load(boolean pullToRefresh) {
-        if (isViewAttached()) {
-            getView().showLoading(pullToRefresh);
-        }
-        unsubscribe();
-        useCase.execute(new BaseSubscriber(pullToRefresh));
-    }
+    public abstract void subscribe(boolean pullToRefresh);
 
-    protected void onCompleted() {
-        if (isViewAttached()) {
-            getView().showContent();
-        }
-        unsubscribe();
-    }
+    abstract protected void onCompleted();
 
-    protected void onError(Throwable e, boolean pullToRefresh) {
-        if (isViewAttached()) {
-            getView().showError(e, pullToRefresh);
-        }
-        unsubscribe();
-    }
+    abstract protected void onError(Throwable e, boolean pullToRefresh);
 
-    protected void onNext(M data) {
-        if (isViewAttached()) {
-            getView().setData(data);
-        }
-    }
+    abstract protected void onNext(M data);
+
 
     @Override
     public void attachView(V view) {
@@ -88,7 +72,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         eventBus.unregister(this);
     }
 
-    private final class BaseSubscriber extends Subscriber<M> {
+    final class BaseSubscriber extends Subscriber<M> {
 
         private boolean pullToRefresh;
 

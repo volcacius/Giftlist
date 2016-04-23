@@ -19,4 +19,24 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     public WishlistListPresenter(EventBus eventBus, GetWishlistListUseCase useCase) {
         super(eventBus, useCase);
     }
+
+    @Override
+    public void subscribe(boolean pullToRefresh) {
+
+    }
+
+    @Override
+    protected void onCompleted() {
+
+    }
+
+    @Override
+    protected void onError(Throwable e, boolean pullToRefresh) {
+
+    }
+
+    @Override
+    protected void onNext(List<Wishlist> data) {
+
+    }
 }

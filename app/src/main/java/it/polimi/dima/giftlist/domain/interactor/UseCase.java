@@ -29,4 +29,8 @@ public abstract class UseCase<T> {
             subscription.unsubscribe();
         }
     }
+
+    public boolean isUnsubscribed() {
+        return subscription.isUnsubscribed();
+    }
 }

@@ -17,6 +17,12 @@ import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 import com.squareup.leakcanary.RefWatcher;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import icepick.Icepick;
 import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.di.HasComponent;
@@ -27,6 +33,9 @@ import it.polimi.dima.giftlist.di.HasComponent;
  */
 public abstract class BaseViewStateLceFragment<CV extends View, M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
         extends MvpLceViewStateFragment<CV, M, V, P> {
+
+    @Inject
+    EventBus eventBus;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
