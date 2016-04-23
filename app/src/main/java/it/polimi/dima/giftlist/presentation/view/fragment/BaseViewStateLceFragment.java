@@ -19,6 +19,8 @@ import com.squareup.leakcanary.RefWatcher;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import icepick.Icepick;

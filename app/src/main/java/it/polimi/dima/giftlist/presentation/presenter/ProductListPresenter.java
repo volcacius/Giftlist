@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
 import it.polimi.dima.giftlist.presentation.view.ProductListView;
@@ -17,7 +18,7 @@ import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
 /**
  * Created by Elena on 27/01/2016.
  */
-public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Product, GetProductListUseCase> {
+public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, List<Product>, GetProductListUseCase> {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
     private boolean isSubscriptionPending;
@@ -40,6 +41,7 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Pr
      * @param pullToRefresh Pull to refresh?
      */
     @Override
+    @DebugLog
     public void subscribe(boolean pullToRefresh) {
         useCase.execute(new BaseSubscriber(pullToRefresh));
     }
@@ -63,9 +65,9 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Pr
     }
 
     @Override
-    protected void onNext(Product data) {
+    protected void onNext(List<Product> data) {
         if (isViewAttached()) {
-            getView().setData(data);
+            getView().appendData(data);
             getView().showContent();
         }
     }
@@ -74,6 +76,7 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Pr
     //it sends a message to the presenter to remind it to load more data. If a subscription isn't ongoing,
     //subscribe. Otherwise, if a subscription is already open and there is no pending future subscription,
     //set a subscription as pending.
+    @DebugLog
     @Subscribe
     public void onAdapterEmptyEvent(AdapterEmptyEvent event) {
         if (useCase.isUnsubscribed()) {

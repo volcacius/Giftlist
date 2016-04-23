@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
@@ -37,7 +38,7 @@ import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
  * Created by Elena on 19/01/2016.
  */
 @FragmentWithArgs
-public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdapterView, Product, ProductListView, ProductListPresenter>
+public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdapterView, List<Product>, ProductListView, ProductListPresenter>
         implements ProductListView {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
@@ -76,12 +77,12 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @OnClick(R.id.next_button)
     public void goNext() {
-        productListAdapter.removeFirstProduct();
+        flingContainer.getTopCardListener().selectLeft();
     }
 
     @OnClick(R.id.reload_button)
     public void reloadItems() {
-        loadData(true);
+        loadData(NO_PULL_TO_REFRESH);
     }
 
     @NonNull
@@ -135,13 +136,14 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @NonNull
     @Override
-    public LceViewState<Product, ProductListView> createViewState() {
+    public LceViewState<List<Product>, ProductListView> createViewState() {
         return new RetainingLceViewState<>();
     }
 
+    @DebugLog
     @Override
-    public Product getData() {
-        return productListAdapter.getProductList().get(0);
+    public List<Product> getData() {
+        return productListAdapter.getProductList();
     }
 
     @Override
@@ -149,11 +151,13 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
         return errorMessageDeterminer.getErrorMessage(e);
     }
 
+    @DebugLog
     @Override
-    public void setData(Product data) {
+    public void appendData(List<Product> data) {
         productListAdapter.appendProductList(data);
     }
 
+    @DebugLog
     @Override
     public void loadData(boolean pullToRefresh) {
         presenter.subscribe(NO_PULL_TO_REFRESH);
@@ -168,6 +172,11 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     }
 
     @Override
+    public void setData(List<Product> data) {
+        productListAdapter.setProductList(data);
+    }
+
+    @Override
     public void showContent() {
         super.showContent();
         nextProduct.setEnabled(true);
@@ -175,7 +184,6 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
         reloadButton.setEnabled(false);
     }
 
-    //called by BaseRxLcePresenter in method load()
     @Override
     public void showLoading(boolean pullToRefresh) {
         nextProduct.setEnabled(false);

@@ -11,6 +11,7 @@ import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,16 +21,16 @@ import javax.inject.Inject;
 import it.polimi.dima.giftlist.data.model.Currency;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
-import it.polimi.dima.giftlist.presentation.event.ImageUrlRetrievedEvent;
 import rx.Observable;
 import rx.functions.Func2;
 
 /**
  * Created by Elena on 27/01/2016.
  */
-public class GetProductListUseCase extends UseCase<Product> {
+public class GetProductListUseCase extends UseCase<List<Product>> {
 
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
@@ -52,14 +53,13 @@ public class GetProductListUseCase extends UseCase<Product> {
         this.category = category;
         this.keywords = keywords;
         this.searchOffset = STARTING_OFFSET;
-
-        //TODO notify adapter to reload image
         this.eventBus = eventBus;
     }
 
     @RxLogObservable
     @Override
-    protected Observable<Product> buildUseCaseObservable() {
+    //At the end of the chain I need to wrap the product as a single valued list, since list<product> is the type accepted as model accross the whole use case
+    protected Observable<List<Product>> buildUseCaseObservable() {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
         for (ProductRepository<Product> pr : productRepositoryList) {
             productListObservableList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
@@ -72,7 +72,7 @@ public class GetProductListUseCase extends UseCase<Product> {
                     @Override
                     public Product call(Product product, List<Currency> currencies) {
                         if (product.getClass().equals(EbayProduct.class)) {
-                            product.setImageUrl(getHQImageUrl((EbayProduct) product));
+                            product.setImageUrl(EbayProductDataSource.getHQImageUrl((EbayProduct) product));
                         }
                         for (Currency c : currencies) {
                             if (c.getCurrencyType().equals(product.getCurrencyType())) {
@@ -81,7 +81,7 @@ public class GetProductListUseCase extends UseCase<Product> {
                         }
                         return product;
                     }
-        });
+        }).map(product -> new ArrayList<Product>(Arrays.asList(product)));
     }
 
     private float round(float value, int places) {
@@ -91,34 +91,5 @@ public class GetProductListUseCase extends UseCase<Product> {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.floatValue();
-    }
-
-    private String getHQImageUrl(EbayProduct product) {
-        StringBuffer myString = new StringBuffer();
-        try {
-            String thisLine;
-            URL u = new URL(product.getProductPage());
-            DataInputStream theHTML = new DataInputStream(u.openStream());
-            int count = 0;
-            while (count < 20) {
-                thisLine = theHTML.readLine();
-                myString.append(thisLine);
-                count++;
-            }
-        } catch (MalformedURLException e) {
-        } catch (IOException e) {
-        }
-
-        //String to match:
-        //<meta  property="og:image" content="http://i.ebayimg.com/images/i/322010611314-0-1/s-l1000.jpg" />
-        String pattern = "(<meta  property=\"og:image\" content=\"([^\"]*)\" />)";
-        Pattern pat = Pattern.compile(pattern);
-        Matcher m = pat.matcher(myString);
-        if (m.find()) {
-            return m.group(2);
-        }
-        else {
-            return product.getImageUrl();
-        }
     }
 }
