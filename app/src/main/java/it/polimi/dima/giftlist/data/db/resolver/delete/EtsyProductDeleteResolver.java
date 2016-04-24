@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.db.resolver;
+package it.polimi.dima.giftlist.data.db.resolver.delete;
 
 import android.support.annotation.NonNull;
 
@@ -20,23 +20,15 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 /**
  * Created by Alessandro on 29/03/16.
  */
-public class EtsyProductDeleteResolver extends DeleteResolver<EtsyProduct> {
+public class EtsyProductDeleteResolver extends DefaultDeleteResolver<EtsyProduct> {
 
     @NonNull
     @Override
-    public DeleteResult performDelete(@NonNull StorIOSQLite storIOSQLite, @NonNull EtsyProduct object) {
-        List<Object> objectsToDelete = new ArrayList<>();
-        objectsToDelete.add(object);
-
-        storIOSQLite
-                .delete()
-                .objects(objectsToDelete)
-                .prepare()
-                .executeAsBlocking();
-
-        final Set<String> affectedTables = new HashSet<String>(1);
-        affectedTables.add(EtsyProductTable.TABLE);
-
-        return DeleteResult.newInstance(1, affectedTables);
+    protected DeleteQuery mapToDeleteQuery(@NonNull EtsyProduct object) {
+        return DeleteQuery.builder()
+                .table(EtsyProductTable.TABLE)
+                .where(EtsyProductTable.COLUMN_ID + "= ?")
+                .whereArgs(object.getId())
+                .build();
     }
 }

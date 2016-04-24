@@ -7,18 +7,23 @@ import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.impl.DefaultStorIOSQLite;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.data.db.DbOpenHelper;
-import it.polimi.dima.giftlist.data.db.resolver.CurrencyDeleteResolver;
-import it.polimi.dima.giftlist.data.db.resolver.CurrencyGetResolver;
-import it.polimi.dima.giftlist.data.db.resolver.CurrencyPutResolver;
-import it.polimi.dima.giftlist.data.db.resolver.EtsyProductDeleteResolver;
-import it.polimi.dima.giftlist.data.db.resolver.EtsyProductGetResolver;
-import it.polimi.dima.giftlist.data.db.resolver.EtsyProductPutResolver;
+import it.polimi.dima.giftlist.data.db.resolver.delete.CurrencyDeleteResolver;
+import it.polimi.dima.giftlist.data.db.resolver.delete.EbayProductDeleteResolver;
+import it.polimi.dima.giftlist.data.db.resolver.get.CurrencyGetResolver;
+import it.polimi.dima.giftlist.data.db.resolver.get.EbayProductGetResolver;
+import it.polimi.dima.giftlist.data.db.resolver.put.CurrencyPutResolver;
+import it.polimi.dima.giftlist.data.db.resolver.delete.EtsyProductDeleteResolver;
+import it.polimi.dima.giftlist.data.db.resolver.get.EtsyProductGetResolver;
+import it.polimi.dima.giftlist.data.db.resolver.put.EbayProductPutResolver;
+import it.polimi.dima.giftlist.data.db.resolver.put.EtsyProductPutResolver;
 import it.polimi.dima.giftlist.data.model.Currency;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 
 /**
@@ -43,12 +48,17 @@ public class DbModule {
                         .getResolver(new EtsyProductGetResolver())
                         .deleteResolver(new EtsyProductDeleteResolver())
                         .build())
+                .addTypeMapping(EbayProduct.class, SQLiteTypeMapping.<EbayProduct>builder()
+                        .putResolver(new EbayProductPutResolver())
+                        .getResolver(new EbayProductGetResolver())
+                        .deleteResolver(new EbayProductDeleteResolver())
+                        .build())
                 .build();
     }
 
     @Provides
     @Singleton
-    public SQLiteOpenHelper provideSQLiteOpenHelper(Context context) {
+    public SQLiteOpenHelper provideSQLiteOpenHelper(@Named("AppContext") Context context) {
         return new DbOpenHelper(context);
     }
 }

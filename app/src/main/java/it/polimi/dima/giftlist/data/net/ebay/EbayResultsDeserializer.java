@@ -15,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,8 +46,7 @@ public class EbayResultsDeserializer implements JsonDeserializer {
             try{
                 //TODO Add try - catch Attempt to invoke virtual method 'java.lang.String com.google.gson.JsonElement.getAsString()' on a null object reference
                 String title = jsonProduct.getAsJsonObject().get("title").getAsString();
-                String listing_id = jsonProduct.getAsJsonObject().get("itemId").getAsString();
-
+                long listing_id = Long.valueOf(jsonProduct.getAsJsonObject().get("itemId").toString().replaceAll("[^0-9]", "").replaceAll("\\u0000", ""));
                 //String description = jsonProduct.getAsJsonObject().get("description").getAsString();
 
                 JsonElement priceInfo = jsonProduct.getAsJsonObject().get("sellingStatus")

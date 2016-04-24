@@ -13,7 +13,7 @@ public class EtsyProduct extends Product {
 
     int categoryId;
 
-    public EtsyProduct(String name, String description, int id, float price, CurrencyType currencyType, String imageUrl) {
+    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl) {
         this.name = name;
         this.description = description;
         this.id = id;

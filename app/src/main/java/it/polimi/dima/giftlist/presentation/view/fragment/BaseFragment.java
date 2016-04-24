@@ -33,6 +33,7 @@ import javax.inject.Inject;
 import icepick.Icepick;
 import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.GiftlistApplication;
+import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**
@@ -86,12 +87,14 @@ public abstract class BaseFragment extends Fragment {
    * Inject the dependencies. The component itself is declared in the Application class
    * so its lifecycle is fine since it's tied to the Application
    */
-  protected void injectDependencies() {
-    this.getApplicationComponent().inject(this);
-  }
+  protected abstract void injectDependencies();
 
-  protected ApplicationComponent getApplicationComponent() {
-    return ((GiftlistApplication) getActivity().getApplication()).getApplicationComponent();
+  /**
+   * Gets a component for dependency injection by its type.
+   * This pattern allows to avoid ugly casting in each fragment
+   */
+  @SuppressWarnings("unchecked")
+  protected <C> C getComponent(Class<C> componentType) {
+    return componentType.cast(((HasComponent<C>) getActivity()).getComponent());
   }
-
 }

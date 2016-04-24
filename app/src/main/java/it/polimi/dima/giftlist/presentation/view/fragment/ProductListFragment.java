@@ -28,12 +28,14 @@ import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
+import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.view.ProductListView;
 import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
 import it.polimi.dima.giftlist.presentation.presenter.ProductListPresenter;
 import it.polimi.dima.giftlist.presentation.view.adapter.ProductListAdapter;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
+import it.polimi.dima.giftlist.util.ToastFactory;
 
 /**
  * Created by Elena on 19/01/2016.
@@ -115,12 +117,11 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
             @Override
             public void onLeftCardExit(Object o) {
-
+                eventBus.post(new ProductAddedEvent((Product) o));
             }
 
             @Override
             public void onRightCardExit(Object o) {
-
             }
 
             @Override
@@ -189,5 +190,15 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     public void showLoading(boolean pullToRefresh) {
         nextProduct.setEnabled(false);
         super.showLoading(NO_PULL_TO_REFRESH);
+    }
+
+    @Override
+    public void showProductAddedError() {
+        ToastFactory.showShortToast(getContext(), R.string.product_added);
+    }
+
+    @Override
+    public void showProductAddedSuccess() {
+        ToastFactory.showShortToast(getContext(), R.string.product_added_error);
     }
 }

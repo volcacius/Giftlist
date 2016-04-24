@@ -10,7 +10,7 @@ public class Product {
     String name;
     float price;
     float convertedPrice;
-    int id;
+    long id;
     CurrencyType currencyType;
     String description;
     String imageUrl;
@@ -51,7 +51,7 @@ public class Product {
         this.convertedPrice = price;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 }

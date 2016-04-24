@@ -1,7 +1,11 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
+import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -10,10 +14,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import hugo.weaving.DebugLog;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
+import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
+import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.presentation.view.ProductListView;
 import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Elena on 27/01/2016.
@@ -24,8 +34,8 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Li
     private boolean isSubscriptionPending;
 
     @Inject
-    public ProductListPresenter(EventBus eventBus, GetProductListUseCase getProductListUseCase) {
-        super(eventBus, getProductListUseCase);
+    public ProductListPresenter(EventBus eventBus, GetProductListUseCase getProductListUseCase, StorIOSQLite db) {
+        super(eventBus, getProductListUseCase, db);
         this.isSubscriptionPending = false;
     }
 
@@ -86,11 +96,58 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Li
         }
     }
 
+    @Subscribe
+    public void onProductAddedEvent(ProductAddedEvent event) throws UnknownProductException {
+        Product product = event.getProduct();
+        Observer observer;
+        if (product instanceof EbayProduct) {
+            observer = new EbayProductPutObserver();
+        } else if (product instanceof EtsyProduct) {
+            observer = new EtsyProductPutObserver();
+        } else {
+            throw new UnknownProductException();
+        }
+        db.put()
+          .object(product)
+          .prepare()
+          .asRxObservable()
+          .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+          .subscribe(observer);
+    }
+
     //Check if there is a pending subscription to register
     private void checkPendingSubscription() {
         if (isSubscriptionPending) {
             subscribe(NO_PULL_TO_REFRESH);
             isSubscriptionPending = false;
+        }
+    }
+
+    private class EbayProductPutObserver implements Observer<PutResults<EbayProduct>> {
+        @Override
+        public void onCompleted() {
+        }
+        @Override
+        public void onError(Throwable e) {
+            getView().showProductAddedError();
+        }
+        @Override
+        public void onNext(PutResults<EbayProduct> ebayProductPutResults) {
+            getView().showProductAddedSuccess();
+        }
+    }
+
+    private class EtsyProductPutObserver implements Observer<PutResults<EtsyProduct>> {
+        @Override
+        public void onCompleted() {
+        }
+        @Override
+        public void onError(Throwable e) {
+            getView().showProductAddedError();
+        }
+        @Override
+        public void onNext(PutResults<EtsyProduct> etsyProductPutResults) {
+            getView().showProductAddedSuccess();
         }
     }
 }

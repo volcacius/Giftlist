@@ -33,7 +33,7 @@ public class EtsyResultsDeserializer implements JsonDeserializer {
                 String description = jsonProduct.getAsJsonObject().get("description").getAsString();
                 CurrencyType currencyType = CurrencyType.valueOf(jsonProduct.getAsJsonObject().get("currency_code").getAsString().toUpperCase());
                 float price = jsonProduct.getAsJsonObject().get("price").isJsonNull() ? 0 : jsonProduct.getAsJsonObject().get("price").getAsFloat();
-                int listing_id = jsonProduct.getAsJsonObject().get("listing_id").getAsInt();
+                long listing_id = jsonProduct.getAsJsonObject().get("listing_id").getAsLong();
 
                 JsonElement images = jsonProduct.getAsJsonObject().get("Images");
                 JsonArray imagesArray = images.getAsJsonArray();

@@ -55,6 +55,7 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
+    @Named("AppContext")
     Context provideApplicationContext() {
         return this.application;
     }

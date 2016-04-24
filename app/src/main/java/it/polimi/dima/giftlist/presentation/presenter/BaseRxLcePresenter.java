@@ -1,6 +1,7 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,10 +25,12 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
 
     protected EventBus eventBus;
     protected U useCase;
+    protected StorIOSQLite db;
 
-    public BaseRxLcePresenter(EventBus eventBus, U useCase) {
+    public BaseRxLcePresenter(EventBus eventBus, U useCase, StorIOSQLite db) {
         this.eventBus = eventBus;
         this.useCase = useCase;
+        this.db = db;
     }
 
     /**

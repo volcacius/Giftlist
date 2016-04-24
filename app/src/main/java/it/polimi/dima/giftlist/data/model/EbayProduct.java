@@ -7,11 +7,11 @@ public class EbayProduct extends Product {
 
     String productPage;
 
-    public EbayProduct(String name, String description, String listing_id, float price,
+    public EbayProduct(String name, String description, long listing_id, float price,
                        CurrencyType currencyType, String url_170x135, String url_page) {
         this.name = name;
         this.description = description;
-        this.id = 0; //listing_id;
+        this.id = listing_id;
         this.price = price;
         this.currencyType = currencyType;
         this.imageUrl =  url_170x135;
@@ -21,9 +21,5 @@ public class EbayProduct extends Product {
 
     public String getProductPage() {
         return productPage;
-    }
-
-    public void setProductPage(String productPage) {
-        this.productPage = productPage;
     }
 }

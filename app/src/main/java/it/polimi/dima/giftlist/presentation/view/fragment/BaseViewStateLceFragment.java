@@ -92,10 +92,9 @@ public abstract class BaseViewStateLceFragment<CV extends View, M, V extends Mvp
     }
 
     /**
-     * Inject the dependencies, has to be overwritten
+     * Inject the dependencies
      */
-    protected void injectDependencies() {
-    }
+    protected abstract void injectDependencies();
 
     /**
      * Gets a component for dependency injection by its type.

@@ -1,4 +1,4 @@
-package it.polimi.dima.giftlist.data.db.resolver;
+package it.polimi.dima.giftlist.data.db.resolver.get;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
