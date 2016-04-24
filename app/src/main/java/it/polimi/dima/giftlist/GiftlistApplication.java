@@ -18,6 +18,7 @@ import it.polimi.dima.giftlist.data.module.ReleaseCurrencyModule;
 import it.polimi.dima.giftlist.data.module.ReleaseEbayModule;
 import it.polimi.dima.giftlist.data.module.ReleaseEtsyModule;
 import jp.wasabeef.takt.Takt;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 15/03/16.
@@ -54,9 +55,7 @@ public class GiftlistApplication extends Application {
             BlockCanary.install(this, new AppBlockCanaryContext()).start();
             refWatcher = LeakCanary.install(this);
             Stetho.initializeWithDefaults(this);
-            
-
-
+            Timber.plant(new Timber.DebugTree());
         } else {
             applicationComponent = DaggerReleaseApplicationComponent.builder()
                     .applicationModule(new ApplicationModule(this))
