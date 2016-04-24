@@ -21,7 +21,6 @@ public interface ApplicationComponent {
     void inject(EbayProductDataSource ebayProductDataSource);
     void inject(CurrencyDataSource currencyDataSource);
 
-
     //Naming convention for this method is: returned type is a subcomponent class, method name is arbitrary, parameters are modules required in this subcomponent.
     ProductListComponent plus(ProductListModule module);
 }
