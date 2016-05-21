@@ -2,14 +2,19 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
 import icepick.Icepick;
 import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.GiftlistApplication;
+import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**

@@ -8,7 +8,7 @@
                 android:paddingRight="16dp">
 
     <TextView
-        android:id="@+id/item_name"
+        android:id="@+id/wishlist_product_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

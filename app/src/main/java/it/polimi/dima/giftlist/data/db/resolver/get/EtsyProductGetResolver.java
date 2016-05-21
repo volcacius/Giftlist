@@ -23,7 +23,8 @@ public class EtsyProductGetResolver extends DefaultGetResolver<EtsyProduct> {
                 cursor.getLong(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_ID)),
                 cursor.getFloat(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_PRICE)),
                 CurrencyType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_CURRENCY_TYPE))),
-                cursor.getString(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_IMAGE_URL))
+                cursor.getString(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_IMAGE_URL)),
+                cursor.getLong(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_WISHLIST_ID))
         );
     }
 }

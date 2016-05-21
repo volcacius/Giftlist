@@ -7,7 +7,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import it.polimi.dima.giftlist.domain.interactor.UseCase;
-import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
 import rx.Subscriber;
 
 /**

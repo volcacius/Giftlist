@@ -3,9 +3,6 @@ package it.polimi.dima.giftlist.presentation.presenter;
 import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -17,25 +14,25 @@ import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
-import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
+import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
-import it.polimi.dima.giftlist.presentation.view.ProductListView;
-import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
+import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
+import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Elena on 27/01/2016.
  */
-public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, List<Product>, GetProductListUseCase> {
+public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView, List<Product>, GetNetProductsUseCase> {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
     private boolean isSubscriptionPending;
 
     @Inject
-    public ProductListPresenter(EventBus eventBus, GetProductListUseCase getProductListUseCase, StorIOSQLite db) {
-        super(eventBus, getProductListUseCase, db);
+    public ProductPickerPresenter(EventBus eventBus, GetNetProductsUseCase getNetProductsUseCase, StorIOSQLite db) {
+        super(eventBus, getNetProductsUseCase, db);
         this.isSubscriptionPending = false;
     }
 
@@ -45,7 +42,7 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Li
      * allows, if necessary, to override them from classes that extends the Presenter while leaving the subscriber untouched.
      * To get an idea, see e.g. https://ideone.com/mIeavZ
      *
-     * ShowLoading is not called here, otherwise it would show the loading view when subscribing in background, even if the
+     * ShowLoading is not called here, otherwise it would show the loading view when subscribing in background, even if there
      * is still stuff in the adapter. ShowLoading is called only as an empty view of the adapter
      *
      * @param pullToRefresh Pull to refresh?
@@ -88,7 +85,7 @@ public class ProductListPresenter extends BaseRxLcePresenter<ProductListView, Li
     //set a subscription as pending.
     @DebugLog
     @Subscribe
-    public void onAdapterEmptyEvent(AdapterEmptyEvent event) {
+    public void onAdapterEmptyEvent(AdapterAboutToEmptyEvent event) {
         if (useCase.isUnsubscribed()) {
             subscribe(NO_PULL_TO_REFRESH);
         } else if (!isSubscriptionPending) {

@@ -5,17 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,13 +22,13 @@ import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
-import it.polimi.dima.giftlist.presentation.event.AdapterEmptyEvent;
+import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
-import it.polimi.dima.giftlist.presentation.view.ProductListView;
-import it.polimi.dima.giftlist.presentation.component.ProductListComponent;
-import it.polimi.dima.giftlist.presentation.presenter.ProductListPresenter;
-import it.polimi.dima.giftlist.presentation.view.adapter.ProductListAdapter;
+import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
+import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
+import it.polimi.dima.giftlist.presentation.presenter.ProductPickerPresenter;
+import it.polimi.dima.giftlist.presentation.view.adapter.ProductPickerAdapter;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 import it.polimi.dima.giftlist.util.ToastFactory;
 
@@ -41,8 +36,8 @@ import it.polimi.dima.giftlist.util.ToastFactory;
  * Created by Elena on 19/01/2016.
  */
 @FragmentWithArgs
-public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdapterView, List<Product>, ProductListView, ProductListPresenter>
-        implements ProductListView {
+public class ProductPickerFragment extends BaseViewStateLceFragment<SwipeFlingAdapterView, List<Product>, ProductPickerView, ProductPickerPresenter>
+        implements ProductPickerView {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
 
@@ -53,6 +48,8 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Bind(R.id.contentView)
     SwipeFlingAdapterView flingContainer;
 
+    @Arg
+    long wishlistId;
     @Arg
     HashMap<Class, Boolean> enabledProductRepositoryMap;
     @Arg
@@ -65,7 +62,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Inject
     IntentStarter intentStarter;
     @Inject
-    ProductListAdapter productListAdapter;
+    ProductPickerAdapter productPickerAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -75,7 +72,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @Override
     protected void injectDependencies() {
-        this.getComponent(ProductListComponent.class).inject(this);
+        this.getComponent(ProductPickerComponent.class).inject(this);
     }
 
     @OnClick(R.id.next_button)
@@ -90,13 +87,13 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @NonNull
     @Override
-    public ProductListPresenter createPresenter() {
-        return this.getComponent(ProductListComponent.class).provideProductListPresenter();
+    public ProductPickerPresenter createPresenter() {
+        return this.getComponent(ProductPickerComponent.class).provideProductListPresenter();
     }
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.fragment_product;
+        return R.layout.fragment_product_picker;
     }
 
     @Override
@@ -107,12 +104,12 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        flingContainer.setAdapter(productListAdapter);
+        flingContainer.setAdapter(productPickerAdapter);
         flingContainer.setEmptyView(loadingView);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
-                productListAdapter.removeFirstProduct();
+                productPickerAdapter.removeFirstProduct();
             }
 
             @Override
@@ -126,7 +123,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
             @Override
             public void onAdapterAboutToEmpty(int i) {
-                eventBus.post(new AdapterEmptyEvent());
+                eventBus.post(new AdapterAboutToEmptyEvent());
             }
 
             @Override
@@ -138,14 +135,14 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @NonNull
     @Override
-    public LceViewState<List<Product>, ProductListView> createViewState() {
+    public LceViewState<List<Product>, ProductPickerView> createViewState() {
         return new RetainingLceViewState<>();
     }
 
     @DebugLog
     @Override
     public List<Product> getData() {
-        return productListAdapter.getProductList();
+        return productPickerAdapter.getProductList();
     }
 
     @Override
@@ -156,7 +153,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
     @DebugLog
     @Override
     public void appendData(List<Product> data) {
-        productListAdapter.appendProductList(data);
+        productPickerAdapter.appendProductList(data);
     }
 
     @DebugLog
@@ -175,7 +172,7 @@ public class ProductListFragment extends BaseViewStateLceFragment<SwipeFlingAdap
 
     @Override
     public void setData(List<Product> data) {
-        productListAdapter.setProductList(data);
+        productPickerAdapter.setProductList(data);
     }
 
     @Override

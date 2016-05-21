@@ -22,6 +22,16 @@ public class EtsyProduct extends Product {
         this.imageUrl = imageUrl;
     }
 
+    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, long wishlistId) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.price = price;
+        this.currencyType = currencyType;
+        this.imageUrl = imageUrl;
+        this.wishlistId = wishlistId;
+    }
+
     public int getCategoryId() {
         return categoryId;
     }

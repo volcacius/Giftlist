@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import it.polimi.dima.giftlist.data.db.table.CurrencyTable;
 import it.polimi.dima.giftlist.data.db.table.EbayProductTable;
 import it.polimi.dima.giftlist.data.db.table.EtsyProductTable;
+import it.polimi.dima.giftlist.data.db.table.WishlistTable;
 
 /**
  * Created by Alessandro on 29/03/16.
@@ -21,6 +22,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(WishlistTable.getCreateTableQuery());
         db.execSQL(CurrencyTable.getCreateTableQuery());
         db.execSQL(EtsyProductTable.getCreateTableQuery());
         db.execSQL(EbayProductTable.getCreateTableQuery());

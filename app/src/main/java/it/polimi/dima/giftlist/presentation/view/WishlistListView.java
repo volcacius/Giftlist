@@ -11,12 +11,11 @@ import it.polimi.dima.giftlist.data.model.Wishlist;
  */
 public interface WishlistListView extends MvpLceView<List<Wishlist>> {
 
-    public void addWishlist(int wishlistId);
+    public void addWishlist(Wishlist wishlist);
 
     public void removeWishlist(int wishlistId);
 
-    public void showAddingFailed(Wishlist wishlist);
+    void showWishlistAddedError();
 
-    public void showRemovingFailed(Wishlist wishlist);
-
+    void showWishlistAddedSuccess();
 }

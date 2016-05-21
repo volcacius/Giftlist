@@ -8,12 +8,15 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.hannesdorfmann.fragmentargs.annotation.Arg;
+import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
+
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
+import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
@@ -21,9 +24,13 @@ import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 /**
  * Created by Elena on 10/02/2016.
  */
-public class WishlistSettingsFragment extends BaseFragment {
+@FragmentWithArgs
+public class ProductPickerSettingsFragment extends BaseFragment {
 
     private static final String EMPTY_STRING = "";
+
+    @Arg
+    long wishlistId;
 
     @Bind(R.id.checkbox_ebay)
     CheckBox ebayCheckbox;
@@ -45,10 +52,11 @@ public class WishlistSettingsFragment extends BaseFragment {
 
     @OnClick(R.id.button_start_product_activity)
     public void startProductActivity(){
-        intentStarter.startProductListActivity(this.getContext(),
+        intentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 categorySelected,
-                                                keywordsEditText.getText().toString());
+                                                keywordsEditText.getText().toString(),
+                                                wishlistId);
     }
 
     @Override
@@ -59,21 +67,8 @@ public class WishlistSettingsFragment extends BaseFragment {
 
     @Override
     protected int getLayoutRes() {
-        return R.layout.fragment_wishlistsettings;
+        return R.layout.fragment_product_picker_settings;
     }
-
-    /*
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_wishlistsettings, container, false); //xml file name
-        ButterKnife.bind(this,v);
-        //TODO questo override è da eliminare, trovare un modo più pulito per settare il valore di default della view
-        keywordsEditText.setText("");
-        return v;
-    }
-    */
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -83,6 +78,11 @@ public class WishlistSettingsFragment extends BaseFragment {
         enabledRepositoryMap = new HashMap<>();
         enabledRepositoryMap.put(EbayProductDataSource.class, Boolean.FALSE);
         enabledRepositoryMap.put(EtsyProductDataSource.class, Boolean.FALSE);
+    }
+
+    @Override
+    protected void injectDependencies() {
+        this.getComponent(ApplicationComponent.class).inject(this);
     }
 
     @OnItemSelected(R.id.spinner_category)

@@ -19,6 +19,16 @@ public class EbayProduct extends Product {
 
     }
 
+    public EbayProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, long wishlistId) {
+        this.name = name;
+        this.description = description;
+        this.id = id;
+        this.price = price;
+        this.currencyType = currencyType;
+        this.imageUrl = imageUrl;
+        this.wishlistId = wishlistId;
+    }
+
     public String getProductPage() {
         return productPage;
     }

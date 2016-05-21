@@ -30,7 +30,7 @@ import rx.functions.Func2;
 /**
  * Created by Elena on 27/01/2016.
  */
-public class GetProductListUseCase extends UseCase<List<Product>> {
+public class GetNetProductsUseCase extends UseCase<List<Product>> {
 
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
@@ -41,18 +41,21 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
     private String keywords;
     private int searchOffset;
     protected EventBus eventBus;
+    private long wishlistId;
 
     @Inject
-    public GetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
+    public GetNetProductsUseCase(List<ProductRepository<Product>> productRepositoryList,
                                  CurrencyRepository currencyRepository,
                                  String category,
                                  String keywords,
+                                 long wishlistId,
                                  EventBus eventBus) {
         this.currencyRepository = currencyRepository;
         this.productRepositoryList = productRepositoryList;
         this.category = category;
         this.keywords = keywords;
         this.searchOffset = STARTING_OFFSET;
+        this.wishlistId = wishlistId;
         this.eventBus = eventBus;
     }
 
@@ -71,14 +74,18 @@ public class GetProductListUseCase extends UseCase<List<Product>> {
                 .withLatestFrom(currencyList, new Func2<Product, List<Currency>, Product>() {
                     @Override
                     public Product call(Product product, List<Currency> currencies) {
+                        //Retrieve and set HQ ebay image
                         if (product.getClass().equals(EbayProduct.class)) {
                             product.setImageUrl(EbayProductDataSource.getHQImageUrl((EbayProduct) product));
                         }
+                        //Set converted price
                         for (Currency c : currencies) {
                             if (c.getCurrencyType().equals(product.getCurrencyType())) {
                                 product.setConvertedPrice(round(product.getPrice() / c.getRate(), DIGITS));
                             }
                         }
+                        //Set wishlist id
+                        product.setWishlistId(wishlistId);
                         return product;
                     }
         }).map(product -> new ArrayList<Product>(Arrays.asList(product)));

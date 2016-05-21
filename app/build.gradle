@@ -1,11 +1,12 @@
 //The order in which the plugins are applied matters
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.hugo'
 apply plugin: 'com.github.triplet.play'
 apply plugin: 'com.fernandocejas.frodo'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 apply from: '../config/quality/quality.gradle'
 
 //Repositories exclusive to the app module

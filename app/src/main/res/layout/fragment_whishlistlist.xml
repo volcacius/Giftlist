@@ -2,24 +2,25 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context=".presentation.view.activity.BaseViewStateLceActivity">
+             tools:context=".presentation.view.activity.WishlistListActivity">
             <!--not sure about the row above... -->
 
-    <include layout="@layout/loading_view" />
-    <include layout="@layout/error_view" />
+    <include layout="@layout/view_loading" />
+    <include layout="@layout/view_error" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/contentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <!-->
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_wishlistlist_recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+     >
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
+ </-->
 </FrameLayout>

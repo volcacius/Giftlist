@@ -25,6 +25,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 21/03/16.
@@ -50,7 +51,7 @@ public class CurrencyModule {
         try {
             registry.bind(Currency.class, CurrencyConverter.class);
         } catch (Exception e) {
-            //TODO something
+            Timber.e("Exception occured while binding currency xml converter: %s", e.getMessage());
         }
         Strategy strategy = new RegistryStrategy(registry);
         return new Persister(strategy);

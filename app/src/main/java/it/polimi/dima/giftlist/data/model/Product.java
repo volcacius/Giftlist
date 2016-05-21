@@ -14,6 +14,7 @@ public class Product {
     CurrencyType currencyType;
     String description;
     String imageUrl;
+    long wishlistId;
 
     public String getName() {
         return name;
@@ -53,5 +54,13 @@ public class Product {
 
     public long getId() {
         return id;
+    }
+
+    public long getWishlistId() {
+        return wishlistId;
+    }
+
+    public void setWishlistId(long wishlistId) {
+        this.wishlistId = wishlistId;
     }
 }

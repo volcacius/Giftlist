@@ -7,37 +7,42 @@ import java.util.List;
  */
 public class Wishlist {
 
+    public static final long DEFAULT_ID = 0;
 
-    private String wishlistTitle;
+    private String name;
     private List<Product> productList;
-    private int id;
+    private long id;
 
-    public Wishlist(List<Product> productList, int id) {
-        this.productList = productList;
+    public Wishlist(long id, String name) {
         this.id = id;
+        this.name = name;
     }
 
-    public Wishlist(String wishlistTitle) {
-        this.wishlistTitle = wishlistTitle;
+    public Wishlist(String name) {
+        this.name = name;
     }
 
-    public String getWishlistTitle() {
-        return wishlistTitle;
+    public String getName() {
+        return name;
     }
 
-    public void setWishlistTitle(String wishlistTitle) {
-        this.wishlistTitle = wishlistTitle;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<Product> getProductList() {
         return productList;
     }
 
-    public void setItemList(List<Product> productList) {
-        this.productList = productList;
+    public void appendProductList(List<Product> productList) {
+        this.productList.addAll(productList);
     }
 
-    public int getId() {
+    public long getId() {
         return id;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 }

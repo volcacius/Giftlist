@@ -3,18 +3,16 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
-import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -22,53 +20,58 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
+import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
+import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
+import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
+import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
+import it.polimi.dima.giftlist.util.ToastFactory;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
  */
-public abstract class WishlistListFragment extends MvpLceViewStateFragment<SwipeRefreshLayout, List<Wishlist>, WishlistListView, WishlistListPresenter>
-        implements WishlistListView, SwipeRefreshLayout.OnRefreshListener {
+public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView, List<Wishlist>, WishlistListView, WishlistListPresenter>
+        implements WishlistListView {
 
-    /*
-    @Bind(R.id.fragment_wishlistlist_recyclerView)
-    RecyclerView mRecyclerView;
+    @Bind(R.id.contentView)
+    RecyclerView recyclerView;
 
     @Inject
-    ErrorMessageDeterminer errorMessageDeterminer;
-
-    //WishlistListAdapter mWishlistListAdapter;
-    WishlistListComponent mWishlistListComponent;
-
-    protected void injectDependencies() {
-        mWishlistListComponent =
-                DaggerWishlistListComponent.builder().wishlistListModule(new WishlistListModule(getActivity())).build();
-        mWishlistListComponent.inject(this);
-    }
-
-    @Nullable @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        injectDependencies();
-        //ButterKnife is done in onViewCreate, and also setLayoutManager
-        return inflater.inflate(R.layout.fragment_whislistlist, container, false);
-    }
+    WishlistListAdapter wishlistListAdapter;
+    @Inject
+    IntentStarter intentStarter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setRetainInstance(true);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.fragment_whishlistlist;
+    }
+
+    @Override
+    protected void injectDependencies() {
+        this.getComponent(WishlistListComponent.class).inject(this);
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        mWishlistListAdapter = mWishlistListComponent.provideAdapter();
-        mRecyclerView.setAdapter(mWishlistListAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        contentView.setOnRefreshListener(this);
+        recyclerView.setAdapter(wishlistListAdapter);
+        wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
+            @Override
+            public void onItemClick(View v , int position) {
+                Timber.d("Clicked on wishlist!");
+                intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
+            }
+        });
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        //contentView.setOnRefreshListener(this);
     }
 
     @Override public void onDestroyView() {
@@ -76,49 +79,54 @@ public abstract class WishlistListFragment extends MvpLceViewStateFragment<Swipe
         ButterKnife.unbind(this);
     }
 
-
     @Override public LceViewState<List<Wishlist>, WishlistListView> createViewState() {
         return new RetainingLceViewState<>();
     }
 
     @Override public List<Wishlist> getData() {
-        return mWishlistListAdapter.getWishlistList();
+        return wishlistListAdapter.getWishlistList();
     }
 
     @Override protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
-        return errorMessageDeterminer.getErrorMessage(e, pullToRefresh);
+        //return errorMessageDeterminer.getErrorMessage(e, pullToRefresh);
+        return null;
     }
 
     @Override public WishlistListPresenter createPresenter() {
-        return mWishlistListComponent.provideProductListPresenter();
+        return this.getComponent(WishlistListComponent.class).providePresenter();
     }
 
     @Override public void setData(List<Wishlist> data) {
-        mWishlistListAdapter.setWishlistList(data);
-        mWishlistListAdapter.notifyDataSetChanged();
+        wishlistListAdapter.setWishlistList(data);
+        wishlistListAdapter.notifyDataSetChanged();
     }
 
     @Override public void loadData(boolean pullToRefresh) {
-        presenter.loadWishlistList(pullToRefresh);
+        presenter.subscribe(pullToRefresh);
     }
 
+    /*
     @Override public void onRefresh() {
+        Random random = new Random();
+        addWishlist(new Wishlist(random.nextLong(), "Wishlist"));
         loadData(true);
     }
+    */
 
     @Override public void showError(Throwable e, boolean pullToRefresh) {
         super.showError(e, pullToRefresh);
-        contentView.setRefreshing(false);
+        //contentView.setRefreshing(false);
         e.printStackTrace();
     }
 
     @Override public void showContent() {
         super.showContent();
-        contentView.setRefreshing(false);
+        //contentView.setRefreshing(false);
     }
 
     @Override public void showLoading(boolean pullToRefresh) {
         super.showLoading(pullToRefresh);
+        /*
         if (pullToRefresh && !contentView.isRefreshing()) {
             // Workaround for measure bug: https://code.google.com/p/android/issues/detail?id=77712
             contentView.post(new Runnable() {
@@ -127,11 +135,27 @@ public abstract class WishlistListFragment extends MvpLceViewStateFragment<Swipe
                 }
             });
         }
+        */
     }
 
     @Override
-    public void addWishlist(int wishlistId) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Random random = new Random();
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                addWishlist(new Wishlist(random.nextLong(), "Wishlist"));
+                return true;
 
+            default:
+                break;
+
+        }
+        return false;
+    }
+
+    @Override
+    public void addWishlist(Wishlist wishlist) {
+        eventBus.post(new WishlistAddedEvent(wishlist));
     }
 
     @Override
@@ -140,14 +164,13 @@ public abstract class WishlistListFragment extends MvpLceViewStateFragment<Swipe
     }
 
     @Override
-    public void showAddingFailed(Wishlist wishlist) {
+    public void showWishlistAddedError() {
 
     }
 
     @Override
-    public void showRemovingFailed(Wishlist wishlist) {
-
+    public void showWishlistAddedSuccess() {
+        ToastFactory.showShortToast(getContext(), R.string.wishlist_added);
     }
-    */
 }
 

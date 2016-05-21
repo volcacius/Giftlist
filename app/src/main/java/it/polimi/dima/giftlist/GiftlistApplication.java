@@ -9,6 +9,7 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import it.polimi.dima.giftlist.data.module.CurrencyModule;
+import it.polimi.dima.giftlist.data.module.DbModule;
 import it.polimi.dima.giftlist.data.module.DebugCurrencyModule;
 import it.polimi.dima.giftlist.data.module.DebugEbayModule;
 import it.polimi.dima.giftlist.data.module.DebugEtsyModule;
@@ -50,6 +51,7 @@ public class GiftlistApplication extends Application {
                                         .debugEbayModule(new DebugEbayModule())
                                         .ebayModule(new EbayModule())
                                         .currencyModule(new CurrencyModule())
+                                        .dbModule(new DbModule())
                                         .build();
             Takt.stock(this).play();
             BlockCanary.install(this, new AppBlockCanaryContext()).start();
@@ -65,6 +67,7 @@ public class GiftlistApplication extends Application {
                     .releaseEbayModule(new ReleaseEbayModule())
                     .ebayModule(new EbayModule())
                     .currencyModule(new CurrencyModule())
+                    .dbModule(new DbModule())
                     .build();
         }
     }

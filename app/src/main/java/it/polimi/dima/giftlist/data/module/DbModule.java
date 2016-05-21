@@ -15,16 +15,20 @@ import dagger.Provides;
 import it.polimi.dima.giftlist.data.db.DbOpenHelper;
 import it.polimi.dima.giftlist.data.db.resolver.delete.CurrencyDeleteResolver;
 import it.polimi.dima.giftlist.data.db.resolver.delete.EbayProductDeleteResolver;
+import it.polimi.dima.giftlist.data.db.resolver.delete.WishlistDeleteResolver;
 import it.polimi.dima.giftlist.data.db.resolver.get.CurrencyGetResolver;
 import it.polimi.dima.giftlist.data.db.resolver.get.EbayProductGetResolver;
+import it.polimi.dima.giftlist.data.db.resolver.get.WishlistGetResolver;
 import it.polimi.dima.giftlist.data.db.resolver.put.CurrencyPutResolver;
 import it.polimi.dima.giftlist.data.db.resolver.delete.EtsyProductDeleteResolver;
 import it.polimi.dima.giftlist.data.db.resolver.get.EtsyProductGetResolver;
 import it.polimi.dima.giftlist.data.db.resolver.put.EbayProductPutResolver;
 import it.polimi.dima.giftlist.data.db.resolver.put.EtsyProductPutResolver;
+import it.polimi.dima.giftlist.data.db.resolver.put.WishlistPutResolver;
 import it.polimi.dima.giftlist.data.model.Currency;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 
 /**
  * Created by Alessandro on 29/03/16.
@@ -52,6 +56,11 @@ public class DbModule {
                         .putResolver(new EbayProductPutResolver())
                         .getResolver(new EbayProductGetResolver())
                         .deleteResolver(new EbayProductDeleteResolver())
+                        .build())
+                .addTypeMapping(Wishlist.class, SQLiteTypeMapping.<Wishlist>builder()
+                        .putResolver(new WishlistPutResolver())
+                        .getResolver(new WishlistGetResolver())
+                        .deleteResolver(new WishlistDeleteResolver())
                         .build())
                 .build();
     }

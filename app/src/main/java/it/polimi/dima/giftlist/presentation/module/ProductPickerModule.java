@@ -15,21 +15,20 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
-import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
-import it.polimi.dima.giftlist.domain.interactor.GetProductListUseCase;
+import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
 import it.polimi.dima.giftlist.di.PerActivity;
-import it.polimi.dima.giftlist.presentation.view.adapter.ProductListAdapter;
+import it.polimi.dima.giftlist.presentation.view.adapter.ProductPickerAdapter;
 
 /**
  * Created by Elena on 27/01/2016.
  */
 @Module()
-public class ProductListModule {
+public class ProductPickerModule {
 
     private static final String EMPTY_STRING = "";
 
@@ -38,26 +37,29 @@ public class ProductListModule {
     private String category = EMPTY_STRING;
     private Map<Class, Boolean> enabledRepositoryMap = new HashMap<Class, Boolean>();
     private Context context;
+    private long wishlistId;
 
-    public ProductListModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category) {
+    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;
         this.category = category;
+        this.wishlistId = wishlistId;
     }
 
-    public ProductListModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, String keywords) {
+    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, String keywords, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;
         this.category = category;
         this.keywords = keywords;
+        this.wishlistId = wishlistId;
     }
 
     @Provides
     @PerActivity
-    GetProductListUseCase provideGetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
+    GetNetProductsUseCase provideGetNetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
                                                        CurrencyRepository currencyRepository,
                                                        EventBus eventBus) {
-        return new GetProductListUseCase(productRepositoryList, currencyRepository, category, keywords, eventBus);
+        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, category, keywords, wishlistId, eventBus);
     }
 
     //Edit this method to add new product data sources
@@ -83,7 +85,7 @@ public class ProductListModule {
 
     @Provides
     @PerActivity
-    ProductListAdapter providesProductListAdapter(Picasso picasso) {
-        return new ProductListAdapter(context, picasso);
+    ProductPickerAdapter providesProductListAdapter(Picasso picasso) {
+        return new ProductPickerAdapter(context, picasso);
     }
 }

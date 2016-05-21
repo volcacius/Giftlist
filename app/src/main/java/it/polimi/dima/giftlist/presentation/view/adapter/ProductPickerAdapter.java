@@ -28,7 +28,7 @@ import it.polimi.dima.giftlist.data.model.Product;
 /**
  * Created by Alessandro on 21/03/16.
  */
-public class ProductListAdapter extends BaseAdapter {
+public class ProductPickerAdapter extends BaseAdapter {
 
     private static final int IMAGE_WIDTH = 240;
     private static final int IMAGE_HEIGHT = 330;
@@ -40,7 +40,7 @@ public class ProductListAdapter extends BaseAdapter {
     List<Product> productList;
 
     @Inject
-    public ProductListAdapter(Context context, Picasso picasso) {
+    public ProductPickerAdapter(Context context, Picasso picasso) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picasso = picasso;
@@ -64,36 +64,36 @@ public class ProductListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        ProductListViewHolder productListViewHolder;
+        ProductPickerViewHolder productPickerViewHolder;
         if (view != null) {
-            productListViewHolder = (ProductListViewHolder) view.getTag();
+            productPickerViewHolder = (ProductPickerViewHolder) view.getTag();
         } else {
             view = layoutInflater.inflate(R.layout.view_product, parent, false);
-            productListViewHolder = new ProductListViewHolder(view);
-            view.setTag(productListViewHolder);
+            productPickerViewHolder = new ProductPickerViewHolder(view);
+            view.setTag(productPickerViewHolder);
         }
         Product currentProduct = getItem(position);
-        productListViewHolder.nameTextView.setText(currentProduct.getName());
-        productListViewHolder.priceTextView.setText(currentProduct.getPrice() + " " + currentProduct.getCurrencyType().toString());
+        productPickerViewHolder.nameTextView.setText(currentProduct.getName());
+        productPickerViewHolder.priceTextView.setText(currentProduct.getPrice() + " " + currentProduct.getCurrencyType().toString());
         if(currentProduct.getConvertedPrice() != 0 && !currentProduct.getCurrencyType().equals(CurrencyType.EUR)) {
-            productListViewHolder.convertedPriceTextView.setText("(" + currentProduct.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
+            productPickerViewHolder.convertedPriceTextView.setText("(" + currentProduct.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
         }
         if(currentProduct instanceof EbayProduct) {
-            productListViewHolder.repositoryTextView.setText(R.string.checkbox_ebay);
+            productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_ebay);
         }
         if(currentProduct instanceof EtsyProduct) {
-            productListViewHolder.repositoryTextView.setText(R.string.checkbox_etsy);
+            productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_etsy);
         }
         if (currentProduct.getImageUrl() == null) {
-            ColorDrawable colorDrawable = new ColorDrawable(productListViewHolder.colorPrimary);
-            productListViewHolder.productThumb.setDrawingCacheEnabled(true);
-            productListViewHolder.productThumb.setImageDrawable(colorDrawable);
+            ColorDrawable colorDrawable = new ColorDrawable(productPickerViewHolder.colorPrimary);
+            productPickerViewHolder.productThumb.setDrawingCacheEnabled(true);
+            productPickerViewHolder.productThumb.setImageDrawable(colorDrawable);
 
         } else {
             picasso.load(currentProduct.getImageUrl())
                     .resize(IMAGE_WIDTH,IMAGE_HEIGHT)
                     .centerCrop()
-                    .into(productListViewHolder.productThumb);
+                    .into(productPickerViewHolder.productThumb);
         }
         return view;
     }
@@ -115,7 +115,7 @@ public class ProductListAdapter extends BaseAdapter {
         this.productList = productList;
     }
 
-    static class ProductListViewHolder {
+    static class ProductPickerViewHolder {
 
         @Bind(R.id.product_name)
         TextView nameTextView;
@@ -130,8 +130,8 @@ public class ProductListAdapter extends BaseAdapter {
         @BindColor(R.color.primary)
         int colorPrimary;
 
-        public ProductListViewHolder(View productListView) {
-            ButterKnife.bind(this, productListView);
+        public ProductPickerViewHolder(View view) {
+            ButterKnife.bind(this, view);
         }
     }
 

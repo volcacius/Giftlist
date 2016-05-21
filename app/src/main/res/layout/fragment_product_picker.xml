@@ -5,9 +5,9 @@
              android:orientation="vertical"
     >
 
-    <include layout="@layout/loading_view"/>
+    <include layout="@layout/view_loading"/>
 
-    <include layout="@layout/error_view"/>
+    <include layout="@layout/view_error"/>
 
     <com.lorentzos.flingswipe.SwipeFlingAdapterView
         android:id="@+id/contentView"
