@@ -38,7 +38,7 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = layoutInflater.inflate(R.layout.list_wishlist, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, onWishlistClickListener); //needs the listener as a parameter
         return vh;
     }
 
@@ -66,30 +66,40 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
         this.wishlistList = wishlistList;
     }
 
+    //qua prendo la roba passata dal fragment
     public void setOnWishlistClickListener(OnWishlistClickListener onWishlistClickListener) {
         this.onWishlistClickListener = onWishlistClickListener;
     }
-
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+                                                        //no need of implementing this interface
+    class ViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener {**********
 
         @Bind(R.id.wishlist_name)
         TextView wishlistNameTextView;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnWishlistClickListener onWishlistClickListener) {
             super(view);
             ButterKnife.bind(this, view);
+            bindListener(view, onWishlistClickListener);//*
         }
-
-        @Override
+        //method to bind the listener
+        private void bindListener(View view, OnWishlistClickListener onWishlistClickListener) {
+            view.setOnClickListener(v ->
+            onWishlistClickListener.onItemClick(v, getPosition()));
+        }
+/*
+        @Override                                                                        ***********
         public void onClick(View v) {
             Timber.d("Clicked on wishlist!");
             if (onWishlistClickListener != null) {
                 onWishlistClickListener.onItemClick(v, getPosition());
             }
-        }
+        }*/
     }
 
+
     //This is a pattern to declare an onClick in the ViewHolder but implement it in the fragment
+    //E' un'interfaccia di wrapping
+    //In Avengers: RecyclerClickListener
     public interface OnWishlistClickListener {
         public void onItemClick(View view , int position);
     }

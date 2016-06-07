@@ -63,16 +63,22 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistListAdapter);
+
+        //dichiaro tutto questo nel fragment perchè devo poter avviare l'altra activity dal fragment
         wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
             @Override
             public void onItemClick(View v , int position) {
-                Timber.d("Clicked on wishlist!");
-                intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
+                Timber.d("Clicked on wishlist! Id: "+ wishlistListAdapter.getItemId(position));
+                //for now, all WL are empty, so I'll start productPicker
+                //intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
+                intentStarter.startProductPickerSettingsActivity(getContext(), wishlistListAdapter.getItemId(position));
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //contentView.setOnRefreshListener(this);
+        //contentView.setOnRefreshListener(this);*/
     }
+
+
 
     @Override public void onDestroyView() {
         super.onDestroyView();
@@ -143,7 +149,7 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
         Random random = new Random();
         switch (item.getItemId()) {
             case R.id.action_add:
-                addWishlist(new Wishlist(random.nextLong(), "Wishlist"));
+                addWishlist(new Wishlist(Math.abs(random.nextLong()), "Wishlist"));
                 return true;
 
             default:
