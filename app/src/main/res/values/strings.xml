@@ -8,6 +8,7 @@
     <string name="dialog_error_title">Sorry</string>
 
     <string name="keyword_hint">Enter keywords separed by a comma</string>
+    <string name="price_hint">Use dot (.) to separate decimals</string>
 
     <string name="etsy_prompt">Choose a category</string>
     <string name="checkbox_ebay">Ebay</string>

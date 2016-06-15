@@ -18,6 +18,11 @@ public interface EtsyApi {
     Observable<List<EtsyProduct>> getItems(@Query("category") String category, @Query("offset") int offset);
 
     @GET("v2/listings/active?fields=listing_id,title,currency_code,price,description&includes=Images(url_570xN,hex_code)")
-    Observable<List<EtsyProduct>> getItems(@Query("category") String category, @Query("tags") String keywords, @Query("offset") int offset);
+    Observable<List<EtsyProduct>> getItems(@Query("category") String category,
+                                           @Query("tags") String keywords,
+                                           @Query("max_price") Float maxprice,
+                                           @Query("min_price") Float minprice,
+                                           @Query("offset") int offset);
+    ///@Query("max_price") Float maxprice, NB: needs to be converted in USD
 
 }

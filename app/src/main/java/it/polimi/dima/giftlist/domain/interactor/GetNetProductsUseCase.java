@@ -39,6 +39,8 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private CurrencyRepository currencyRepository;
     private String category;
     private String keywords;
+    private Float maxprice;
+    private Float minprice;
     private int searchOffset;
     protected EventBus eventBus;
     private long wishlistId;
@@ -48,12 +50,16 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
                                  CurrencyRepository currencyRepository,
                                  String category,
                                  String keywords,
+                                 Float maxprice,
+                                 Float minprice,
                                  long wishlistId,
                                  EventBus eventBus) {
         this.currencyRepository = currencyRepository;
         this.productRepositoryList = productRepositoryList;
         this.category = category;
         this.keywords = keywords;
+        this.maxprice = maxprice;
+        this.minprice = minprice;
         this.searchOffset = STARTING_OFFSET;
         this.wishlistId = wishlistId;
         this.eventBus = eventBus;
@@ -65,7 +71,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     protected Observable<List<Product>> buildUseCaseObservable() {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
         for (ProductRepository<Product> pr : productRepositoryList) {
-            productListObservableList.add(pr.getProductList(category, keywords, searchOffset*PRODUCT_PER_PAGE));
+            productListObservableList.add(pr.getProductList(category, keywords, maxprice, minprice, searchOffset*PRODUCT_PER_PAGE));
         }
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();
         searchOffset++;

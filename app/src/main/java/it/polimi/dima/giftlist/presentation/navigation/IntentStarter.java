@@ -22,8 +22,8 @@ public class IntentStarter {
     public IntentStarter() {
     }
 
-    public void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, String category, String keywords, long wishlistId) {
-        Intent intentToLaunch = ProductPickerActivity.getCallingIntent(context, enabledRepositoryMap, category, keywords, wishlistId);
+    public void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, String category, String keywords, Float maxprice, Float minprice, long wishlistId) {
+        Intent intentToLaunch = ProductPickerActivity.getCallingIntent(context, enabledRepositoryMap, category, keywords, maxprice, minprice, wishlistId);
         context.startActivity(intentToLaunch);
     }
 

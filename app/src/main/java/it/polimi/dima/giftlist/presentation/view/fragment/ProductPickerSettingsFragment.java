@@ -47,6 +47,13 @@ public class ProductPickerSettingsFragment extends BaseFragment {
     @Bind(R.id.text_keywords)
     EditText keywordsEditText;
 
+    @Bind(R.id.text_maxprice)
+    EditText maxpriceEditText;
+
+    @Bind(R.id.text_minprice)
+    EditText minpriceEditText;
+
+
     String categorySelected;
     HashMap<Class,Boolean> enabledRepositoryMap;
 
@@ -56,6 +63,8 @@ public class ProductPickerSettingsFragment extends BaseFragment {
                                                 enabledRepositoryMap,
                                                 categorySelected,
                                                 keywordsEditText.getText().toString(),
+                                                Float.parseFloat(maxpriceEditText.getText().toString()),
+                                                Float.parseFloat(minpriceEditText.getText().toString()),
                                                 wishlistId);
     }
 

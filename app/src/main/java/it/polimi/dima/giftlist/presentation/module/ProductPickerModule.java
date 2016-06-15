@@ -31,10 +31,14 @@ import it.polimi.dima.giftlist.presentation.view.adapter.ProductPickerAdapter;
 public class ProductPickerModule {
 
     private static final String EMPTY_STRING = "";
+    private static final Float DEFAULT_MAX_PRICE = (float) 1000.00;
+    private static final Float DEFAULT_MIN_PRICE = (float) 0.00;
 
     //keywords and category has to be initialized by default to something since they are used in the @Provides, otherwise Dagger won't build
     private String keywords = EMPTY_STRING;
     private String category = EMPTY_STRING;
+    private Float maxprice = DEFAULT_MAX_PRICE;
+    private Float minprice = DEFAULT_MIN_PRICE;
     private Map<Class, Boolean> enabledRepositoryMap = new HashMap<Class, Boolean>();
     private Context context;
     private long wishlistId;
@@ -46,11 +50,13 @@ public class ProductPickerModule {
         this.wishlistId = wishlistId;
     }
 
-    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, String keywords, long wishlistId) {
+    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, String keywords, Float maxprice, Float minprice, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;
         this.category = category;
         this.keywords = keywords;
+        this.maxprice = maxprice;
+        this.minprice = minprice;
         this.wishlistId = wishlistId;
     }
 
@@ -59,7 +65,7 @@ public class ProductPickerModule {
     GetNetProductsUseCase provideGetNetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
                                                        CurrencyRepository currencyRepository,
                                                        EventBus eventBus) {
-        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, category, keywords, wishlistId, eventBus);
+        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, category, keywords, maxprice, minprice, wishlistId, eventBus);
     }
 
     //Edit this method to add new product data sources

@@ -33,7 +33,7 @@ public class EtsyProductDataSource implements ProductRepository {
     }
 
     @Override
-    public Observable<List<EtsyProduct>> getProductList(String category, String keywords, int offset) {
-        return mEtsyApi.getItems(category, keywords, offset);
+    public Observable<List<EtsyProduct>> getProductList(String category, String keywords,  Float maxprice, Float minprice, int offset) {
+        return mEtsyApi.getItems(category, keywords, maxprice, minprice, offset);
     }
 }

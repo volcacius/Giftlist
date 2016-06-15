@@ -13,6 +13,7 @@ import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerFragmentBuilder;
+import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsFragment;
 
 
 /**
@@ -23,11 +24,15 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     private static final String EXTRA_REPOSITORIES_SELECTED = "repositories";
     private static final String EXTRA_CATEGORY_SELECTED = "category";
     private static final String EXTRA_KEYWORDS = "keywords";
+    private static final String EXTRA_MAXPRICE = "maxprice";
+    private static final String EXTRA_MINPRICE = "minprice";
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     private long wishlistId;
     private HashMap<Class, Boolean> enabledRepositoryMap;
     private String category;
     private String keywords;
+    private Float maxprice;
+    private Float minprice;
 
     //The component has to be declared in the activity and not in the fragment since its lifecycle must be tied to the activity
     ProductPickerComponent productPickerComponent;
@@ -43,6 +48,8 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
             enabledRepositoryMap = (HashMap<Class, Boolean>) getIntent().getSerializableExtra(EXTRA_REPOSITORIES_SELECTED);
             category = getIntent().getStringExtra(EXTRA_CATEGORY_SELECTED);
             keywords = getIntent().getStringExtra(EXTRA_KEYWORDS);
+            maxprice = getIntent().getFloatExtra(EXTRA_MAXPRICE, (float) 1000.00);
+            minprice = getIntent().getFloatExtra(EXTRA_MINPRICE, (float) 0.00);
             wishlistId = getIntent().getLongExtra(EXTRA_WISHLIST_ID, Wishlist.DEFAULT_ID);
         }
         createComponent();
@@ -53,11 +60,13 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     }
 
     @DebugLog
-    public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, String category, String keywords, Long wishlistId) {
+    public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, String category, String keywords, Float maxprice, Float minprice, Long wishlistId) {
         Intent callingIntent = new Intent(context, ProductPickerActivity.class);
         callingIntent.putExtra(EXTRA_REPOSITORIES_SELECTED, enabledRepositoryMap);
         callingIntent.putExtra(EXTRA_CATEGORY_SELECTED, category);
         callingIntent.putExtra(EXTRA_KEYWORDS, keywords);
+        callingIntent.putExtra(EXTRA_MAXPRICE, maxprice);
+        callingIntent.putExtra(EXTRA_MINPRICE, minprice);
         callingIntent.putExtra(EXTRA_WISHLIST_ID, wishlistId);
         return callingIntent;
     }
@@ -69,6 +78,6 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     }
 
     protected void createComponent() {
-        productPickerComponent = getApplicationComponent().plus(new ProductPickerModule(this, enabledRepositoryMap, category, keywords, wishlistId));
+        productPickerComponent = getApplicationComponent().plus(new ProductPickerModule(this, enabledRepositoryMap, category, keywords, maxprice, minprice, wishlistId));
     }
 }

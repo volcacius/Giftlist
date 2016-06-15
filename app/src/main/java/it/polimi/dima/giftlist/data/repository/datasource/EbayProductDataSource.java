@@ -26,6 +26,9 @@ public class EbayProductDataSource implements ProductRepository {
     EventBus mEventBus;
     private static final int PRODUCT_PER_PAGE = 25;
 
+    String QUERY_NAME_MAX = "MaxPrice";
+    String QUERY_NAME_MIN = "MinPrice";
+
     @Inject
     public EbayProductDataSource(EbayApi ebayApi, EventBus eventBus) {
         mEbayApi = ebayApi;
@@ -33,8 +36,10 @@ public class EbayProductDataSource implements ProductRepository {
     }
 
     @Override
-    public Observable<List<EbayProduct>> getProductList(String category, String keywords, int offset) {
-        return mEbayApi.getItems(keywords, offset/PRODUCT_PER_PAGE + 1);
+    public Observable<List<EbayProduct>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset) {
+        return mEbayApi.getItems(keywords, offset/PRODUCT_PER_PAGE + 1,
+                                QUERY_NAME_MAX, maxprice,
+                                QUERY_NAME_MIN, minprice);
     }
 
     public static String getHQImageUrl(EbayProduct product) {

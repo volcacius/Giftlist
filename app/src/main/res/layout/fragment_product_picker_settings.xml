@@ -25,6 +25,18 @@
         android:layout_height="wrap_content"
         android:hint="@string/keyword_hint"/>
 
+    <EditText
+        android:id="@+id/text_maxprice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/price_hint"/>
+
+    <EditText
+        android:id="@+id/text_minprice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/price_hint"/>
+
     <CheckBox
         android:id="@+id/checkbox_ebay"
         android:layout_width="match_parent"
