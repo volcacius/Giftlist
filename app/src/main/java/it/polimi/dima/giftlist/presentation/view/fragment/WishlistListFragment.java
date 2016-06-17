@@ -70,8 +70,8 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
             public void onItemClick(View v , int position) {
                 Timber.d("Clicked on wishlist! Id: "+ wishlistListAdapter.getItemId(position));
                 //for now, all WL are empty, so I'll start productPicker
-                //intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
-                intentStarter.startProductPickerSettingsActivity(getContext(), wishlistListAdapter.getItemId(position));
+                intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
+                //intentStarter.startProductPickerSettingsActivity(getContext(), wishlistListAdapter.getItemId(position));
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -149,7 +149,9 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
         Random random = new Random();
         switch (item.getItemId()) {
             case R.id.action_add:
-                addWishlist(new Wishlist(Math.abs(random.nextLong()), "Wishlist"));
+                long new_id = Math.abs(random.nextLong());
+                addWishlist(new Wishlist(new_id, "Wishlist"));
+                intentStarter.startProductPickerSettingsActivity(getContext(),new_id);
                 return true;
 
             default:

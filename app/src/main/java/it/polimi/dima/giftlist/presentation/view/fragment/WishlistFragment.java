@@ -25,6 +25,7 @@ import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistView;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistAdapter;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 24/04/16.
@@ -82,13 +83,16 @@ public class WishlistFragment extends BaseViewStateLceFragment<SwipeRefreshLayou
 
     @Override
     public void setData(List<Product> data) {
+        Timber.d("Fragment setData");
         wishlistAdapter.setProductList(data);
     }
 
     @Override
     public void loadData(boolean pullToRefresh) {
+        Timber.d("Fragment loadData");
         presenter.subscribe(pullToRefresh);
     }
+
 
     @Override
     public LceViewState<List<Product>, WishlistView> createViewState() {

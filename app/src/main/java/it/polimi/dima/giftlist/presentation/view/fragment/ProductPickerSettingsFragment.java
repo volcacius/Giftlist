@@ -28,6 +28,8 @@ import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 public class ProductPickerSettingsFragment extends BaseFragment {
 
     private static final String EMPTY_STRING = "";
+    private static final Float DEFAULT_MAX = (float) 1000.0;
+    private static final Float DEFAULT_MIN = (float) 0.0;
 
     @Arg
     long wishlistId;
@@ -59,12 +61,32 @@ public class ProductPickerSettingsFragment extends BaseFragment {
 
     @OnClick(R.id.button_start_product_activity)
     public void startProductActivity(){
+        Float minprice;
+        Float maxprice;
+        try
+        {
+            minprice =  Float.parseFloat(minpriceEditText.getText().toString());
+        }
+        catch(NumberFormatException e)
+        {
+            minprice = DEFAULT_MIN;
+        }
+
+        try
+        {
+            maxprice  = Float.parseFloat(maxpriceEditText.getText().toString());
+        }
+        catch(NumberFormatException e)
+        {
+            maxprice = DEFAULT_MAX;
+        }
+
         intentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 categorySelected,
                                                 keywordsEditText.getText().toString(),
-                                                Float.parseFloat(maxpriceEditText.getText().toString()),
-                                                Float.parseFloat(minpriceEditText.getText().toString()),
+                                                maxprice,
+                                                minprice,
                                                 wishlistId);
     }
 

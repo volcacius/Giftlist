@@ -18,6 +18,7 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 18/03/16.
@@ -37,11 +38,15 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
 
     @Override
     protected Observable<List<Product>> buildUseCaseObservable() {
+        Timber.d("useCase buildUseCase");
         return Observable.concat(getWishlistEbayProductList(),
                                  getWishlistEtsyProductList());
     }
 
+
+
     private Observable<List<Product>> getWishlistEbayProductList() {
+        Timber.d("useCase getEbayList");
         return db.get()
                 .listOfObjects(EbayProduct.class)
                 .withQuery(Query.builder()
@@ -57,6 +62,7 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
     }
 
     private Observable<List<Product>> getWishlistEtsyProductList() {
+        Timber.d("useCase getEtsyList");
         return db.get()
                 .listOfObjects(EtsyProduct.class)
                 .withQuery(Query.builder()

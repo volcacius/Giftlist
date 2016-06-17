@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.Bind;
@@ -23,7 +24,7 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     long wishlistId;
 
-    @Bind(R.id.toolbar)
+    @Bind(R.id.wl_toolbar)
     Toolbar toolbar;
 
     WishlistComponent wishlistComponent;
@@ -32,8 +33,9 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
-        toolbar.inflateMenu(R.menu.menu_wishlist);
         ButterKnife.bind(this);
+        //toolbar.inflateMenu(R.menu.menu_wishlist);
+
         setSupportActionBar(toolbar);
         //I need the wishlist id to launch the fragment
         //If it's the first time creating the activity, I get it from the Intent.
@@ -48,10 +50,10 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
 
     }
 
-    //I need to expose the component so that I can perform injection from the fragment
     @Override
-    public WishlistComponent getComponent() {
-        return wishlistComponent;
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_wishlist, menu);
+        return true;
     }
 
     @Override
@@ -68,6 +70,13 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
 
         }
     }
+
+    //I need to expose the component so that I can perform injection from the fragment
+    @Override
+    public WishlistComponent getComponent() {
+        return wishlistComponent;
+    }
+
 
     protected void createComponent() {
         wishlistComponent = getApplicationComponent().plus(new WishlistModule(this, wishlistId));

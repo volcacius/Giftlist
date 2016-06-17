@@ -6,7 +6,7 @@
              tools:context=".presentation.view.activity.WishlistActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/wl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:background="?attr/colorPrimary"
