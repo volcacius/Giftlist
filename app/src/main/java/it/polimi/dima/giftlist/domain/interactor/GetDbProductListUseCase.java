@@ -6,6 +6,7 @@ import com.pushtorefresh.storio.sqlite.queries.RawQuery;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,6 +19,7 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import rx.Observable;
+import rx.functions.Func2;
 import timber.log.Timber;
 
 /**
@@ -39,13 +41,22 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
     @Override
     protected Observable<List<Product>> buildUseCaseObservable() {
         Timber.d("useCase buildUseCase");
-        return Observable.concat(getWishlistEbayProductList(),
-                                 getWishlistEtsyProductList());
+        return Observable.combineLatest(getWishlistEtsyProductList(),
+                getWishlistEbayProductList(),
+                new Func2<List<EtsyProduct>, List<EbayProduct>, List<Product>>() {
+                    @Override
+                    public List<Product> call(List<EtsyProduct> etsyProducts, List<EbayProduct> ebayProducts) {
+                        List<Product> products = new ArrayList<Product>();
+                        products.addAll(etsyProducts);
+                        products.addAll(ebayProducts);
+                        return products;
+                    }
+                });
     }
 
 
 
-    private Observable<List<Product>> getWishlistEbayProductList() {
+    private Observable<List<EbayProduct>> getWishlistEbayProductList() {
         Timber.d("useCase getEbayList");
         return db.get()
                 .listOfObjects(EbayProduct.class)
@@ -55,13 +66,10 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
                         .whereArgs(wishlistId)
                         .build())
                 .prepare()
-                .asRxObservable()
-                .flatMap(ebayProducts -> Observable.from(ebayProducts))
-                .cast(Product.class)
-                .toList();
+                .asRxObservable();
     }
 
-    private Observable<List<Product>> getWishlistEtsyProductList() {
+    private Observable<List<EtsyProduct>> getWishlistEtsyProductList() {
         Timber.d("useCase getEtsyList");
         return db.get()
                 .listOfObjects(EtsyProduct.class)
@@ -71,9 +79,6 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
                         .whereArgs(wishlistId)
                         .build())
                 .prepare()
-                .asRxObservable()
-                .flatMap(etsyProducts -> Observable.from(etsyProducts))
-                .cast(Product.class)
-                .toList();
+                .asRxObservable();
     }
 }
