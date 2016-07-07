@@ -8,6 +8,7 @@ import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
 import it.polimi.dima.giftlist.data.db.table.EtsyProductTable;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 
 /**
  * Created by Alessandro on 29/03/16.

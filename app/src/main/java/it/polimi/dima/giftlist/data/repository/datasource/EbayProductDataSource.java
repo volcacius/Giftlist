@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.ebay.EbayApi;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import rx.Observable;
@@ -36,7 +37,7 @@ public class EbayProductDataSource implements ProductRepository {
     }
 
     @Override
-    public Observable<List<EbayProduct>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset) {
+    public Observable<List<Product>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset) {
         return mEbayApi.getItems(keywords, offset/PRODUCT_PER_PAGE + 1,
                                 QUERY_NAME_MAX, maxprice,
                                 QUERY_NAME_MIN, minprice);

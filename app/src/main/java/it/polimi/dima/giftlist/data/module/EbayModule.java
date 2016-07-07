@@ -59,7 +59,7 @@ public class EbayModule {
     @Provides
     @Singleton
     @Named("EbayRepository")
-    public ProductRepository<Product> providesEbayRepository(EbayApi ebayApi, EventBus eventBus) {
+    public ProductRepository providesEbayRepository(EbayApi ebayApi, EventBus eventBus) {
         return new EbayProductDataSource(ebayApi, eventBus);
     }
 }

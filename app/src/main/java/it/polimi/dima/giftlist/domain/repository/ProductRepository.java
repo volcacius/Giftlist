@@ -9,6 +9,6 @@ import rx.Observable;
 /**
  * Created by Elena on 27/01/2016.
  */
-public interface ProductRepository<T extends Product> {
-    Observable<List<T>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset);
+public interface ProductRepository {
+    Observable<List<Product>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset);
 }

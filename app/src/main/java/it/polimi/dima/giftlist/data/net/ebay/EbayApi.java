@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist.data.net.ebay;
 import java.util.List;
 
 import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -19,12 +20,12 @@ public interface EbayApi {
 
 
     @GET(KEYWORD_SEARCH+"&paginationInput.entriesPerPage=25")//manca cat id e apikey
-    Observable<List<EbayProduct>> getItems(@Query("keywords") String keywords,
-                                           @Query("paginationInput.pageNumber") int page,
-                                           @Query("itemFilter(0).name") String queryNameMax,
-                                           @Query("itemFilter(0).value") Float maxprice,
-                                           @Query("itemFilter(1).name") String queryNameMin,
-                                           @Query("itemFilter(1).value") Float minprice
+    Observable<List<Product>> getItems(@Query("keywords") String keywords,
+                                       @Query("paginationInput.pageNumber") int page,
+                                       @Query("itemFilter(0).name") String queryNameMax,
+                                       @Query("itemFilter(0).value") Float maxprice,
+                                       @Query("itemFilter(1).name") String queryNameMin,
+                                       @Query("itemFilter(1).value") Float minprice
     );
 }
 //SECURITY-APPNAME=ElenaSac-Giftlist-PRD-538ccab7b-049d08b3

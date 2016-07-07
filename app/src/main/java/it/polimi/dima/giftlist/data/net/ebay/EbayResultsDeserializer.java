@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 
 /**
  * Created by Elena on 26/03/2016.
@@ -30,7 +31,7 @@ public class EbayResultsDeserializer implements JsonDeserializer {
 
     @Override
     public Object deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        List<EbayProduct> ebayProductsList = new ArrayList<>();
+        List<Product> ebayProductsList = new ArrayList<>();
 
         JsonElement results = je.getAsJsonObject().get("findItemsByKeywordsResponse")
                 .getAsJsonArray().get(0)                //if you don't catch them as json arrays first, it complains

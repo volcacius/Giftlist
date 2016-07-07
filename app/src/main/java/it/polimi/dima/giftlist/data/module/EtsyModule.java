@@ -66,7 +66,7 @@ public class EtsyModule {
     @Provides
     @Singleton
     @Named("EtsyRepository")
-    public ProductRepository<Product> providesEtsyRepository(EtsyApi etsyApi, EventBus eventBus) {
+    public ProductRepository providesEtsyRepository(EtsyApi etsyApi, EventBus eventBus) {
         return new EtsyProductDataSource(etsyApi, eventBus);
     }
 }

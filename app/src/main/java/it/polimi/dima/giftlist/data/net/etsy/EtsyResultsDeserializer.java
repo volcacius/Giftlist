@@ -12,6 +12,7 @@ import java.util.List;
 
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
+import it.polimi.dima.giftlist.data.model.Product;
 
 /**
  * Created by Elena on 28/01/2016.
@@ -19,9 +20,9 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 public class EtsyResultsDeserializer implements JsonDeserializer {
 
     @Override
-    public List<EtsyProduct> deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public List<Product> deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-        List<EtsyProduct> etsyProductsList = new ArrayList<>();
+        List<Product> etsyProductsList = new ArrayList<>();
         JsonElement results = je.getAsJsonObject().get("results");
         JsonArray resultsArray = results.getAsJsonArray();
 

@@ -4,6 +4,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import org.greenrobot.eventbus.EventBus;
 
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.currency.CurrencyXmlModel;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import it.polimi.dima.giftlist.data.net.etsy.EtsyApi;
@@ -33,7 +34,7 @@ public class EtsyProductDataSource implements ProductRepository {
     }
 
     @Override
-    public Observable<List<EtsyProduct>> getProductList(String category, String keywords,  Float maxprice, Float minprice, int offset) {
+    public Observable<List<Product>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset) {
         return mEtsyApi.getItems(category, keywords, maxprice, minprice, offset);
     }
 }

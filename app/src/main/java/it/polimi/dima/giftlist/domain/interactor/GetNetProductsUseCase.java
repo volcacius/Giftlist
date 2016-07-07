@@ -35,7 +35,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
-    private List<ProductRepository<Product>> productRepositoryList;
+    private List<ProductRepository> productRepositoryList;
     private CurrencyRepository currencyRepository;
     private String category;
     private String keywords;
@@ -46,7 +46,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private long wishlistId;
 
     @Inject
-    public GetNetProductsUseCase(List<ProductRepository<Product>> productRepositoryList,
+    public GetNetProductsUseCase(List<ProductRepository> productRepositoryList,
                                  CurrencyRepository currencyRepository,
                                  String category,
                                  String keywords,
@@ -70,7 +70,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     //At the end of the chain I need to wrap the product as a single valued list, since list<product> is the type accepted as model accross the whole use case
     protected Observable<List<Product>> buildUseCaseObservable() {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
-        for (ProductRepository<Product> pr : productRepositoryList) {
+        for (ProductRepository pr : productRepositoryList) {
             productListObservableList.add(pr.getProductList(category, keywords, maxprice, minprice, searchOffset*PRODUCT_PER_PAGE));
         }
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();

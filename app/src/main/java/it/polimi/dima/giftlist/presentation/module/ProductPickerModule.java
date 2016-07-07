@@ -15,6 +15,8 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
@@ -62,7 +64,7 @@ public class ProductPickerModule {
 
     @Provides
     @PerActivity
-    GetNetProductsUseCase provideGetNetProductListUseCase(List<ProductRepository<Product>> productRepositoryList,
+    GetNetProductsUseCase provideGetNetProductListUseCase(List<ProductRepository> productRepositoryList,
                                                        CurrencyRepository currencyRepository,
                                                        EventBus eventBus) {
         return new GetNetProductsUseCase(productRepositoryList, currencyRepository, category, keywords, maxprice, minprice, wishlistId, eventBus);
@@ -71,9 +73,9 @@ public class ProductPickerModule {
     //Edit this method to add new product data sources
     @Provides
     @PerActivity
-    List<ProductRepository<Product>> provideProductRepositoryList(@Named("EbayRepository") ProductRepository<Product> ebayProductDataSource,
-                                                                  @Named("EtsyRepository")ProductRepository<Product> etsyProductDataSource) {
-        List<ProductRepository<Product>> productRepositoryList = new ArrayList<>();
+    List<ProductRepository> provideProductRepositoryList(@Named("EbayRepository") ProductRepository ebayProductDataSource,
+                                                                  @Named("EtsyRepository")ProductRepository etsyProductDataSource) {
+        List<ProductRepository> productRepositoryList = new ArrayList<>();
         if (enabledRepositoryMap.get(EbayProductDataSource.class)) {
             productRepositoryList.add(ebayProductDataSource);
         }

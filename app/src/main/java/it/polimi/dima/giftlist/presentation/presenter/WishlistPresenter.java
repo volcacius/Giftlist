@@ -23,27 +23,26 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
     @Inject
     public WishlistPresenter(EventBus eventBus, GetDbProductListUseCase getDbProductListUseCase, StorIOSQLite db) {
         super(eventBus, getDbProductListUseCase, db);
-        Timber.d("Presenter inject");
     }
 
     @Override
     public void subscribe(boolean pullToRefresh) {
-        Timber.d("Presenter subscribe");
+        if(!useCase.isUnsubscribed()) {
+            unsubscribe();
+        }
         useCase.execute(new BaseSubscriber(pullToRefresh));
+        if (isViewAttached()) {
+            getView().showLoading(pullToRefresh);
+        }
     }
 
     @Override
     protected void onCompleted() {
-        Timber.d("Presenter onCompleted");
-        if (isViewAttached()) {
-            getView().showContent();
-        }
         unsubscribe();
     }
 
     @Override
     protected void onError(Throwable e, boolean pullToRefresh) {
-        Timber.d("Presenter onError");
         if (isViewAttached()) {
             getView().showError(e, pullToRefresh);
         }
@@ -52,10 +51,11 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
 
     @Override
     protected void onNext(List<Product> data) {
-        Timber.d("Presenter onNext");
         getView().setData(data);
+        if (isViewAttached()) {
+            getView().showContent();
+        }
     }
-
 
     @Subscribe
     public void onProductRemovedEvent(ProductRemovedEvent event) {
