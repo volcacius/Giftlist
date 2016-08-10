@@ -70,8 +70,8 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
     public void setOnWishlistClickListener(OnWishlistClickListener onWishlistClickListener) {
         this.onWishlistClickListener = onWishlistClickListener;
     }
-                                                        //no need of implementing this interface
-    class ViewHolder extends RecyclerView.ViewHolder {//implements View.OnClickListener {**********
+
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.wishlist_name)
         TextView wishlistNameTextView;
@@ -86,14 +86,6 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
             view.setOnClickListener(v ->
             onWishlistClickListener.onItemClick(v, getPosition()));
         }
-/*
-        @Override                                                                        ***********
-        public void onClick(View v) {
-            Timber.d("Clicked on wishlist!");
-            if (onWishlistClickListener != null) {
-                onWishlistClickListener.onItemClick(v, getPosition());
-            }
-        }*/
     }
 
 

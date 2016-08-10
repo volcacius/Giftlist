@@ -53,7 +53,7 @@ public class EtsyModule {
     @Named("EtsyGson")
     Gson providesEtsyGsonInstance(EtsyResultsDeserializer etsyResultsDeserializer) {
         return new GsonBuilder()
-                .registerTypeAdapter(new TypeToken<List<EtsyProduct>>() {}.getType(), etsyResultsDeserializer)
+                .registerTypeAdapter(new TypeToken<List<Product>>() {}.getType(), etsyResultsDeserializer)
                 .create();
     }
 

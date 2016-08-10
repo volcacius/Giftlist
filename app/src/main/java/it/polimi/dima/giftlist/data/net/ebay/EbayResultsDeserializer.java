@@ -23,14 +23,15 @@ import java.util.regex.Pattern;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 26/03/2016.
  */
-public class EbayResultsDeserializer implements JsonDeserializer {
+public class EbayResultsDeserializer implements JsonDeserializer<List<Product>> {
 
     @Override
-    public Object deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public List<Product> deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         List<Product> ebayProductsList = new ArrayList<>();
 
         JsonElement results = je.getAsJsonObject().get("findItemsByKeywordsResponse")
@@ -86,8 +87,8 @@ public class EbayResultsDeserializer implements JsonDeserializer {
 
                 EbayProduct p = new EbayProduct(title, "something", listing_id, price, currencyType, url_170x135, url_page);
                 ebayProductsList.add(p);
-            } catch (NullPointerException e) {
-                System.out.println("problem: null json object " + e.getMessage());
+            } catch (Exception e) {
+                Timber.d("Ebay deserializer exception message: " + e.getMessage());
             }
         }
         return  ebayProductsList;

@@ -13,11 +13,12 @@ import java.util.List;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 28/01/2016.
  */
-public class EtsyResultsDeserializer implements JsonDeserializer {
+public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> {
 
     @Override
     public List<Product> deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -51,8 +52,8 @@ public class EtsyResultsDeserializer implements JsonDeserializer {
             }*/
                 EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currencyType, url_170x135);
                 etsyProductsList.add(p);
-            } catch (NullPointerException e) {
-                System.out.println("null json object " + e.getMessage());
+            } catch (Exception e) {
+                Timber.d("Ebay deserializer exception message: " + e.getMessage());
             }
         }
         return  etsyProductsList;

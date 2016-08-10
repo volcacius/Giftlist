@@ -31,10 +31,8 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlistlist);
         createComponent();
-        //
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
-        //toolbar.inflateMenu(R.menu.menu_wishlist);
         if (savedInstanceState == null) {
             addFragment(R.id.wishlistlist_activity_content, new WishlistListFragment());
         }
@@ -48,16 +46,12 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Timber.d("click (activity)");
         switch (item.getItemId()) {
             case R.id.action_add:
-
                  //implemented in the fragment
                 return false;
-
             default:
                 break;
-
         }
         return false;
     }

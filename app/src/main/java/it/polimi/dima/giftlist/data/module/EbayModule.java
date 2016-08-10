@@ -46,7 +46,7 @@ public class EbayModule {
     @Named("EbayGson")
     Gson providesEbayGsonInstance(EbayResultsDeserializer ebayResultsDeserializer) {
         return new GsonBuilder()
-                .registerTypeAdapter(new TypeToken<List<EbayProduct>>() {}.getType(), ebayResultsDeserializer)
+                .registerTypeAdapter(new TypeToken<List<Product>>() {}.getType(), ebayResultsDeserializer)
                 .create();
     }
 

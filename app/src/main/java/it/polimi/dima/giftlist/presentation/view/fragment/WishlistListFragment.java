@@ -68,14 +68,10 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
         wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
             @Override
             public void onItemClick(View v , int position) {
-                Timber.d("Clicked on wishlist! Id: "+ wishlistListAdapter.getItemId(position));
-                //for now, all WL are empty, so I'll start productPicker
                 intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
-                //intentStarter.startProductPickerSettingsActivity(getContext(), wishlistListAdapter.getItemId(position));
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //contentView.setOnRefreshListener(this);*/
     }
 
 
@@ -109,39 +105,6 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
 
     @Override public void loadData(boolean pullToRefresh) {
         presenter.subscribe(pullToRefresh);
-    }
-
-    /*
-    @Override public void onRefresh() {
-        Random random = new Random();
-        addWishlist(new Wishlist(random.nextLong(), "Wishlist"));
-        loadData(true);
-    }
-    */
-
-    @Override public void showError(Throwable e, boolean pullToRefresh) {
-        super.showError(e, pullToRefresh);
-        //contentView.setRefreshing(false);
-        e.printStackTrace();
-    }
-
-    @Override public void showContent() {
-        super.showContent();
-        //contentView.setRefreshing(false);
-    }
-
-    @Override public void showLoading(boolean pullToRefresh) {
-        super.showLoading(pullToRefresh);
-        /*
-        if (pullToRefresh && !contentView.isRefreshing()) {
-            // Workaround for measure bug: https://code.google.com/p/android/issues/detail?id=77712
-            contentView.post(new Runnable() {
-                @Override public void run() {
-                    contentView.setRefreshing(true);
-                }
-            });
-        }
-        */
     }
 
     @Override
