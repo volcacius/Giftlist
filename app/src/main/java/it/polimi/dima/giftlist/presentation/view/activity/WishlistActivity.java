@@ -15,6 +15,7 @@ import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistFragmentBuilder;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 24/04/16.
@@ -24,7 +25,7 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     long wishlistId;
 
-    @Bind(R.id.wl_toolbar)
+    @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     WishlistComponent wishlistComponent;
@@ -34,8 +35,6 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
         ButterKnife.bind(this);
-        //toolbar.inflateMenu(R.menu.menu_wishlist);
-
         setSupportActionBar(toolbar);
         //I need the wishlist id to launch the fragment
         //If it's the first time creating the activity, I get it from the Intent.
@@ -45,7 +44,7 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
         }
         createComponent();
         if (savedInstanceState == null) {
-            addFragment(R.id.activity_frame, new WishlistFragmentBuilder(wishlistId).build());
+            addFragment(R.id.wishlist_activity_content, new WishlistFragmentBuilder(wishlistId).build());
         }
 
     }
@@ -60,10 +59,12 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
+                /*Timber.d("add intent starter from activity");
                 intentStarter.startProductPickerSettingsActivity(this, wishlistId);
-                return true;
+                */return false;
 
             default:
+                Timber.d("default option from activity");
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);

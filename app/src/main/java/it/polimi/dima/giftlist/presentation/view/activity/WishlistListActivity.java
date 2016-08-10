@@ -40,7 +40,7 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_wishlist, menu);
+        getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
         return true;
     }
 

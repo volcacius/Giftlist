@@ -1,4 +1,3 @@
-
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
@@ -72,13 +71,6 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    }
-
-
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     @Override public LceViewState<List<Wishlist>, WishlistListView> createViewState() {
