@@ -59,9 +59,8 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                /*Timber.d("add intent starter from activity");
-                intentStarter.startProductPickerSettingsActivity(this, wishlistId);
-                */return false;
+                //implemented in the fragment
+                return false;
 
             default:
                 Timber.d("default option from activity");

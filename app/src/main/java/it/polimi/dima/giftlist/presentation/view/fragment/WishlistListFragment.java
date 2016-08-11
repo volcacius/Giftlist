@@ -101,12 +101,10 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Random random = new Random();
+
         switch (item.getItemId()) {
             case R.id.action_add:
-                long new_id = Math.abs(random.nextLong());
-                addWishlist(new Wishlist(new_id, "Wishlist"));
-                intentStarter.startProductPickerSettingsActivity(getContext(),new_id);
+                intentStarter.startWishlistSettingsActivity(getContext());
                 return true;
 
             default:

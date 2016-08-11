@@ -31,6 +31,10 @@
             android:name=".presentation.view.activity.ProductPickerSettingsActivity"
             android:parentActivityName=".presentation.view.activity.MainActivity"
             />
+        <activity
+            android:name=".presentation.view.activity.WishlistSettingsActivity"
+            android:parentActivityName=".presentation.view.activity.MainActivity"
+            />
 
 
         <service android:name="it.polimi.dima.giftlist.data.SyncService"/>
