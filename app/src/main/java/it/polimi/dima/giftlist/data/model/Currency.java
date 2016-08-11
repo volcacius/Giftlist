@@ -28,8 +28,4 @@ public class Currency {
         return rate;
     }
 
-    public void setRate(float rate) {
-        this.rate = rate;
-    }
-
 }

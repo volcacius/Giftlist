@@ -12,11 +12,13 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.ebay.EbayApi;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 26/03/2016.
@@ -55,8 +57,8 @@ public class EbayProductDataSource implements ProductRepository {
                 myString.append(thisLine);
                 count++;
             }
-        } catch (MalformedURLException e) {
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Timber.d("Ebay HQ image exception is: " + e.getMessage());
         }
 
         //String to match:
@@ -68,6 +70,7 @@ public class EbayProductDataSource implements ProductRepository {
             return m.group(2);
         }
         else {
+            Timber.d("HQ image not found for product " + product.getId());
             return product.getImageUrl();
         }
     }

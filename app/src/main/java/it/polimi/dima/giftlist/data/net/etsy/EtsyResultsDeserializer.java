@@ -20,27 +20,37 @@ import timber.log.Timber;
  */
 public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> {
 
+    private static final String RESULTS = "results";
+    private static final String TITLE = "title";
+    private static final String DESCRIPTION = "description";
+    private static final String CURRENCY_CODE = "currency_code";
+    private static final String PRICE = "price";
+    private static final String LISTING_ID = "listing_id";
+    private static final String IMAGES = "Images";
+    private static final String URL_570_X_N = "url_570xN";
+    private static final float DEFAULT_PRICE = 0;
+
+
     @Override
     public List<Product> deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-
         List<Product> etsyProductsList = new ArrayList<>();
-        JsonElement results = je.getAsJsonObject().get("results");
-        JsonArray resultsArray = results.getAsJsonArray();
+        JsonArray resultsArray = je.getAsJsonObject().get(RESULTS).getAsJsonArray();
 
         for(int currentProduct = 0; currentProduct < resultsArray.size(); currentProduct++) {
-            JsonElement jsonProduct = resultsArray.get(currentProduct);
-            try{
-                //TODO Add try - catch Attempt to invoke virtual method 'java.lang.String com.google.gson.JsonElement.getAsString()' on a null object reference
-                String title = jsonProduct.getAsJsonObject().get("title").getAsString();
-                String description = jsonProduct.getAsJsonObject().get("description").getAsString();
-                CurrencyType currencyType = CurrencyType.valueOf(jsonProduct.getAsJsonObject().get("currency_code").getAsString().toUpperCase());
-                float price = jsonProduct.getAsJsonObject().get("price").isJsonNull() ? 0 : jsonProduct.getAsJsonObject().get("price").getAsFloat();
-                long listing_id = jsonProduct.getAsJsonObject().get("listing_id").getAsLong();
 
-                JsonElement images = jsonProduct.getAsJsonObject().get("Images");
+            JsonElement jsonProduct = resultsArray.get(currentProduct);
+
+            try {
+                String title = jsonProduct.getAsJsonObject().get(TITLE).getAsString();
+                String description = jsonProduct.getAsJsonObject().get(DESCRIPTION).getAsString();
+                CurrencyType currencyType = CurrencyType.valueOf(jsonProduct.getAsJsonObject().get(CURRENCY_CODE).getAsString().toUpperCase());
+                float price = jsonProduct.getAsJsonObject().get(PRICE).isJsonNull() ? DEFAULT_PRICE : jsonProduct.getAsJsonObject().get(PRICE).getAsFloat();
+                long listing_id = jsonProduct.getAsJsonObject().get(LISTING_ID).getAsLong();
+
+                JsonElement images = jsonProduct.getAsJsonObject().get(IMAGES);
                 JsonArray imagesArray = images.getAsJsonArray();
                 JsonElement jsonImage = imagesArray.get(0);
-                String url_170x135 = jsonImage.getAsJsonObject().get("url_570xN").getAsString();
+                String url_170x135 = jsonImage.getAsJsonObject().get(URL_570_X_N).getAsString();
 
                 //TODO later, to get more images
             /*
@@ -56,9 +66,8 @@ public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> 
                 Timber.d("Ebay deserializer exception message: " + e.getMessage());
             }
         }
+
         return  etsyProductsList;
     }
-
-
 }
 

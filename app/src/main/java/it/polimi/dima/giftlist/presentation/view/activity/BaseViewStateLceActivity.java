@@ -35,7 +35,9 @@ public abstract class BaseViewStateLceActivity<CV extends View, M, V extends Mvp
         Icepick.saveInstanceState(this, outState);
     }
 
-    protected void injectDependencies() {
-
-    }
+    /*
+     * Since there are no injection in this base class that has to be performed by the Application component,
+     * this method is declared as abstract and left to the subclass implementation and their own components
+     */
+    abstract protected void injectDependencies();
 }

@@ -77,7 +77,7 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         return productPickerComponent;
     }
 
-    protected void createComponent() {
+    private void createComponent() {
         productPickerComponent = getApplicationComponent().plus(new ProductPickerModule(this, enabledRepositoryMap, category, keywords, maxprice, minprice, wishlistId));
     }
 }

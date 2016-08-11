@@ -12,7 +12,6 @@ import it.polimi.dima.giftlist.presentation.view.fragment.WishlistListFragment;
 /**
  * Created by Elena on 12/01/2016.
  */
-//Dagger ignores the annotation put atop the @Component. I put it there just for readability
 @PerActivity
 @Subcomponent(modules = {WishlistListModule.class})
 public interface WishlistListComponent {
