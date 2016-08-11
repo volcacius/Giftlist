@@ -1,12 +1,18 @@
 package it.polimi.dima.giftlist.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class Product {
+@ParcelablePlease
+public class Product implements Parcelable {
 
+    public static final long DEFAULT_ID = 0L;
     String name;
     float price;
     float convertedPrice;
@@ -63,4 +69,26 @@ public class Product {
     public void setWishlistId(long wishlistId) {
         this.wishlistId = wishlistId;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override public void writeToParcel(Parcel dest, int flags) {
+        ProductParcelablePlease.writeToParcel(this, dest, flags);
+    }
+
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        public Product createFromParcel(Parcel source) {
+            Product target = new Product();
+            ProductParcelablePlease.readFromParcel(target, source);
+            return target;
+        }
+
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

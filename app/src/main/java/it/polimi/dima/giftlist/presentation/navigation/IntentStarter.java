@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.presentation.view.activity.ProductDetailsPagerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerSettingsActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistActivity;
@@ -39,6 +43,11 @@ public class IntentStarter {
 
     public void startProductPickerSettingsActivity(@NonNull Context context, long wishlistId) {
         Intent intentToLaunch = ProductPickerSettingsActivity.getCallingIntent(context, wishlistId);
+        context.startActivity(intentToLaunch);
+    }
+
+    public void startProductDetailsPagerActivity(@NonNull Context context, ArrayList<Product> productList, Product selectedProduct) {
+        Intent intentToLaunch = ProductDetailsPagerActivity.getCallingIntent(context, productList, selectedProduct);
         context.startActivity(intentToLaunch);
     }
 }
