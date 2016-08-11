@@ -1,17 +1,24 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/activity_frame"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".presentation.view.activity.WishlistActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/activity_frame"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context=".presentation.view.activity.WishlistActivity"
+              android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/wl_toolbar"
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:titleTextColor="#ffffff">
+
     </android.support.v7.widget.Toolbar>
 
-</FrameLayout>
+    <FrameLayout
+        android:id="@+id/wishlist_activity_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
+
+</LinearLayout>

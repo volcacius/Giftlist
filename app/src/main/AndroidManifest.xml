@@ -20,6 +20,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".presentation.view.activity.WishlistActivity"
+            android:parentActivityName=".presentation.view.activity.WishlistListActivity"
+            />
+        <activity
             android:name=".presentation.view.activity.ProductPickerActivity"
             android:parentActivityName=".presentation.view.activity.WishlistListActivity"
             />
@@ -28,9 +32,10 @@
             android:parentActivityName=".presentation.view.activity.MainActivity"
             />
         <activity
-            android:name=".presentation.view.activity.WishlistActivity"
-            android:parentActivityName=".presentation.view.activity.WishlistListActivity"
+            android:name=".presentation.view.activity.WishlistSettingsActivity"
+            android:parentActivityName=".presentation.view.activity.MainActivity"
             />
+
 
         <service android:name="it.polimi.dima.giftlist.data.SyncService"/>
 

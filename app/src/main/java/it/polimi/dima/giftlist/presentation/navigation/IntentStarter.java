@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -16,6 +15,7 @@ import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerSettingsActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistListActivity;
+import it.polimi.dima.giftlist.presentation.view.activity.WishlistSettingsActivity;
 
 /**
  * Created by Alessandro on 18/03/16.
@@ -43,6 +43,11 @@ public class IntentStarter {
 
     public void startProductPickerSettingsActivity(@NonNull Context context, long wishlistId) {
         Intent intentToLaunch = ProductPickerSettingsActivity.getCallingIntent(context, wishlistId);
+        context.startActivity(intentToLaunch);
+    }
+
+    public void startWishlistSettingsActivity(@NonNull Context context) {
+        Intent intentToLaunch = WishlistSettingsActivity.getCallingIntent(context);
         context.startActivity(intentToLaunch);
     }
 

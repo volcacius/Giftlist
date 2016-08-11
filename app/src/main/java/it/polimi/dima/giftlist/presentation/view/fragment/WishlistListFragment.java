@@ -1,4 +1,3 @@
-
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
@@ -74,13 +73,6 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
-
     @Override public LceViewState<List<Wishlist>, WishlistListView> createViewState() {
         return new RetainingLceViewState<>();
     }
@@ -109,12 +101,10 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Random random = new Random();
+
         switch (item.getItemId()) {
             case R.id.action_add:
-                long new_id = Math.abs(random.nextLong());
-                addWishlist(new Wishlist(new_id, "Wishlist"));
-                intentStarter.startProductPickerSettingsActivity(getContext(),new_id);
+                intentStarter.startWishlistSettingsActivity(getContext());
                 return true;
 
             default:

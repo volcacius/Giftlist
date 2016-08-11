@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
@@ -13,6 +14,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -31,40 +33,30 @@ import timber.log.Timber;
  * Created by Alessandro on 24/04/16.
  */
 @FragmentWithArgs
-public class WishlistFragment extends BaseViewStateLceFragment<SwipeRefreshLayout, List<Product>, WishlistView, WishlistPresenter>
-        implements WishlistView, SwipeRefreshLayout.OnRefreshListener {
+public class WishlistFragment extends BaseViewStateLceFragment<RecyclerView, List<Product>, WishlistView, WishlistPresenter>
+        implements WishlistView {
 
-    @Arg
-    long wishlistId;
+    @Bind(R.id.contentView)
+    RecyclerView recyclerView;
 
     @Inject
     WishlistAdapter wishlistAdapter;
+    @Inject
+    IntentStarter intentStarter;
 
-    @Bind(R.id.fragment_wishlist_recyclerView)
-    RecyclerView recyclerView;
-
-    @Override
-    protected int getLayoutRes() {
-        return R.layout.fragment_wishlist;
-    }
-
-    @Override
-    public WishlistPresenter createPresenter() {
-        return this.getComponent(WishlistComponent.class).provideWishlistPresenter();
-    }
+    @Arg
+    long wishlistId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        recyclerView.setAdapter(wishlistAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        contentView.setOnRefreshListener(this);
+    protected int getLayoutRes() {
+        return R.layout.fragment_wishlist;
     }
 
     @Override
@@ -73,12 +65,30 @@ public class WishlistFragment extends BaseViewStateLceFragment<SwipeRefreshLayou
     }
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView.setAdapter(wishlistAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
+    public LceViewState<List<Product>, WishlistView> createViewState() {
+        return new RetainingLceViewState<>();
+    }
+
+    @Override
+    public List<Product> getData() {
+        return wishlistAdapter.getProductList();
+    }
+
+    @Override
     protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
         return null;
     }
 
     @Override
-    public void removeProduct(Product product) {
+    public WishlistPresenter createPresenter() {
+        return this.getComponent(WishlistComponent.class).provideWishlistPresenter();
     }
 
     @Override
@@ -93,19 +103,30 @@ public class WishlistFragment extends BaseViewStateLceFragment<SwipeRefreshLayou
         presenter.subscribe(pullToRefresh);
     }
 
-
     @Override
-    public LceViewState<List<Product>, WishlistView> createViewState() {
-        return new RetainingLceViewState<>();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_add:
+                Timber.d("button add pressed");
+                intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
+                return true;
+
+            case R.id.action_settings:
+                Timber.d("button settings pressed");
+                intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
+                return true;
+
+            default:
+                break;
+
+        }
+        return false;
     }
 
     @Override
-    public List<Product> getData() {
-        return wishlistAdapter.getProductList();
+    public void removeProduct(Product product) {
     }
 
-    @Override
-    public void onRefresh() {
-        loadData(true);
-    }
+
+
 }
