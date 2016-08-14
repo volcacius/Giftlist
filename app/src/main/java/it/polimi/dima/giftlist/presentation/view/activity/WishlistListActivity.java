@@ -29,13 +29,16 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlistlist);
-        createComponent();
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
+        createComponent();
         if (savedInstanceState == null) {
             addFragment(R.id.wishlistlist_activity_content, new WishlistListFragment());
         }
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_wishlistlist;
     }
 
     @Override
@@ -62,7 +65,8 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
         return wishlistListComponent;
     }
 
-    protected void createComponent() {
+    @Override
+    public void createComponent() {
         wishlistListComponent = getApplicationComponent().plus(new WishlistListModule(this));
     }
 

@@ -2,7 +2,6 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
@@ -14,14 +13,12 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
-import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistPresenter;
@@ -33,7 +30,7 @@ import timber.log.Timber;
  * Created by Alessandro on 24/04/16.
  */
 @FragmentWithArgs
-public class WishlistFragment extends BaseViewStateLceFragment<RecyclerView, List<Product>, WishlistView, WishlistPresenter>
+public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Product>, WishlistView, WishlistPresenter>
         implements WishlistView {
 
     @Bind(R.id.contentView)
@@ -68,6 +65,12 @@ public class WishlistFragment extends BaseViewStateLceFragment<RecyclerView, Lis
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistAdapter);
+        wishlistAdapter.setOnProductClickListener(new WishlistAdapter.OnProductClickListener() {
+            @Override
+            public void onItemClick(View v , int position) {
+                intentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getProductList(), wishlistAdapter.getItem(position).getId());
+            }
+        });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 

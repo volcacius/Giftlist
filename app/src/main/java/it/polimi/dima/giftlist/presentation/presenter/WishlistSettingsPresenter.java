@@ -18,12 +18,13 @@ import rx.android.schedulers.AndroidSchedulers;
 public class WishlistSettingsPresenter extends MvpBasePresenter<WishlistSettingsView> {
 
     protected StorIOSQLite db;
+
     @Inject
     public WishlistSettingsPresenter(StorIOSQLite db) {
         this.db = db;
     }
 
-    public void onWishlistAdded(Wishlist wishlist) {
+    public void addWishlist(Wishlist wishlist) {
         Observer observer = new WishlistPutObserver();
         db.put()
                 .object(wishlist)

@@ -33,8 +33,6 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlist);
-        ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         //I need the wishlist id to launch the fragment
         //If it's the first time creating the activity, I get it from the Intent.
@@ -47,6 +45,11 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
             addFragment(R.id.wishlist_activity_content, new WishlistFragmentBuilder(wishlistId).build());
         }
 
+    }
+
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_wishlist;
     }
 
     @Override
@@ -77,8 +80,8 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
         return wishlistComponent;
     }
 
-
-    protected void createComponent() {
+    @Override
+    public void createComponent() {
         wishlistComponent = getApplicationComponent().plus(new WishlistModule(this, wishlistId));
     }
 

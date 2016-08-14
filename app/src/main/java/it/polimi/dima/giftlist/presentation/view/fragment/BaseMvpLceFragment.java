@@ -1,5 +1,8 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
+/**
+ * Created by Elena on 08/01/2016.
+ */
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -8,56 +11,82 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import butterknife.ButterKnife;
 
 import com.hannesdorfmann.fragmentargs.FragmentArgs;
-import com.hannesdorfmann.mosby.mvp.MvpFragment;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
-import com.hannesdorfmann.mosby.mvp.MvpView;
+import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
+import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateFragment;
 import com.squareup.leakcanary.RefWatcher;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
 import icepick.Icepick;
+import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.GiftlistApplication;
 import it.polimi.dima.giftlist.di.HasComponent;
-import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
+import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
- * Created by Elena on 11/08/2016.
+ * Base LCE ViewState Fragment for this app that uses Butterknife, Icepick and dependency injection
+ *
  */
-public abstract class BasePresenterFragment <V extends MvpView, P extends MvpPresenter<V>> extends MvpFragment <V, P>{
-    @Inject
-    IntentStarter intentStarter;
+public abstract class BaseMvpLceFragment<CV extends View, M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
+        extends MvpLceViewStateFragment<CV, M, V, P> {
 
-    @Override public void onCreate(Bundle savedInstanceState) {
+    @Inject
+    EventBus eventBus;
+
+    @Inject
+    ErrorMessageDeterminer errorMessageDeterminer;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FragmentArgs.inject(this);
     }
 
-    @LayoutRes protected abstract int getLayoutRes();
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
-    @Nullable @Override
+    // Not needed in general. override it in subclass if you need this callback
+    @Override
+    public void onViewStateInstanceRestored(boolean instanceStateRetained) {
+        super.onViewStateInstanceRestored(instanceStateRetained);
+    }
+
+    @Override
+    public void onNewViewStateInstance() {
+        loadData(false);
+    }
+
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Icepick.restoreInstanceState(this, savedInstanceState);
         return inflater.inflate(getLayoutRes(), container, false);
     }
 
-    @Override public void onSaveInstanceState(Bundle outState) {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         injectDependencies();
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
     }
 
-    @Override public void onDestroyView() {
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
@@ -69,11 +98,7 @@ public abstract class BasePresenterFragment <V extends MvpView, P extends MvpPre
         refWatcher.watch(this);
     }
 
-    /**
-     * Inject the dependencies. The component itself is declared in the Application class
-     * so its lifecycle is fine since it's tied to the Application
-     */
-    protected abstract void injectDependencies();
+    abstract protected void injectDependencies();
 
     /**
      * Gets a component for dependency injection by its type.

@@ -2,6 +2,7 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -14,23 +15,21 @@ import butterknife.ButterKnife;
 import icepick.Icepick;
 import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.GiftlistApplication;
-import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 
 /**
  * Created by Alessandro on 18/03/16.
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
-    @Inject
-    IntentStarter intentStarter;
-    @Inject
-    SharedPreferences mSharedPreferences;
+    /* Since most activities do not inject stuff, do not put either an abstract injectDependencies()
+       nor injected fields, leave it to subclasses */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        injectDependencies();
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutRes());
+        ButterKnife.bind(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
@@ -39,6 +38,9 @@ public class BaseActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         Icepick.saveInstanceState(this, outState);
     }
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
 
     //TODO: approfondire differenza fra add fragment e replace fragment
     //Attenzione anche alla questione event bus
@@ -49,17 +51,8 @@ public class BaseActivity extends AppCompatActivity {
         .commit();
     }
 
-    /*
-     * Inject the dependencies required by this base classe. The component itself is declared in the Application class
-     * so its lifecycle is fine since it's tied to the Application.
-     * This method can be overriden by the subclasses without calling the super (i.e. this one) implementation since each component
-     * of the subclasses is declared as a subcomponent of the application component, so it can access the application component modules.
-     */
-    protected void injectDependencies() {
-        this.getApplicationComponent().inject(this);
-    }
-
     protected ApplicationComponent getApplicationComponent() {
         return ((GiftlistApplication) getApplication()).getApplicationComponent();
     }
+
 }

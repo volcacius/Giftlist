@@ -55,7 +55,6 @@ public class ProductPickerSettingsFragment extends BaseFragment {
     @Bind(R.id.text_minprice)
     EditText minpriceEditText;
 
-
     String categorySelected;
     HashMap<Class,Boolean> enabledRepositoryMap;
 

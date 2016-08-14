@@ -5,21 +5,28 @@ package it.polimi.dima.giftlist.presentation.view.activity;
  */
 
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.view.View;
 import butterknife.ButterKnife;
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.MvpLceViewStateActivity;
 import icepick.Icepick;
+import it.polimi.dima.giftlist.ApplicationComponent;
+import it.polimi.dima.giftlist.GiftlistApplication;
 
 
-public abstract class BaseViewStateLceActivity<CV extends View, M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
+public abstract class BaseMvpLceActivity<CV extends View, M, V extends MvpLceView<M>, P extends MvpPresenter<V>>
         extends MvpLceViewStateActivity<CV, M, V, P> {
+
+    /* Since most activities do not inject stuff, do not put either an abstract injectDependencies()
+       nor injected fields, leave it to subclasses */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        injectDependencies();
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutRes());
+        ButterKnife.bind(this);
         Icepick.restoreInstanceState(this, savedInstanceState);
     }
 
@@ -35,9 +42,11 @@ public abstract class BaseViewStateLceActivity<CV extends View, M, V extends Mvp
         Icepick.saveInstanceState(this, outState);
     }
 
-    /*
-     * Since there are no injection in this base class that has to be performed by the Application component,
-     * this method is declared as abstract and left to the subclass implementation and their own components
-     */
-    abstract protected void injectDependencies();
+    protected ApplicationComponent getApplicationComponent() {
+        return ((GiftlistApplication) getApplication()).getApplicationComponent();
+    }
+
+    @LayoutRes
+    protected abstract int getLayoutRes();
+
 }

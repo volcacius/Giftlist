@@ -26,6 +26,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     LayoutInflater layoutInflater;
 
     private List<Product> productList;
+    private OnProductClickListener onProductClickListener;
 
     @Inject
     public WishlistAdapter(Context context) {
@@ -37,7 +38,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = layoutInflater.inflate(R.layout.list_product, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, onProductClickListener);
         return vh;
     }
 
@@ -50,6 +51,10 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     @Override
     public long getItemId(int position) {
         return productList.get(position).getId();
+    }
+
+    public Product getItem(int position) {
+        return productList.get(position);
     }
 
     @Override
@@ -65,14 +70,30 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         this.productList = productList;
     }
 
+    public void setOnProductClickListener(OnProductClickListener onProductClickListener) {
+        this.onProductClickListener = onProductClickListener;
+    }
+
+    //This is a pattern to declare an onClick in the ViewHolder but implement it in the fragment
+    public interface OnProductClickListener {
+        public void onItemClick(View view , int position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.wishlist_product_name)
         public TextView productNameTextView;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view, OnProductClickListener onProductClickListener) {
             super(view);
             ButterKnife.bind(this, view);
+            bindListener(view, onProductClickListener);
+        }
+
+        //method to bind the listener
+        private void bindListener(View view, OnProductClickListener onProductClickListener) {
+            view.setOnClickListener(v ->
+                    onProductClickListener.onItemClick(v, getPosition()));
         }
     }
 }

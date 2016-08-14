@@ -8,12 +8,15 @@ import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
+import it.polimi.dima.giftlist.presentation.module.ProductDetailsPagerModule;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistSettingsModule;
 import it.polimi.dima.giftlist.presentation.view.activity.BaseActivity;
+import it.polimi.dima.giftlist.presentation.view.activity.MainActivity;
 import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
+import it.polimi.dima.giftlist.presentation.view.fragment.ProductDetailsFragment;
 
 /**
  * Created by Alessandro on 24/03/16.
@@ -22,8 +25,9 @@ import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
  */
 public interface ApplicationComponent {
 
-    void inject(BaseActivity baseActivity);
+    void inject(MainActivity mainActivity);
     void inject(BaseFragment baseFragment);
+    void inject(ProductDetailsFragment productDetailsFragment);
     void inject(EtsyProductDataSource etsyProductDataSource);
     void inject(EbayProductDataSource ebayProductDataSource);
     void inject(CurrencyDataSource currencyDataSource);

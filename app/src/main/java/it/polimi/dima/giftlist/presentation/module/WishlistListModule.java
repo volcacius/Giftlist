@@ -8,6 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.data.DummyInterface;
 import it.polimi.dima.giftlist.data.DummyList;
+import it.polimi.dima.giftlist.di.PerActivity;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 
 /**
@@ -23,6 +24,7 @@ public class WishlistListModule {
     }
 
     @Provides
+    @PerActivity
     public Context provideContext() {
         return context;
     }

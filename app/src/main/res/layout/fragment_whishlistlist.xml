@@ -3,7 +3,6 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context=".presentation.view.activity.WishlistListActivity">
-            <!--not sure about the row above... -->
 
     <include layout="@layout/view_loading" />
     <include layout="@layout/view_error" />
@@ -13,5 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+
 
 </FrameLayout>
