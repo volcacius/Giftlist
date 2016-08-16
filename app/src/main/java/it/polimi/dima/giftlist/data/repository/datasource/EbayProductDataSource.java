@@ -17,6 +17,7 @@ import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.ebay.EbayApi;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import rx.Observable;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 26/03/2016.
@@ -26,9 +27,10 @@ public class EbayProductDataSource implements ProductRepository {
     EbayApi mEbayApi;
     EventBus mEventBus;
     private static final int PRODUCT_PER_PAGE = 25;
-
+    private static final int LINE_TO_PARSE = 40;
     String QUERY_NAME_MAX = "MaxPrice";
     String QUERY_NAME_MIN = "MinPrice";
+
 
     @Inject
     public EbayProductDataSource(EbayApi ebayApi, EventBus eventBus) {
@@ -50,7 +52,7 @@ public class EbayProductDataSource implements ProductRepository {
             URL u = new URL(product.getProductPage());
             DataInputStream theHTML = new DataInputStream(u.openStream());
             int count = 0;
-            while (count < 20) {
+            while (count < LINE_TO_PARSE) {
                 thisLine = theHTML.readLine();
                 myString.append(thisLine);
                 count++;
