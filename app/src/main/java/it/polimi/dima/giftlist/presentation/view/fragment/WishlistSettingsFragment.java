@@ -57,13 +57,20 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
         if (wlName == "") {
             wlName = "Unnamed wl";
         }
-        getPresenter().onWishlistAdded(new Wishlist(new_id, wlName));
-        intentStarter.startProductPickerSettingsActivity(getContext(),wishlistId);
+        if(wishlistId == 0) {
+            Timber.d("new wl");
+            getPresenter().onWishlistAdded(new Wishlist(new_id, wlName));
+        } else {
+            Timber.d("old wl " + wlName);
+            getPresenter().onWishlistAdded(new Wishlist(wishlistId, wlName));
+        }
+        intentStarter.startProductPickerSettingsActivity(getContext(), new_id);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Timber.d("id of wishlist is: " + wishlistId);
         setRetainInstance(true);
     }
 
@@ -80,6 +87,16 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setTextBoxes();
+    }
+
+    protected void setTextBoxes(){
+        if (wishlistId==0) {
+            Timber.d("new wl");
+        } else {
+            Wishlist currentWishlist = getPresenter().onWishlistSettingsLoaded(wishlistId);
+            wlNameEditText.setText(currentWishlist.getName());
+        }
     }
 
     @Override

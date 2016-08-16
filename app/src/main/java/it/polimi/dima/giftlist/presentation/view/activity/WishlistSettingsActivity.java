@@ -43,9 +43,9 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
 
     }
 
-    public static Intent getCallingIntent(Context context) {
+    public static Intent getCallingIntent(Context context, long wishlistId) {
         Intent callingIntent = new Intent(context, WishlistSettingsActivity.class);
-
+        callingIntent.putExtra(EXTRA_WISHLIST_ID, wishlistId);
         return callingIntent;
     }
 

@@ -43,8 +43,8 @@ public class IntentStarter {
         context.startActivity(intentToLaunch);
     }
 
-    public void startWishlistSettingsActivity(@NonNull Context context) {
-        Intent intentToLaunch = WishlistSettingsActivity.getCallingIntent(context);
+    public void startWishlistSettingsActivity(@NonNull Context context, long wishlistId) {
+        Intent intentToLaunch = WishlistSettingsActivity.getCallingIntent(context,wishlistId);
         context.startActivity(intentToLaunch);
     }
 }

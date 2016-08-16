@@ -74,11 +74,11 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
         }
         @Override
         public void onError(Throwable e) {
-            getView().showWishlistAddedError();
+
         }
         @Override
         public void onNext(PutResults<Wishlist> wishlistPutResults) {
-            getView().showWishlistAddedSuccess();
+
         }
     }
 

@@ -11,6 +11,7 @@ import java.util.Arrays;
 
 import it.polimi.dima.giftlist.data.db.table.WishlistTable;
 import it.polimi.dima.giftlist.data.model.Wishlist;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 23/04/16.
@@ -29,14 +30,13 @@ public class WishlistPutResolver extends DefaultPutResolver<Wishlist> {
     @Override
     protected UpdateQuery mapToUpdateQuery(@NonNull Wishlist object) {
 
-        Object[] argsArray = {object.getId(),
-                              object.getName()};
+        /*Object[] argsArray = {object.getId(),
+                              object.getName()};*/
 
         return UpdateQuery.builder()
                 .table(WishlistTable.TABLE)
                 .where(WishlistTable.COLUMN_ID + " = ?")
-                .where(WishlistTable.COLUMN_NAME + " = ?")
-                .whereArgs(Arrays.asList(argsArray))
+                .whereArgs(object.getId())//Arrays.asList(argsArray))
                 .build();
     }
 

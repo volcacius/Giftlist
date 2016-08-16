@@ -104,7 +104,7 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
 
         switch (item.getItemId()) {
             case R.id.action_add:
-                intentStarter.startWishlistSettingsActivity(getContext());
+                intentStarter.startWishlistSettingsActivity(getContext(), 0);
                 return true;
 
             default:
@@ -115,23 +115,9 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
     }
 
     @Override
-    public void addWishlist(Wishlist wishlist) {
-        eventBus.post(new WishlistAddedEvent(wishlist));
-    }
-
-    @Override
     public void removeWishlist(int wishlistId) {
 
     }
 
-    @Override
-    public void showWishlistAddedError() {
-
-    }
-
-    @Override
-    public void showWishlistAddedSuccess() {
-        ToastFactory.showShortToast(getContext(), R.string.wishlist_added);
-    }
 }
 

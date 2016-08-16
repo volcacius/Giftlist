@@ -113,7 +113,7 @@ public class WishlistFragment extends BaseViewStateLceFragment<RecyclerView, Lis
 
             case R.id.action_settings:
                 Timber.d("button settings pressed");
-                intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
+                intentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
                 return true;
 
             default:
