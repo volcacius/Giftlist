@@ -128,6 +128,8 @@ dependencies {
     final LEAK_CANARY_VERSION = '1.4-beta2'
     final STETHO_VERSION = '1.3.1'
     final STOREIO_VERSION = '1.8.0'
+    final PARCELABLE_PLEASE_VERSION = '1.0.2'
+    final AUTOVALUE_VERSION = '1.2'
 
     // "compile" refers to the dependencies required to compile the production source of the project.
     //The .jar in the libs folder are included as dependencies
@@ -164,6 +166,7 @@ dependencies {
     compile "com.pushtorefresh.storio:sqlite:$STOREIO_VERSION"
     compile "com.pushtorefresh.storio:content-resolver:$STOREIO_VERSION"
     compile "com.pushtorefresh.storio:sqlite-annotations:$STOREIO_VERSION"
+    compile "com.hannesdorfmann.parcelableplease:annotation:$PARCELABLE_PLEASE_VERSION"
     compile("com.crashlytics.sdk.android:crashlytics:$CRASHLYTICS_VERSION") {
         transitive = true;
     }
@@ -218,6 +221,8 @@ dependencies {
     apt "com.hannesdorfmann.fragmentargs:processor:$FRAGMENT_ARGS_VERSION"
     apt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     apt "com.pushtorefresh.storio:sqlite-annotations-processor:$STOREIO_VERSION"
+    apt "com.hannesdorfmann.parcelableplease:processor:$PARCELABLE_PLEASE_VERSION"
+    apt "com.google.auto.value:auto-value:$AUTOVALUE_VERSION"
     testApt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     androidTestApt "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
 }

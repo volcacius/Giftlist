@@ -8,7 +8,6 @@ import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.di.HasComponent;
-import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsFragment;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsFragmentBuilder;
 
 /**

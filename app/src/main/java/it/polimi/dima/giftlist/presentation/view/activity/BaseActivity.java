@@ -49,6 +49,12 @@ public class BaseActivity extends AppCompatActivity {
         .commit();
     }
 
+    /*
+     * Inject the dependencies required by this base classe. The component itself is declared in the Application class
+     * so its lifecycle is fine since it's tied to the Application.
+     * This method can be overriden by the subclasses without calling the super (i.e. this one) implementation since each component
+     * of the subclasses is declared as a subcomponent of the application component, so it can access the application component modules.
+     */
     protected void injectDependencies() {
         this.getApplicationComponent().inject(this);
     }

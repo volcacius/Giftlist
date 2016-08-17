@@ -3,10 +3,12 @@ package it.polimi.dima.giftlist;
 import it.polimi.dima.giftlist.data.repository.datasource.CurrencyDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
+import it.polimi.dima.giftlist.presentation.component.ProductDetailsPagerComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
+import it.polimi.dima.giftlist.presentation.module.ProductDetailsPagerModule;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
@@ -32,4 +34,5 @@ public interface ApplicationComponent {
     WishlistComponent plus(WishlistModule module);
     WishlistListComponent plus(WishlistListModule module);
     WishlistSettingsComponent plus(WishlistSettingsModule module);
+    ProductDetailsPagerComponent plus(ProductDetailsPagerModule module);
 }

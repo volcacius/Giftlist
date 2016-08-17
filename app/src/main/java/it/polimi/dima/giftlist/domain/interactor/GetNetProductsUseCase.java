@@ -26,6 +26,7 @@ import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
 import rx.Observable;
 import rx.functions.Func2;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 27/01/2016.
@@ -81,6 +82,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
                     @Override
                     public Product call(Product product, List<Currency> currencies) {
                         //Retrieve and set HQ ebay image
+                        Timber.d("Product is of type " + product.getClass().getSimpleName());
                         if (product.getClass().equals(EbayProduct.class)) {
                             product.setImageUrl(EbayProductDataSource.getHQImageUrl((EbayProduct) product));
                         }
