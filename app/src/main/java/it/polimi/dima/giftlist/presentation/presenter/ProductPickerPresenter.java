@@ -1,8 +1,24 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
+import android.content.Context;
+import android.content.ContextWrapper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.Environment;
+
 import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,6 +37,7 @@ import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 27/01/2016.
@@ -29,6 +46,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
 
     private static final boolean NO_PULL_TO_REFRESH = false;
     private boolean isSubscriptionPending;
+
 
     @Inject
     public ProductPickerPresenter(EventBus eventBus, GetNetProductsUseCase getNetProductsUseCase, StorIOSQLite db) {
@@ -93,10 +111,16 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         }
     }
 
+
+
     @Subscribe
     public void onProductAddedEvent(ProductAddedEvent event) throws UnknownProductException {
         Product product = event.getProduct();
         Observer observer;
+
+
+
+
         if (product instanceof EbayProduct) {
             observer = new EbayProductPutObserver();
         } else if (product instanceof EtsyProduct) {
@@ -147,6 +171,8 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
             getView().showProductAddedSuccess();
         }
     }
+
+
 }
 
 

@@ -24,6 +24,7 @@ import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
+import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
@@ -31,6 +32,7 @@ import it.polimi.dima.giftlist.presentation.presenter.ProductPickerPresenter;
 import it.polimi.dima.giftlist.presentation.view.adapter.ProductPickerAdapter;
 import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 import it.polimi.dima.giftlist.util.ToastFactory;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 19/01/2016.
@@ -114,7 +116,14 @@ public class ProductPickerFragment extends BaseViewStateLceFragment<SwipeFlingAd
 
             @Override
             public void onLeftCardExit(Object o) {
-                eventBus.post(new ProductAddedEvent((Product) o));
+                Product p = (Product) o;
+                try {
+                    p = productPickerAdapter.saveProductImage(p);
+                } catch (UnknownProductException e) {
+                    Timber.d("productPickerFragment error " + e.getMessage());
+                }
+
+                eventBus.post(new ProductAddedEvent(p));
             }
 
             @Override
