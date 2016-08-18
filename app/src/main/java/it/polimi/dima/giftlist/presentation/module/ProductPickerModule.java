@@ -93,7 +93,7 @@ public class ProductPickerModule {
 
     @Provides
     @PerActivity
-    ProductPickerAdapter providesProductListAdapter(Picasso picasso) {
-        return new ProductPickerAdapter(context, picasso);
+    ProductPickerAdapter providesProductListAdapter(Picasso picasso, EventBus eventBus) {
+        return new ProductPickerAdapter(context, picasso, eventBus);
     }
 }

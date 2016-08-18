@@ -118,12 +118,10 @@ public class ProductPickerFragment extends BaseViewStateLceFragment<SwipeFlingAd
             public void onLeftCardExit(Object o) {
                 Product p = (Product) o;
                 try {
-                    p = productPickerAdapter.saveProductImage(p);
+                    productPickerAdapter.saveProductImage(p);
                 } catch (UnknownProductException e) {
                     Timber.d("productPickerFragment error " + e.getMessage());
                 }
-
-                eventBus.post(new ProductAddedEvent(p));
             }
 
             @Override

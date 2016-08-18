@@ -59,11 +59,14 @@ public class ProductPickerAdapter extends BaseAdapter {
     List<Product> productList;
 
 
+    EventBus eventBus;
+
     @Inject
-    public ProductPickerAdapter(Context context, Picasso picasso) {
+    public ProductPickerAdapter(Context context, Picasso picasso, EventBus eventBus) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picasso = picasso;
+        this.eventBus = eventBus;
         this.productList = new ArrayList<>();
         this.targets = new ArrayList<Target>();
     }
@@ -158,7 +161,7 @@ public class ProductPickerAdapter extends BaseAdapter {
 
 
 
-    public Product saveProductImage(Product product) throws UnknownProductException {
+    public void saveProductImage(Product product) throws UnknownProductException {
         String root = context.getExternalCacheDir().toString();
         String name = product.getId() + "_pic.jpg";
         String uri = root + name;
@@ -172,7 +175,8 @@ public class ProductPickerAdapter extends BaseAdapter {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
                     out.flush();
                     out.close();
-
+                    product.setImageUrl(uri);
+                    eventBus.post(new ProductAddedEvent(product));
                 } catch(Exception e){
                     Timber.d("picasso error " + e.getMessage());
                 }
@@ -182,6 +186,7 @@ public class ProductPickerAdapter extends BaseAdapter {
             @Override
             public void onBitmapFailed(Drawable errorDrawable) {
                 Timber.d("picasso onBitmapFailed");
+                eventBus.post(new ProductAddedEvent(product));
                 targets.remove(this);
             }
 
@@ -196,8 +201,6 @@ public class ProductPickerAdapter extends BaseAdapter {
                 .load(product.getImageUrl())
                 .into(myTarget);
 
-        product.setImageUrl(uri);
-        return product;
     }
 
 }

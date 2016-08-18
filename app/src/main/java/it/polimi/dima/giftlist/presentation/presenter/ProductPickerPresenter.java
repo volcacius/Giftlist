@@ -118,9 +118,6 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         Product product = event.getProduct();
         Observer observer;
 
-
-
-
         if (product instanceof EbayProduct) {
             observer = new EbayProductPutObserver();
         } else if (product instanceof EtsyProduct) {
