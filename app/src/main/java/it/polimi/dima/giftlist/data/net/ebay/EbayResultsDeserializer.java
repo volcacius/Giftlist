@@ -85,7 +85,7 @@ public class EbayResultsDeserializer implements JsonDeserializer<List<Product>> 
                 String url_170x135 = jsonProduct.getAsJsonObject().get("galleryURL").getAsString();
                 String url_page = jsonProduct.getAsJsonObject().get("viewItemURL").getAsString();
 
-                EbayProduct p = new EbayProduct(title, "something", listing_id, price, currencyType, url_170x135, url_page);
+                EbayProduct p = new EbayProduct(title, "something", listing_id, price, currencyType, url_170x135, url_page, "uri");
                 ebayProductsList.add(p);
             } catch (Exception e) {
                 Timber.d("Ebay deserializer exception message: " + e.getMessage());

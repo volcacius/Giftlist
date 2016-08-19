@@ -20,6 +20,7 @@ public class Product implements Parcelable {
     CurrencyType currencyType;
     String description;
     String imageUrl;
+    String imageUri;
     long wishlistId;
 
     public String getName() {
@@ -44,6 +45,14 @@ public class Product implements Parcelable {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public String getImageUri() {
+        return imageUri;
     }
 
     public float getPrice() {

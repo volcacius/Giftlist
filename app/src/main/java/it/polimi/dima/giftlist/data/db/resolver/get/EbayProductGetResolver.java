@@ -27,6 +27,7 @@ public class EbayProductGetResolver extends DefaultGetResolver<EbayProduct> {
                 cursor.getFloat(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_PRICE)),
                 CurrencyType.valueOf(cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_CURRENCY_TYPE))),
                 cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_IMAGE_URL)),
+                cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_IMAGE_URI)),
                 cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_PRODUCT_PAGE))
         );
     }

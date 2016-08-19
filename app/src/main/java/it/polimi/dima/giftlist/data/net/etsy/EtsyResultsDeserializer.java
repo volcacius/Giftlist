@@ -60,7 +60,7 @@ public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> 
                 String url_170x135 = jsonImage.getAsJsonObject().get("url_170x135").getAsString();
 
             }*/
-                EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currencyType, url_170x135);
+                EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currencyType, url_170x135, "uri");
                 etsyProductsList.add(p);
             } catch (Exception e) {
                 Timber.d("Ebay deserializer exception message: " + e.getMessage());

@@ -11,22 +11,24 @@ public class EtsyProduct extends Product {
 
     int categoryId;
 
-    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl) {
+    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.price = price;
         this.currencyType = currencyType;
         this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
     }
 
-    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, long wishlistId) {
+    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri, long wishlistId) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.price = price;
         this.currencyType = currencyType;
         this.imageUrl = imageUrl;
+        this.imageUri = imageUri;
         this.wishlistId = wishlistId;
     }
 
