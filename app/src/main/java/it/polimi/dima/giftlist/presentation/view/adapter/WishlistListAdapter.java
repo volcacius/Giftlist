@@ -79,8 +79,9 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
         public ViewHolder(View view, OnWishlistClickListener onWishlistClickListener) {
             super(view);
             ButterKnife.bind(this, view);
-            bindListener(view, onWishlistClickListener);//*
+            bindListener(view, onWishlistClickListener);
         }
+
         //method to bind the listener
         private void bindListener(View view, OnWishlistClickListener onWishlistClickListener) {
             view.setOnClickListener(v ->

@@ -11,12 +11,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductDetailsPagerComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductDetailsPagerModule;
 import it.polimi.dima.giftlist.presentation.view.adapter.ProductDetailsPagerAdapter;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 10/08/16.
@@ -24,7 +26,7 @@ import it.polimi.dima.giftlist.presentation.view.adapter.ProductDetailsPagerAdap
 public class ProductDetailsPagerActivity extends BaseActivity implements HasComponent<ProductDetailsPagerComponent> {
 
     private static final String EXTRA_PRODUCT_LIST = "product_list";
-    private static final String EXTRA_SELECTED_PRODUCT = "selected_product";
+    private static final String EXTRA_SELECTED_PRODUCT_ID = "selected_product_id";
 
     private ProductDetailsPagerComponent productDetailsPagerComponent;
 
@@ -35,25 +37,37 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
     ProductDetailsPagerAdapter productDetailsPagerAdapter;
 
     private List<Product> productList;
-    private Product selectedProduct;
+    private long selectedProductId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_details);
+        ButterKnife.bind(this);
         if (savedInstanceState == null) {
             productList = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);
-            selectedProduct = getIntent().getParcelableExtra(EXTRA_SELECTED_PRODUCT);
+            selectedProductId = getIntent().getLongExtra(EXTRA_SELECTED_PRODUCT_ID, Product.DEFAULT_ID);
         }
         createComponent();
-        viewPager.setAdapter(productDetailsPagerAdapter);
-        viewPager.setCurrentItem(productList.indexOf(selectedProduct));
+        injectDependencies();
+        viewPager.setAdapter(new ProductDetailsPagerAdapter(getSupportFragmentManager(), productList));
+        for (Product p: productList) {
+            if (p.getId() == selectedProductId) {
+                Timber.d("Selected product is id " + p.getId());
+                viewPager.setCurrentItem(productList.indexOf(p));
+                break;
+            }
+        }
     }
 
-    public static Intent getCallingIntent(Context context, ArrayList<Product> productList, Product selectedProduct) {
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_product_details;
+    }
+
+    public static Intent getCallingIntent(Context context, ArrayList<Product> productList, long selectedProductId) {
         Intent callingIntent = new Intent(context, ProductDetailsPagerActivity.class);
         callingIntent.putExtra(EXTRA_PRODUCT_LIST, productList);
-        callingIntent.putExtra(EXTRA_SELECTED_PRODUCT, selectedProduct);
+        callingIntent.putExtra(EXTRA_SELECTED_PRODUCT_ID, selectedProductId);
         return callingIntent;
     }
 
@@ -62,7 +76,12 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
         return productDetailsPagerComponent;
     }
 
-    private void createComponent() {
+    @Override
+    public void createComponent() {
         productDetailsPagerComponent = getApplicationComponent().plus(new ProductDetailsPagerModule(getSupportFragmentManager(), productList));
+    }
+
+    public void injectDependencies() {
+        getComponent().inject(this);
     }
 }

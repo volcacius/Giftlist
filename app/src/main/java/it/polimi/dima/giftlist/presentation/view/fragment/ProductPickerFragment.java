@@ -38,7 +38,7 @@ import timber.log.Timber;
  * Created by Elena on 19/01/2016.
  */
 @FragmentWithArgs
-public class ProductPickerFragment extends BaseViewStateLceFragment<SwipeFlingAdapterView, List<Product>, ProductPickerView, ProductPickerPresenter>
+public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterView, List<Product>, ProductPickerView, ProductPickerPresenter>
         implements ProductPickerView {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
@@ -59,10 +59,6 @@ public class ProductPickerFragment extends BaseViewStateLceFragment<SwipeFlingAd
     @Arg
     String keywords;
 
-    @Inject
-    ErrorMessageDeterminer errorMessageDeterminer;
-    @Inject
-    IntentStarter intentStarter;
     @Inject
     ProductPickerAdapter productPickerAdapter;
 

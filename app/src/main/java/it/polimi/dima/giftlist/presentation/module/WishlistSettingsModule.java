@@ -11,21 +11,5 @@ import it.polimi.dima.giftlist.presentation.presenter.WishlistSettingsPresenter;
  */
 @Module
 public class WishlistSettingsModule {
-
-    private static final long NULL_ID = 0;
-
-    private Context context;
-    long wishlistId = NULL_ID;
-
-    public WishlistSettingsModule(Context context, long wishlistId) {
-        this.context = context;
-        this.wishlistId = wishlistId;
-    }
-
-    @Provides
-    public Context provideContext() {
-        return context;
-    }
-
-
+    //TODO: either this module gets a provides or it is useless
 }

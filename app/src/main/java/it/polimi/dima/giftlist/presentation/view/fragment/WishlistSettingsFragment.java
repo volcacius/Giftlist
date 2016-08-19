@@ -1,7 +1,6 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.BinderThread;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -9,12 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 
 import java.util.Random;
-
-import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -23,9 +19,7 @@ import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
-import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistSettingsPresenter;
-import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import it.polimi.dima.giftlist.presentation.view.WishlistSettingsView;
 import timber.log.Timber;
 
@@ -34,7 +28,7 @@ import timber.log.Timber;
  */
 
 @FragmentWithArgs
-public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSettingsView, WishlistSettingsPresenter>
+public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsView, WishlistSettingsPresenter>
         implements WishlistSettingsView {
 
     @Arg
@@ -48,9 +42,6 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
 
     @Bind(R.id.button_start_product_picker_settings_activity)
     Button startProductPickerSettingsButton;
-
-    @Inject
-    IntentStarter intentStarter;
 
     String occasionSelected;
 
@@ -74,7 +65,7 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
             wishlistId = Math.abs(random.nextLong());
         }
 
-        getPresenter().onWishlistAdded(new Wishlist(wishlistId, wlName));
+        getPresenter().addWishlist(new Wishlist(wishlistId, wlName));
         intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
     }
 

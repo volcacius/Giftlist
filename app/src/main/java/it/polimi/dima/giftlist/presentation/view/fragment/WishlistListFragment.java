@@ -11,12 +11,10 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
@@ -26,12 +24,11 @@ import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
 import it.polimi.dima.giftlist.util.ToastFactory;
-import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView, List<Wishlist>, WishlistListView, WishlistListPresenter>
+public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<Wishlist>, WishlistListView, WishlistListPresenter>
         implements WishlistListView {
 
     @Bind(R.id.contentView)
@@ -39,6 +36,7 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
 
     @Inject
     WishlistListAdapter wishlistListAdapter;
+
     @Inject
     IntentStarter intentStarter;
 
@@ -63,7 +61,6 @@ public class WishlistListFragment extends BaseViewStateLceFragment<RecyclerView,
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistListAdapter);
 
-        //dichiaro tutto questo nel fragment perchè devo poter avviare l'altra activity dal fragment
         wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
             @Override
             public void onItemClick(View v , int position) {

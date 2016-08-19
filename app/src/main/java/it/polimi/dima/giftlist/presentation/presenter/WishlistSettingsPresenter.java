@@ -24,6 +24,7 @@ import timber.log.Timber;
 public class WishlistSettingsPresenter extends MvpBasePresenter<WishlistSettingsView> {
 
     protected StorIOSQLite db;
+
     @Inject
     public WishlistSettingsPresenter(StorIOSQLite db) {
         this.db = db;
@@ -43,7 +44,6 @@ public class WishlistSettingsPresenter extends MvpBasePresenter<WishlistSettings
 
     public void onWishlistAdded(Wishlist wishlist) {
         Observer observer = new WishlistPutObserver();
-        Timber.d(wishlist.getName());
         db.put()
                 .object(wishlist)
                 .prepare()
@@ -58,7 +58,6 @@ public class WishlistSettingsPresenter extends MvpBasePresenter<WishlistSettings
         }
         @Override
         public void onError(Throwable e) {
-            Timber.d("wl error: " + e.getMessage());
             getView().showWishlistAddedError();
         }
 

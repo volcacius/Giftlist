@@ -13,7 +13,7 @@ import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsF
 /**
  * Created by Alessandro on 02/05/16.
  */
-public class ProductPickerSettingsActivity extends BaseActivity implements HasComponent<ApplicationComponent> {
+public class ProductPickerSettingsActivity extends BaseActivity {
 
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     long wishlistId;
@@ -21,7 +21,6 @@ public class ProductPickerSettingsActivity extends BaseActivity implements HasCo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_picker_settings);
         //I need the wishlist id to launch the fragment
         //If it's the first time creating the activity, I get it from the Intent.
         //If the activity is recreated e.g. after rotation, it is restored by IcePick in the super.onCreate call
@@ -34,14 +33,14 @@ public class ProductPickerSettingsActivity extends BaseActivity implements HasCo
 
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_product_picker_settings;
+    }
+
     public static Intent getCallingIntent(Context context, long wishlistId) {
         Intent callingIntent = new Intent(context, ProductPickerSettingsActivity.class);
         callingIntent.putExtra(EXTRA_WISHLIST_ID, wishlistId);
         return callingIntent;
-    }
-
-    @Override
-    public ApplicationComponent getComponent() {
-        return getApplicationComponent();
     }
 }

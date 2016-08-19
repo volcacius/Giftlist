@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductDetailsPagerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerActivity;
@@ -52,8 +53,9 @@ public class IntentStarter {
         context.startActivity(intentToLaunch);
     }
 
-    public void startProductDetailsPagerActivity(@NonNull Context context, ArrayList<Product> productList, Product selectedProduct) {
-        Intent intentToLaunch = ProductDetailsPagerActivity.getCallingIntent(context, productList, selectedProduct);
+    public void startProductDetailsPagerActivity(@NonNull Context context, List<Product> productList, long selectedProductId) {
+        ArrayList<Product> productArrayList = new ArrayList<>(productList);
+        Intent intentToLaunch = ProductDetailsPagerActivity.getCallingIntent(context, productArrayList, selectedProductId);
         context.startActivity(intentToLaunch);
     }
 }

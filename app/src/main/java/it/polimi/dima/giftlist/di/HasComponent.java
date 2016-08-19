@@ -19,5 +19,6 @@ package it.polimi.dima.giftlist.di;
  * Interface representing a contract for clients that contains a component for dependency injection.
  */
 public interface HasComponent<C> {
-  C getComponent();
+    C getComponent();
+    void createComponent();
 }

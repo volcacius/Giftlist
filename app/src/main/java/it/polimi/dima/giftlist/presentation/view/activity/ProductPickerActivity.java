@@ -40,7 +40,6 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_picker);
         //I need repositories, category and keywords both for createComponent() and to launch the fragment
         //If it's the first time creating the activity, I get them from the Intent.
         //If the activity is recreated e.g. after rotation, they are restored by IcePick in the super.onCreate call
@@ -59,6 +58,11 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
 
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_product_picker;
+    }
+
     @DebugLog
     public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, String category, String keywords, Float maxprice, Float minprice, Long wishlistId) {
         Intent callingIntent = new Intent(context, ProductPickerActivity.class);
@@ -71,13 +75,13 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         return callingIntent;
     }
 
-    //I need to expose the component so that I can perform injection from the fragment
     @Override
     public ProductPickerComponent getComponent() {
         return productPickerComponent;
     }
 
-    private void createComponent() {
+    @Override
+    public void createComponent() {
         productPickerComponent = getApplicationComponent().plus(new ProductPickerModule(this, enabledRepositoryMap, category, keywords, maxprice, minprice, wishlistId));
     }
 }

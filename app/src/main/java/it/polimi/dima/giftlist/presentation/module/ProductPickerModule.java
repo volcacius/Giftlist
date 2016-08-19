@@ -87,12 +87,6 @@ public class ProductPickerModule {
 
     @Provides
     @PerActivity
-    Picasso providesPicasso() {
-        return Picasso.with(context);
-    }
-
-    @Provides
-    @PerActivity
     ProductPickerAdapter providesProductListAdapter(Picasso picasso) {
         return new ProductPickerAdapter(context, picasso);
     }

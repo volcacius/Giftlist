@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -95,5 +96,11 @@ public class ApplicationModule {
     @Singleton
     IntentStarter providesIntentStarter() {
         return new IntentStarter();
+    }
+
+    @Provides
+    @Singleton
+    Picasso providesPicasso() {
+        return Picasso.with(application);
     }
 }

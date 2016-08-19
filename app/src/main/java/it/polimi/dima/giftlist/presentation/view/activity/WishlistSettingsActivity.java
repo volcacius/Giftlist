@@ -43,6 +43,11 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
 
     }
 
+    @Override
+    protected int getLayoutRes() {
+        return R.layout.activity_wishlist_settings;
+    }
+
     public static Intent getCallingIntent(Context context, long wishlistId) {
         Intent callingIntent = new Intent(context, WishlistSettingsActivity.class);
         callingIntent.putExtra(EXTRA_WISHLIST_ID, wishlistId);
@@ -51,12 +56,11 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
 
     @Override
     public WishlistSettingsComponent getComponent() {
-        Timber.d(wishlistSettingsComponent.toString());
         return wishlistSettingsComponent;
     }
 
-
-    protected void createComponent() {
-        wishlistSettingsComponent = getApplicationComponent().plus(new WishlistSettingsModule(this, wishlistId));
+    @Override
+    public void createComponent() {
+        wishlistSettingsComponent = getApplicationComponent().plus(new WishlistSettingsModule());
     }
 }

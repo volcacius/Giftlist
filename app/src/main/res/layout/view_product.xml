@@ -22,7 +22,6 @@
         android:gravity="top|center"
         />
 
-
     <ImageView
         android:id="@+id/product_thumb"
         android:layout_width="240dp"
@@ -30,7 +29,6 @@
         android:layout_alignParentTop="true"
         android:layout_gravity="center"
         />
-
 
     <TextView
         android:id="@+id/product_price"

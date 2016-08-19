@@ -55,7 +55,6 @@ public class ProductPickerSettingsFragment extends BaseFragment {
     @Bind(R.id.text_minprice)
     EditText minpriceEditText;
 
-
     String categorySelected;
     HashMap<Class,Boolean> enabledRepositoryMap;
 
@@ -113,7 +112,7 @@ public class ProductPickerSettingsFragment extends BaseFragment {
 
     @Override
     protected void injectDependencies() {
-        this.getComponent(ApplicationComponent.class).inject(this);
+        this.getApplicationComponent().inject(this);
     }
 
     @OnItemSelected(R.id.spinner_category)

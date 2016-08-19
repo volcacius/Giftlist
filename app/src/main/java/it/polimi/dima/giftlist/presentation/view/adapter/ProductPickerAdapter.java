@@ -58,7 +58,6 @@ public class ProductPickerAdapter extends BaseAdapter {
 
     @Inject
     public ProductPickerAdapter(Context context, Picasso picasso) {
-        this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picasso = picasso;
         this.productList = new ArrayList<>();
@@ -83,6 +82,7 @@ public class ProductPickerAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         ProductPickerViewHolder productPickerViewHolder;
+
         if (view != null) {
             productPickerViewHolder = (ProductPickerViewHolder) view.getTag();
         } else {
@@ -90,16 +90,16 @@ public class ProductPickerAdapter extends BaseAdapter {
             productPickerViewHolder = new ProductPickerViewHolder(view);
             view.setTag(productPickerViewHolder);
         }
+
         Product currentProduct = getItem(position);
         productPickerViewHolder.nameTextView.setText(currentProduct.getName());
         productPickerViewHolder.priceTextView.setText(currentProduct.getPrice() + " " + currentProduct.getCurrencyType().toString());
-        if(currentProduct.getConvertedPrice() != 0 && !currentProduct.getCurrencyType().equals(CurrencyType.EUR)) {
+        if (currentProduct.getConvertedPrice() != 0 && !currentProduct.getCurrencyType().equals(CurrencyType.EUR)) {
             productPickerViewHolder.convertedPriceTextView.setText("(" + currentProduct.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
         }
-        if(currentProduct instanceof EbayProduct) {
+        if (currentProduct instanceof EbayProduct) {
             productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_ebay);
-        }
-        if(currentProduct instanceof EtsyProduct) {
+        } else if (currentProduct instanceof EtsyProduct) {
             productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_etsy);
         }
         if (currentProduct.getImageUrl() == null) {
@@ -107,13 +107,13 @@ public class ProductPickerAdapter extends BaseAdapter {
             ColorDrawable colorDrawable = new ColorDrawable(productPickerViewHolder.colorPrimary);
             productPickerViewHolder.productThumb.setDrawingCacheEnabled(true);
             productPickerViewHolder.productThumb.setImageDrawable(colorDrawable);
-
         } else {
             picasso.load(currentProduct.getImageUrl())
                     .resize(IMAGE_WIDTH,IMAGE_HEIGHT)
                     .centerCrop()
                     .into(productPickerViewHolder.productThumb);
         }
+
         return view;
     }
 
