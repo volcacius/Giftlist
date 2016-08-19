@@ -42,7 +42,7 @@ public class WishlistSettingsPresenter extends MvpBasePresenter<WishlistSettings
                 .executeAsBlocking();
     }
 
-    public void onWishlistAdded(Wishlist wishlist) {
+    public void addWishlist(Wishlist wishlist) {
         Observer observer = new WishlistPutObserver();
         db.put()
                 .object(wishlist)
