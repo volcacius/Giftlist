@@ -47,6 +47,8 @@ import timber.log.Timber;
 public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView, List<Product>, GetNetProductsUseCase> {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
+    private static final int MAX_SIZE = 400;
+
     private boolean isSubscriptionPending;
     Picasso picasso;
 
@@ -125,6 +127,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         Product product = event.getProduct();
         saveProductImage(product);
 
+
     }
 
     @Subscribe
@@ -139,6 +142,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         } else {
             throw new UnknownProductException();
         }
+
         db.put()
                 .object(product)
                 .prepare()
@@ -220,6 +224,9 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         targets.add(myTarget);
         picasso
                 .load(product.getImageUrl())
+                .resize(MAX_SIZE,MAX_SIZE)//The other dimension will be scaled properly preserving aspect ratio
+                .centerInside()
+                .onlyScaleDown()
                 .into(myTarget);
 
     }

@@ -103,6 +103,7 @@ public class ProductPickerAdapter extends BaseAdapter {
             productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_etsy);
         }
         if (currentProduct.getImageUrl() == null) {
+            Timber.d("no image available");
             ColorDrawable colorDrawable = new ColorDrawable(productPickerViewHolder.colorPrimary);
             productPickerViewHolder.productThumb.setDrawingCacheEnabled(true);
             productPickerViewHolder.productThumb.setImageDrawable(colorDrawable);

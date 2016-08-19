@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.BinderThread;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import butterknife.OnItemSelected;
 import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
@@ -41,7 +44,7 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
     EditText wlNameEditText;
 
     @Bind(R.id.settings_wishlist_occasion)
-    EditText wlOccasionEditText;
+    Spinner wlOccasionSpinner;
 
     @Bind(R.id.button_start_product_picker_settings_activity)
     Button startProductPickerSettingsButton;
@@ -49,22 +52,30 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
     @Inject
     IntentStarter intentStarter;
 
+    String occasionSelected;
+
+    @OnItemSelected(R.id.settings_wishlist_occasion)
+    public void onItemSelected(int position) {
+        occasionSelected = String.valueOf(wlOccasionSpinner.getSelectedItem());
+    }
+
     @OnClick(R.id.button_start_product_picker_settings_activity)
     public void startProductPickerSettings(){
-        Random random = new Random();
-        long new_id = Math.abs(random.nextLong());
+
         String wlName = wlNameEditText.getText().toString();
         if (wlName == "") {
             wlName = "Unnamed wl";
         }
+
+        //If it is 0, it's a wl created from scratch, otherwise I need the id to load previous settings
         if(wishlistId == 0) {
             Timber.d("new wl");
-            getPresenter().onWishlistAdded(new Wishlist(new_id, wlName));
-        } else {
-            Timber.d("old wl " + wlName);
-            getPresenter().onWishlistAdded(new Wishlist(wishlistId, wlName));
+            Random random = new Random();
+            wishlistId = Math.abs(random.nextLong());
         }
-        intentStarter.startProductPickerSettingsActivity(getContext(), new_id);
+
+        getPresenter().onWishlistAdded(new Wishlist(wishlistId, wlName));
+        intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
     }
 
     @Override
@@ -96,6 +107,8 @@ public class WishlistSettingsFragment extends BasePresenterFragment<WishlistSett
         } else {
             Wishlist currentWishlist = getPresenter().onWishlistSettingsLoaded(wishlistId);
             wlNameEditText.setText(currentWishlist.getName());
+            //wlOccasionSpinner.setSelection(((ArrayAdapter)(wlOccasionSpinner.getAdapter())).getPosition(currentWishlist.getOccasion()));
+
         }
     }
 

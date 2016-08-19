@@ -53,4 +53,11 @@
         <item>weddings</item>
         <item>woodworking</item>
     </string-array>
+    <string-array name="occasions">
+        <item>birthday</item>
+        <item>anniversary</item>
+        <item>degree</item>
+        <item>wedding</item>
+        <item>other</item>
+    </string-array>
 </resources>

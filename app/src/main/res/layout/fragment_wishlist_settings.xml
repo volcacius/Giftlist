@@ -10,11 +10,14 @@
         android:layout_height="wrap_content"
         android:hint="@string/wl_name_hint"/>
 
-    <EditText
+    <Spinner
         android:id="@+id/settings_wishlist_occasion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/wl_occasion_hint"/>
+        android:background="@android:drawable/btn_dropdown"
+        android:entries="@array/occasions"
+        android:prompt="@string/wl_occasion_hint"
+        android:spinnerMode="dropdown" />
 
     <Button
         android:id="@+id/button_start_product_picker_settings_activity"
