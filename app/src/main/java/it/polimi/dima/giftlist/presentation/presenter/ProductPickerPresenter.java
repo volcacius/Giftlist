@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +33,7 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
+import it.polimi.dima.giftlist.presentation.event.ProductImageSavedEvent;
 import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
@@ -46,12 +48,17 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
 
     private static final boolean NO_PULL_TO_REFRESH = false;
     private boolean isSubscriptionPending;
+    Picasso picasso;
 
+    //needed to avoid that the GC collects the image before it is stored
+    final List<Target> targets;
 
     @Inject
-    public ProductPickerPresenter(EventBus eventBus, GetNetProductsUseCase getNetProductsUseCase, StorIOSQLite db) {
+    public ProductPickerPresenter(EventBus eventBus, GetNetProductsUseCase getNetProductsUseCase, StorIOSQLite db, Picasso picasso) {
         super(eventBus, getNetProductsUseCase, db);
+        this.picasso = picasso;
         this.isSubscriptionPending = false;
+        this.targets = new ArrayList<Target>();
     }
 
     /**
@@ -116,8 +123,15 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
     @Subscribe
     public void onProductAddedEvent(ProductAddedEvent event) throws UnknownProductException {
         Product product = event.getProduct();
-        Observer observer;
+        saveProductImage(product);
 
+    }
+
+    @Subscribe
+    public void onProductImageSaved(ProductImageSavedEvent event) throws UnknownProductException{
+
+        Observer observer;
+        Product product = event.getProduct();
         if (product instanceof EbayProduct) {
             observer = new EbayProductPutObserver();
         } else if (product instanceof EtsyProduct) {
@@ -126,11 +140,11 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
             throw new UnknownProductException();
         }
         db.put()
-          .object(product)
-          .prepare()
-          .asRxObservable()
-          .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-          .subscribe(observer);
+                .object(product)
+                .prepare()
+                .asRxObservable()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(observer);
     }
 
     //Check if there is a pending subscription to register
@@ -167,6 +181,47 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         public void onNext(PutResults<EtsyProduct> etsyProductPutResults) {
             getView().showProductAddedSuccess();
         }
+    }
+
+
+    public void saveProductImage(Product product) throws UnknownProductException {
+
+        Target myTarget = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                try {
+                    Timber.d("picasso is saving pic: " + product.getName());
+                    File myDir = new File(product.getImageUri());
+                    FileOutputStream out = new FileOutputStream(myDir);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                    eventBus.post(new ProductImageSavedEvent(product));
+                } catch(Exception e){
+                    Timber.d("picasso error " + e.getMessage());
+                }
+                targets.remove(this);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+                Timber.d("picasso onBitmapFailed");
+                //Better to remove uri?
+                eventBus.post(new ProductImageSavedEvent(product));
+                targets.remove(this);
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                Timber.d("picasso onPrepareLoad");
+            }
+        };
+
+        targets.add(myTarget);
+        picasso
+                .load(product.getImageUrl())
+                .into(myTarget);
+
     }
 
 

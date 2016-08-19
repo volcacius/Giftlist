@@ -50,25 +50,19 @@ public class ProductPickerAdapter extends BaseAdapter {
     private static final int IMAGE_HEIGHT = 330;
     private static final int FIRST_POSITION = 0;
 
-    //needed to avoid that the GC collects the image before it is stored
-    final List<Target> targets;
 
     Context context;
     LayoutInflater layoutInflater;
     Picasso picasso;
     List<Product> productList;
 
-
-    EventBus eventBus;
-
     @Inject
-    public ProductPickerAdapter(Context context, Picasso picasso, EventBus eventBus) {
+    public ProductPickerAdapter(Context context, Picasso picasso) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picasso = picasso;
-        this.eventBus = eventBus;
         this.productList = new ArrayList<>();
-        this.targets = new ArrayList<Target>();
+
     }
 
     @Override
@@ -157,50 +151,6 @@ public class ProductPickerAdapter extends BaseAdapter {
         public ProductPickerViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
-    }
-
-
-
-    public void saveProductImage(Product product) throws UnknownProductException {
-        String root = context.getExternalCacheDir().toString();
-        String name = product.getId() + "_pic.jpg";
-        String uri = root + name;
-        Target myTarget = new Target() {
-            @Override
-            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                try {
-                    Timber.d("picasso is saving pic: " + name);
-                    File myDir = new File(uri);
-                    FileOutputStream out = new FileOutputStream(myDir);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                    out.flush();
-                    out.close();
-                    product.setImageUrl(uri);
-                    eventBus.post(new ProductAddedEvent(product));
-                } catch(Exception e){
-                    Timber.d("picasso error " + e.getMessage());
-                }
-                targets.remove(this);
-            }
-
-            @Override
-            public void onBitmapFailed(Drawable errorDrawable) {
-                Timber.d("picasso onBitmapFailed");
-                eventBus.post(new ProductAddedEvent(product));
-                targets.remove(this);
-            }
-
-            @Override
-            public void onPrepareLoad(Drawable placeHolderDrawable) {
-                Timber.d("picasso onPrepareLoad");
-            }
-        };
-        targets.add(myTarget);
-
-        picasso
-                .load(product.getImageUrl())
-                .into(myTarget);
-
     }
 
 }
