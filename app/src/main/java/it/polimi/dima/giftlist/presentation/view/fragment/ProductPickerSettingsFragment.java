@@ -112,7 +112,7 @@ public class ProductPickerSettingsFragment extends BaseFragment {
 
     @Override
     protected void injectDependencies() {
-        this.getComponent(ApplicationComponent.class).inject(this);
+        this.getApplicationComponent().inject(this);
     }
 
     @OnItemSelected(R.id.spinner_category)
