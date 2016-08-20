@@ -7,11 +7,8 @@ import com.pushtorefresh.storio.sqlite.operations.put.DefaultPutResolver;
 import com.pushtorefresh.storio.sqlite.queries.InsertQuery;
 import com.pushtorefresh.storio.sqlite.queries.UpdateQuery;
 
-import java.util.Arrays;
-
 import it.polimi.dima.giftlist.data.db.table.WishlistTable;
 import it.polimi.dima.giftlist.data.model.Wishlist;
-import timber.log.Timber;
 
 /**
  * Created by Alessandro on 23/04/16.
@@ -46,6 +43,7 @@ public class WishlistPutResolver extends DefaultPutResolver<Wishlist> {
         ContentValues values = new ContentValues();
         values.put(WishlistTable.COLUMN_ID, object.getId());
         values.put(WishlistTable.COLUMN_NAME, object.getName());
+        values.put(WishlistTable.COLUMN_OCCASION, object.getOccasion());
         return values;
     }
 }

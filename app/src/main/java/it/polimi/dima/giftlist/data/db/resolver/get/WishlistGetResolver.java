@@ -21,7 +21,8 @@ public class WishlistGetResolver extends DefaultGetResolver<Wishlist> {
     public Wishlist mapFromCursor(Cursor cursor) {
         return new Wishlist(
                 cursor.getLong(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_NAME))
+                cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_NAME)),
+                cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_OCCASION))
         );
     }
 }

@@ -16,7 +16,6 @@ import java.util.Random;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
-import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
@@ -66,7 +65,8 @@ public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsVi
             wishlistId = Math.abs(random.nextLong());
         }
 
-        getPresenter().addWishlist(new Wishlist(wishlistId, wlName));
+        //addWishlist will either update/insert the wishlist thanks to storio
+        getPresenter().addWishlist(new Wishlist(wishlistId, wlName, occasionSelected));
         intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
     }
 
@@ -99,7 +99,7 @@ public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsVi
         } else {
             Wishlist currentWishlist = getPresenter().onWishlistSettingsLoaded(wishlistId);
             wlNameEditText.setText(currentWishlist.getName());
-            //wlOccasionSpinner.setSelection(((ArrayAdapter)(wlOccasionSpinner.getAdapter())).getPosition(currentWishlist.getOccasion()));
+            wlOccasionSpinner.setSelection(((ArrayAdapter)(wlOccasionSpinner.getAdapter())).getPosition(currentWishlist.getOccasion()));
 
         }
     }

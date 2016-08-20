@@ -10,17 +10,20 @@ public class Wishlist {
     public static final long DEFAULT_ID = 0;
 
     private String name;
+    private String occasion;
     private List<Product> productList;
     private long id;
 
-    public Wishlist(long id, String name) {
+
+    public Wishlist(long id, String name, String occasion) {
         this.id = id;
         this.name = name;
+        this.occasion = occasion;
     }
-
+    /*Test: is this really necessary?
     public Wishlist(String name) {
         this.name = name;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -28,6 +31,14 @@ public class Wishlist {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getOccasion() {
+        return occasion;
+    }
+
+    public void setOccasion(String occasion) {
+        this.occasion = occasion;
     }
 
     public List<Product> getProductList() {
