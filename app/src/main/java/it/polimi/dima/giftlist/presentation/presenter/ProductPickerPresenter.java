@@ -5,7 +5,9 @@ import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Environment;
+import android.provider.SyncStateContract;
 
 import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
@@ -37,6 +39,7 @@ import it.polimi.dima.giftlist.presentation.event.ProductImageSavedEvent;
 import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
+import it.polimi.dima.giftlist.util.ImageConstants;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -47,7 +50,6 @@ import timber.log.Timber;
 public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView, List<Product>, GetNetProductsUseCase> {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
-    private static final int MAX_SIZE = 400;
 
     private boolean isSubscriptionPending;
     Picasso picasso;
@@ -224,7 +226,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         targets.add(myTarget);
         picasso
                 .load(product.getImageUrl())
-                .resize(MAX_SIZE,MAX_SIZE)//The other dimension will be scaled properly preserving aspect ratio
+                .resize(ImageConstants.IMAGE_WIDTH, ImageConstants.IMAGE_HEIGHT)//The other dimension will be scaled properly preserving aspect ratio
                 .centerInside()
                 .onlyScaleDown()
                 .into(myTarget);

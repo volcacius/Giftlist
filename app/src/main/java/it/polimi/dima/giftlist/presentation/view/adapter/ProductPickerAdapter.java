@@ -38,6 +38,7 @@ import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
+import it.polimi.dima.giftlist.util.ImageConstants;
 import rx.Observer;
 import timber.log.Timber;
 
@@ -46,10 +47,7 @@ import timber.log.Timber;
  */
 public class ProductPickerAdapter extends BaseAdapter {
 
-    private static final int IMAGE_WIDTH = 240;
-    private static final int IMAGE_HEIGHT = 330;
     private static final int FIRST_POSITION = 0;
-
 
     Context context;
     LayoutInflater layoutInflater;
@@ -109,7 +107,7 @@ public class ProductPickerAdapter extends BaseAdapter {
             productPickerViewHolder.productThumb.setImageDrawable(colorDrawable);
         } else {
             picasso.load(currentProduct.getImageUrl())
-                    .resize(IMAGE_WIDTH,IMAGE_HEIGHT)
+                    .resize(ImageConstants.IMAGE_WIDTH, ImageConstants.IMAGE_HEIGHT)
                     .centerCrop()
                     .into(productPickerViewHolder.productThumb);
         }

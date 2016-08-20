@@ -11,6 +11,8 @@ import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 import javax.inject.Inject;
 
 import butterknife.Bind;
@@ -21,6 +23,7 @@ import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.util.ImageConstants;
 import timber.log.Timber;
 
 /**
@@ -28,9 +31,6 @@ import timber.log.Timber;
  */
 @FragmentWithArgs
 public class ProductDetailsFragment extends BaseFragment {
-
-    private static final int IMAGE_WIDTH = 240;
-    private static final int IMAGE_HEIGHT = 330;
 
     @Arg
     Product product;
@@ -75,8 +75,10 @@ public class ProductDetailsFragment extends BaseFragment {
             productThumb.setDrawingCacheEnabled(true);
             productThumb.setImageDrawable(colorDrawable);
         } else {
-            picasso.load(product.getImageUrl())
-                    .resize(IMAGE_WIDTH,IMAGE_HEIGHT)
+            File f = new File(product.getImageUri());
+            picasso
+                    .load(f)
+                    .resize(ImageConstants.IMAGE_WIDTH, ImageConstants.IMAGE_HEIGHT)
                     .centerCrop()
                     .into(productThumb);
         }
