@@ -3,27 +3,14 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <Spinner
+    <!--Spinner
         android:id="@+id/spinner_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
         android:entries="@array/etsy_categories"
         android:prompt="@string/etsy_prompt"
-        android:spinnerMode="dropdown" />
-
-    <Button
-        android:id="@+id/button_start_product_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="Start looking for products"/>
-
-    <EditText
-        android:id="@+id/text_keywords"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/keyword_hint"/>
+        android:spinnerMode="dropdown" /-->
 
     <EditText
         android:id="@+id/text_maxprice"
@@ -37,7 +24,36 @@
         android:layout_height="wrap_content"
         android:hint="@string/price_hint"/>
 
-    <CheckBox
+
+    <Spinner
+        android:id="@+id/select_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/btn_dropdown"
+        android:entries="@array/ages"
+        android:prompt="@string/ages_prompt"
+        android:spinnerMode="dropdown"/>
+
+    <EditText
+        android:id="@+id/text_keywords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/keyword_hint"/>
+
+    <Button
+        android:id="@+id/button_more_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More"/>
+
+    <Button
+        android:id="@+id/button_start_product_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Start looking for products"/>
+
+    <!--CheckBox
         android:id="@+id/checkbox_ebay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,5 +63,6 @@
         android:id="@+id/checkbox_etsy"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/checkbox_etsy"/>
+        android:text="@string/checkbox_etsy"/-->
+
 </LinearLayout>

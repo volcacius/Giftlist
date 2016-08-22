@@ -12,6 +12,7 @@ import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,6 +55,8 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
     long wishlistId;
     @Arg
     HashMap<Class, Boolean> enabledProductRepositoryMap;
+    @Arg
+    ArrayList<String> chosenCategoriesList;
     @Arg
     String category;
     @Arg

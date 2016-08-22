@@ -37,4 +37,9 @@ public class EtsyProductDataSource implements ProductRepository {
     public Observable<List<Product>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset) {
         return mEtsyApi.getItems(category, keywords, maxprice, minprice, offset);
     }
+
+    @Override
+    public List<String> getProperCategory(List<String> chosenCategories) {
+        return null;
+    }
 }

@@ -3,8 +3,12 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
@@ -22,13 +26,15 @@ import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsF
 public class ProductPickerActivity extends BaseActivity implements HasComponent<ProductPickerComponent> {
 
     private static final String EXTRA_REPOSITORIES_SELECTED = "repositories";
-    private static final String EXTRA_CATEGORY_SELECTED = "category";
+    private static final String EXTRA_CHOSEN_CATEGORIES_SELECTED = "chosen_categories";
+    private static final String EXTRA_CATEGORY_SELECTED = "category"; //TODO soon redundant
     private static final String EXTRA_KEYWORDS = "keywords";
     private static final String EXTRA_MAXPRICE = "maxprice";
     private static final String EXTRA_MINPRICE = "minprice";
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     private long wishlistId;
     private HashMap<Class, Boolean> enabledRepositoryMap;
+    private ArrayList<String> chosenCategoriesList;
     private String category;
     private String keywords;
     private Float maxprice;
@@ -45,6 +51,7 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         //If the activity is recreated e.g. after rotation, they are restored by IcePick in the super.onCreate call
         if (savedInstanceState == null) {
             enabledRepositoryMap = (HashMap<Class, Boolean>) getIntent().getSerializableExtra(EXTRA_REPOSITORIES_SELECTED);
+            chosenCategoriesList = (ArrayList<String>) getIntent().getSerializableExtra(EXTRA_CHOSEN_CATEGORIES_SELECTED);
             category = getIntent().getStringExtra(EXTRA_CATEGORY_SELECTED);
             keywords = getIntent().getStringExtra(EXTRA_KEYWORDS);
             maxprice = getIntent().getFloatExtra(EXTRA_MAXPRICE, (float) 1000.00);
@@ -53,7 +60,7 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         }
         createComponent();
         if (savedInstanceState == null) {
-            addFragment(R.id.activity_frame, new ProductPickerFragmentBuilder(category, enabledRepositoryMap, keywords, wishlistId).build());
+            addFragment(R.id.activity_frame, new ProductPickerFragmentBuilder(category, chosenCategoriesList, enabledRepositoryMap, keywords, wishlistId).build());
         }
 
     }
@@ -64,9 +71,13 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     }
 
     @DebugLog
-    public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, String category, String keywords, Float maxprice, Float minprice, Long wishlistId) {
+    public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<String> chosenCategoriesList, String category, String keywords, Float maxprice, Float minprice, Long wishlistId) {
         Intent callingIntent = new Intent(context, ProductPickerActivity.class);
         callingIntent.putExtra(EXTRA_REPOSITORIES_SELECTED, enabledRepositoryMap);
+        callingIntent.putExtra(EXTRA_CHOSEN_CATEGORIES_SELECTED, chosenCategoriesList);
+        //All standard implementations of java.util.List already implement java.io.Serializable.
+        //So even though java.util.List itself is not a subtype of java.io.Serializable, it should be safe to cast the list to Serializable,
+        //as long as you know it's one of the standard implementations like ArrayList or LinkedList.
         callingIntent.putExtra(EXTRA_CATEGORY_SELECTED, category);
         callingIntent.putExtra(EXTRA_KEYWORDS, keywords);
         callingIntent.putExtra(EXTRA_MAXPRICE, maxprice);
@@ -82,6 +93,6 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
 
     @Override
     public void createComponent() {
-        productPickerComponent = getApplicationComponent().plus(new ProductPickerModule(this, enabledRepositoryMap, category, keywords, maxprice, minprice, wishlistId));
+        productPickerComponent = getApplicationComponent().plus(new ProductPickerModule(this, enabledRepositoryMap, chosenCategoriesList, category, keywords, maxprice, minprice, wishlistId));
     }
 }

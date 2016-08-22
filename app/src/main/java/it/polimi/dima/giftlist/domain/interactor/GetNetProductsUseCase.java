@@ -24,6 +24,7 @@ import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
+import it.polimi.dima.giftlist.util.CategoryDeterminer;
 import rx.Observable;
 import rx.functions.Func2;
 import timber.log.Timber;
@@ -37,6 +38,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
     private List<ProductRepository> productRepositoryList;
+    private List<String> chosenCategoriesList;
     private CurrencyRepository currencyRepository;
     private String category;
     private String keywords;
@@ -49,6 +51,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     @Inject
     public GetNetProductsUseCase(List<ProductRepository> productRepositoryList,
                                  CurrencyRepository currencyRepository,
+                                 List<String> chosenCategoriesList,
                                  String category,
                                  String keywords,
                                  Float maxprice,
@@ -57,6 +60,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
                                  EventBus eventBus) {
         this.currencyRepository = currencyRepository;
         this.productRepositoryList = productRepositoryList;
+        this.chosenCategoriesList = chosenCategoriesList;
         this.category = category;
         this.keywords = keywords;
         this.maxprice = maxprice;
@@ -68,12 +72,24 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
 
     @RxLogObservable
     @Override
-    //At the end of the chain I need to wrap the product as a single valued list, since list<product> is the type accepted as model accross the whole use case
+    //At the end of the chain I need to wrap the product as a single valued list, since list<product> is the type accepted as model across the whole use case
     protected Observable<List<Product>> buildUseCaseObservable() {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
+
         for (ProductRepository pr : productRepositoryList) {
-            productListObservableList.add(pr.getProductList(category, keywords, maxprice, minprice, searchOffset*PRODUCT_PER_PAGE));
+            //TODO: implement
+            List<String> repoCategories = pr.getProperCategory(chosenCategoriesList);
+            if (!repoCategories.isEmpty()) {
+                for (String cat : repoCategories) {
+                    Timber.d("category selected: " + cat);
+                        productListObservableList.add(pr.getProductList(cat, keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));
+                    }
+            } else {
+                Timber.d("empty chosenCategoriesList");
+                productListObservableList.add(pr.getProductList("",keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));
+            }
         }
+
         Observable<List<Currency>> currencyList = currencyRepository.getCurrencyList();
         searchOffset++;
         return Observable.merge(productListObservableList)

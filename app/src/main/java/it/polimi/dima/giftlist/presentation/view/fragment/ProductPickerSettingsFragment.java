@@ -11,7 +11,9 @@ import android.widget.Spinner;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -20,12 +22,18 @@ import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
+import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
+import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
+import it.polimi.dima.giftlist.presentation.presenter.ProductPickerSettingsPresenter;
+import it.polimi.dima.giftlist.presentation.view.ProductPickerSettingsView;
+import it.polimi.dima.giftlist.util.CategoryDeterminer;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 10/02/2016.
  */
 @FragmentWithArgs
-public class ProductPickerSettingsFragment extends BaseFragment {
+public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPickerSettingsView, ProductPickerSettingsPresenter> {
 
     private static final String EMPTY_STRING = "";
     private static final Float DEFAULT_MAX = (float) 1000.0;
@@ -34,20 +42,8 @@ public class ProductPickerSettingsFragment extends BaseFragment {
     @Arg
     long wishlistId;
 
-    @Bind(R.id.checkbox_ebay)
-    CheckBox ebayCheckbox;
-
-    @Bind(R.id.checkbox_etsy)
-    CheckBox etsyCheckbox;
-
-    @Bind(R.id.spinner_category)
-    Spinner categorySpinner;
-
     @Bind(R.id.button_start_product_activity)
     Button startProductActivityButton;
-
-    @Bind(R.id.text_keywords)
-    EditText keywordsEditText;
 
     @Bind(R.id.text_maxprice)
     EditText maxpriceEditText;
@@ -55,8 +51,33 @@ public class ProductPickerSettingsFragment extends BaseFragment {
     @Bind(R.id.text_minprice)
     EditText minpriceEditText;
 
-    String categorySelected;
+    @Bind(R.id.select_age)
+    Spinner ageSpinner;
+    String ageSelected;
+
+    @Bind(R.id.text_keywords)
+    EditText keywordsEditText;
+
+    @Bind(R.id.button_more_options)
+    Button moreButton;
+
     HashMap<Class,Boolean> enabledRepositoryMap;
+    ArrayList<String> chosenCategoriesList;
+
+    @OnItemSelected(R.id.select_age)
+    public void onItemSelected(int position) {
+        ageSelected = String.valueOf(ageSpinner.getSelectedItem());
+    }
+
+    @OnClick(R.id.button_more_options)
+    public void revealMoreOptions() {
+        if(ageSpinner.getVisibility() == View.GONE) {
+            ageSpinner.setVisibility(View.VISIBLE);
+        } else {
+            keywordsEditText.setVisibility(View.VISIBLE);
+            moreButton.setVisibility(View.GONE);
+        }
+    }
 
     @OnClick(R.id.button_start_product_activity)
     public void startProductActivity(){
@@ -82,7 +103,8 @@ public class ProductPickerSettingsFragment extends BaseFragment {
 
         intentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
-                                                categorySelected,
+                                                chosenCategoriesList,
+                                                EMPTY_STRING,//TODO remove later
                                                 keywordsEditText.getText().toString(),
                                                 maxprice,
                                                 minprice,
@@ -101,35 +123,39 @@ public class ProductPickerSettingsFragment extends BaseFragment {
     }
 
     @Override
+    public ProductPickerSettingsPresenter createPresenter() {
+        return this.getComponent(ProductPickerSettingsComponent.class).providePresenter();
+    }
+
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         keywordsEditText.setText(EMPTY_STRING);
-        categorySelected = EMPTY_STRING;
+        String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
+        chosenCategoriesList = CategoryDeterminer.getCategoriesFromOccasion(occasion);
+        chosenCategoriesList.addAll(CategoryDeterminer.getCategoriesFromAge(ageSelected));
+        Timber.d(occasion);
+        if (!chosenCategoriesList.isEmpty()) {
+            Timber.d("recommended categories " + chosenCategoriesList.get(0));
+            keywordsEditText.setVisibility(View.GONE);
+            ageSpinner.setVisibility(View.GONE);
+        } else {
+            Timber.d("no recommended categories ");
+            moreButton.setVisibility(View.GONE);
+        }
+
+        //for now set them true by default
         enabledRepositoryMap = new HashMap<>();
-        enabledRepositoryMap.put(EbayProductDataSource.class, Boolean.FALSE);
-        enabledRepositoryMap.put(EtsyProductDataSource.class, Boolean.FALSE);
+        enabledRepositoryMap.put(EbayProductDataSource.class, Boolean.TRUE);
+        enabledRepositoryMap.put(EtsyProductDataSource.class, Boolean.TRUE);
+
     }
+
 
     @Override
     protected void injectDependencies() {
-        this.getApplicationComponent().inject(this);
-    }
-
-    @OnItemSelected(R.id.spinner_category)
-    public void onItemSelected(int position) {
-        categorySelected = String.valueOf(categorySpinner.getSelectedItem());
-    }
-
-    @OnClick(R.id.checkbox_ebay)
-    public void onCheckBoxEbay(View view) {
-        boolean checked = ((CheckBox) view).isChecked();
-        enabledRepositoryMap.put(EbayProductDataSource.class, checked);
-    }
-
-    @OnClick(R.id.checkbox_etsy)
-    public void onCheckBoxEtsy(View view) {
-        boolean checked = ((CheckBox) view).isChecked();
-        enabledRepositoryMap.put(EtsyProductDataSource.class, checked);
+        this.getComponent(ProductPickerSettingsComponent.class).inject(this);
     }
 
 }

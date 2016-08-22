@@ -34,7 +34,7 @@ public class EbayResultsDeserializer implements JsonDeserializer<List<Product>> 
     public List<Product> deserialize(JsonElement je, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         List<Product> ebayProductsList = new ArrayList<>();
 
-        JsonElement results = je.getAsJsonObject().get("findItemsByKeywordsResponse")
+        JsonElement results = je.getAsJsonObject().get("findItemsAdvancedResponse")
                 .getAsJsonArray().get(0)                //if you don't catch them as json arrays first, it complains
                 .getAsJsonObject().get("searchResult")
                 .getAsJsonArray().get(0)                //with a NOT a Json object exception

@@ -42,6 +42,7 @@ public class ProductPickerModule {
     private Float maxprice = DEFAULT_MAX_PRICE;
     private Float minprice = DEFAULT_MIN_PRICE;
     private Map<Class, Boolean> enabledRepositoryMap = new HashMap<Class, Boolean>();
+    private List<String> chosenCategoriesList = new ArrayList<String>();
     private Context context;
     private long wishlistId;
 
@@ -52,9 +53,10 @@ public class ProductPickerModule {
         this.wishlistId = wishlistId;
     }
 
-    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, String keywords, Float maxprice, Float minprice, long wishlistId) {
+    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, List<String> chosenCategoriesList, String category, String keywords, Float maxprice, Float minprice, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;
+        this.chosenCategoriesList = chosenCategoriesList;
         this.category = category;
         this.keywords = keywords;
         this.maxprice = maxprice;
@@ -67,7 +69,7 @@ public class ProductPickerModule {
     GetNetProductsUseCase provideGetNetProductListUseCase(List<ProductRepository> productRepositoryList,
                                                        CurrencyRepository currencyRepository,
                                                        EventBus eventBus) {
-        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, category, keywords, maxprice, minprice, wishlistId, eventBus);
+        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, chosenCategoriesList, category, keywords, maxprice, minprice, wishlistId, eventBus);
     }
 
     //Edit this method to add new product data sources

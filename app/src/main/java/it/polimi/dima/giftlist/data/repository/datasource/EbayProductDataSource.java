@@ -41,10 +41,19 @@ public class EbayProductDataSource implements ProductRepository {
 
     @Override
     public Observable<List<Product>> getProductList(String category, String keywords, Float maxprice, Float minprice, int offset) {
-        return mEbayApi.getItems(keywords, offset/PRODUCT_PER_PAGE + 1,
+        Timber.d("ebay " + keywords + category);
+        if (category!="") {
+        return mEbayApi.getItems(keywords, category, offset/PRODUCT_PER_PAGE + 1,
                                 QUERY_NAME_MAX, maxprice,
                                 QUERY_NAME_MIN, minprice);
+        } else {
+            return mEbayApi.getItems(keywords, offset/PRODUCT_PER_PAGE + 1,
+                    QUERY_NAME_MAX, maxprice,
+                    QUERY_NAME_MIN, minprice);
+        }
     }
+
+
 
     public static String getHQImageUrl(EbayProduct product) {
         StringBuffer myString = new StringBuffer();
@@ -74,5 +83,10 @@ public class EbayProductDataSource implements ProductRepository {
             Timber.d("HQ image not found for product " + product.getId());
             return product.getImageUrl();
         }
+    }
+
+    @Override
+    public List<String> getProperCategory(List<String> chosenCategories) {
+        return null;
     }
 }

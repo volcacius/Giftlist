@@ -20,6 +20,14 @@
     <string name="wishlist_added">Wishlist added</string>
     <string name="action_add_product">Add Product</string>
     <string name="action_add_wishlist">Add Wishlist</string>
+    <string name="ages_prompt">Select age</string>
+
+    <string-array name="ages">
+        <item>baby</item>
+        <item>kid</item>
+        <item>young</item>
+        <item>adult</item>
+    </string-array>
     <string-array name="etsy_categories">
         <item>accessories</item>
         <item>art</item>
@@ -53,11 +61,51 @@
         <item>weddings</item>
         <item>woodworking</item>
     </string-array>
+    <string-array name="ebay_categories">
+        <item>Antiques</item>
+        <item>Art</item>
+        <item>Baby</item>
+        <item>Books</item>
+        <item>Business e Industrial</item>
+        <item>Cameras e Photo</item>
+        <item>Cell Phones e Accessories</item>
+        <item>Clothing, Shoes e Accessories</item>
+        <item>Coins e Paper Money</item>
+        <item>Collectibles</item>
+        <item>Computers/Tablets e Networking</item>
+        <item>Consumer Electronics</item>
+        <item>Crafts</item>
+        <item>Dolls e Bears</item>
+        <item>DVDs e Movies</item>
+        <item>Entertainment Memorabilia</item>
+        <item>Gift Cards e Coupons</item>
+        <item>Health e Beauty</item>
+        <item>Home e Garden</item>
+        <item>Jewelry e Watches</item>
+        <item>Music</item>
+        <item>Musical Instruments e Gear</item>
+        <item>Pet Supplies</item>
+        <item>Pottery e Glass</item>
+        <item>Real Estate</item>
+        <item>Specialty Services</item>
+        <item>Sporting Goods</item>
+        <item>Sports Mem, Cards e Fan Shop</item>
+        <item>Stamps</item>
+        <item>Tickets e Experiences</item>
+        <item>Toys e Hobbies</item>
+        <item>Travel</item>
+        <item>Video Games e Consoles</item>
+        <item>Everything Else</item>
+    </string-array>
     <string-array name="occasions">
         <item>birthday</item>
         <item>anniversary</item>
-        <item>degree</item>
+        <item>graduation</item>
+        <item>Christmas</item>
         <item>wedding</item>
+        <item>christening</item>
+        <item>thank you</item>
+        <item>engagement</item>
         <item>other</item>
     </string-array>
 </resources>
