@@ -8,7 +8,7 @@ public class EbayProduct extends Product {
     String productPage;
 
     public EbayProduct(String name, String description, long listing_id, float price,
-                       CurrencyType currencyType, String url_170x135, String url_page, String imageUri) {
+                       CurrencyType currencyType, String url_170x135, String imageUri, String url_page) {
         this.name = name;
         this.description = description;
         this.id = listing_id;
