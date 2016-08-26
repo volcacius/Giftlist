@@ -2,16 +2,21 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,6 +66,27 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     @Bind(R.id.button_more_options)
     Button moreButton;
 
+    @Bind(R.id.checkbox_art)
+    CheckBox artCheckbox;
+
+    @Bind(R.id.checkbox_games)
+    CheckBox gamesCheckbox;
+
+    @Bind(R.id.checkbox_sports)
+    CheckBox sportsCheckbox;
+
+    @Bind(R.id.checkbox_technology)
+    CheckBox techCheckbox;
+
+    @Bind(R.id.checkbox_travelling)
+    CheckBox travelCheckbox;
+
+    @Bind(R.id.checkbox_handcraft)
+    CheckBox handcraftCheckbox;
+
+    @Bind(R.id.category_checkboxes)
+    LinearLayout categoryCheckboxes;
+
     HashMap<Class,Boolean> enabledRepositoryMap;
     ArrayList<String> chosenCategoriesList;
 
@@ -71,16 +97,19 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
 
     @OnClick(R.id.button_more_options)
     public void revealMoreOptions() {
-        if(ageSpinner.getVisibility() == View.GONE) {
+        if ((ageSpinner.getVisibility() == View.GONE) && (checkOccasionForAge())) {
             ageSpinner.setVisibility(View.VISIBLE);
-        } else {
+        } else if (keywordsEditText.getVisibility() == View.GONE){
             keywordsEditText.setVisibility(View.VISIBLE);
+        } else {
+            categoryCheckboxes.setVisibility(View.VISIBLE);
             moreButton.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.button_start_product_activity)
     public void startProductActivity(){
+        chosenCategoriesList = getChosenCategoriesFromUI();
         Float minprice;
         Float maxprice;
         try
@@ -111,6 +140,47 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
                                                 wishlistId);
     }
 
+    private ArrayList<String> getChosenCategoriesFromUI() {
+        chosenCategoriesList = new ArrayList<>();
+        String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
+        chosenCategoriesList.add(occasion);
+        if (ageSpinner.getVisibility()==View.VISIBLE) {
+            chosenCategoriesList.add(ageSelected);
+        }
+
+        if (categoryCheckboxes.getVisibility() == View.VISIBLE) {
+            if (gamesCheckbox.isChecked()) {
+                chosenCategoriesList.add("games");
+            }
+            if (handcraftCheckbox.isChecked()) {
+                chosenCategoriesList.add("handcraft");
+            }
+            if (techCheckbox.isChecked()) {
+                chosenCategoriesList.add("tech");
+            }
+            if (sportsCheckbox.isChecked()) {
+                chosenCategoriesList.add("sports");
+            }
+            if (travelCheckbox.isChecked()) {
+                chosenCategoriesList.add("travel");
+            }
+            if (artCheckbox.isChecked()) {
+                chosenCategoriesList.add("art");
+            }
+        }
+
+        return chosenCategoriesList;
+    }
+
+    private boolean checkOccasionForAge(){
+        List<String> ageOccasions = new ArrayList<>();
+        ageOccasions.addAll(Arrays.asList("wedding","christening","graduation","engagement","anniversary"));
+        if (ageOccasions.contains(getPresenter().getWishlist(wishlistId).getOccasion())) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,19 +201,8 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         keywordsEditText.setText(EMPTY_STRING);
-        String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
-        chosenCategoriesList = CategoryDeterminer.getCategoriesFromOccasion(occasion);
-        chosenCategoriesList.addAll(CategoryDeterminer.getCategoriesFromAge(ageSelected));
-        Timber.d(occasion);
-        if (!chosenCategoriesList.isEmpty()) {
-            Timber.d("recommended categories " + chosenCategoriesList.get(0));
-            keywordsEditText.setVisibility(View.GONE);
-            ageSpinner.setVisibility(View.GONE);
-        } else {
-            Timber.d("no recommended categories ");
-            moreButton.setVisibility(View.GONE);
-        }
 
         //for now set them true by default
         enabledRepositoryMap = new HashMap<>();

@@ -45,6 +45,7 @@ public class CategoryDeterminer {
 
     public static ArrayList<String> getCategoriesFromAge(String ageSelected) {
         ArrayList<String> categories = new ArrayList<>();
+
         categories.add(ageSelected);
         return categories;
     }

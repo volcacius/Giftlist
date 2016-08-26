@@ -32,12 +32,14 @@
         android:background="@android:drawable/btn_dropdown"
         android:entries="@array/ages"
         android:prompt="@string/ages_prompt"
+        android:visibility="gone"
         android:spinnerMode="dropdown"/>
 
     <EditText
         android:id="@+id/text_keywords"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:hint="@string/keyword_hint"/>
 
     <Button
@@ -45,6 +47,57 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="More"/>
+
+
+
+    <LinearLayout
+        android:id="@+id/category_checkboxes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Does he like these things?"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_handcraft"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_handcraft"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_sports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_sports"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_games"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_games"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_art"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_art"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_technology"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_technology"/>
+
+        <CheckBox
+            android:id="@+id/checkbox_travelling"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_travelling"/>
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_start_product_activity"

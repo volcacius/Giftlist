@@ -6,6 +6,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -87,6 +89,67 @@ public class EbayProductDataSource implements ProductRepository {
 
     @Override
     public List<String> getProperCategory(List<String> chosenCategories) {
-        return null;
+        HashSet<String> ebayCategoriesSet = new HashSet<>();
+        List<String> ebayCategories = new ArrayList<>();
+        for (String c : chosenCategories) {
+            Timber.d("getNetProd" + c);
+            switch (c) {
+                case "games": {
+                    ebayCategoriesSet.add("1249");
+                    break;
+                }
+                case "art": {
+                    ebayCategoriesSet.add("550");
+                    break;
+                }
+                case "sports": {
+                    ebayCategoriesSet.add("888");
+                    break;
+                }
+                case "tech": {
+                    ebayCategoriesSet.add("293");
+                    ebayCategoriesSet.add("58058");
+                    break;
+                }
+                case "travel": {
+                    ebayCategoriesSet.add("3252");
+                    break;
+                }
+                case "baby":
+                case "newborn":
+                case "christening": {
+                    ebayCategoriesSet.add("2984");
+                    break;
+                }
+                case "kid": {
+                    ebayCategoriesSet.add("220");
+                    break;
+                }
+                case "young": {
+                    ebayCategoriesSet.add("172008");
+                    break;
+                }
+                case "wedding": {
+                    //ebayCategories.add("14339");
+                    break;
+                }
+                case "handcraft": {
+                    ebayCategoriesSet.add("14339");
+                    break;
+                }
+                case "anniversary":
+                case "engagement": {
+                    ebayCategoriesSet.add("281");
+                    break;
+                }
+            }
+
+        }
+
+        ebayCategories.addAll(ebayCategoriesSet);
+        if (ebayCategoriesSet.isEmpty()) {
+            ebayCategoriesSet.add("99");
+        }
+        return ebayCategories;
     }
 }

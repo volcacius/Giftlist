@@ -11,6 +11,8 @@ import it.polimi.dima.giftlist.data.net.etsy.EtsyApi;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -40,6 +42,69 @@ public class EtsyProductDataSource implements ProductRepository {
 
     @Override
     public List<String> getProperCategory(List<String> chosenCategories) {
-        return null;
+
+        HashSet<String> etsyCategoriesSet = new HashSet<>();
+        List<String> etsyCategories = new ArrayList<>();
+
+        for (String c : chosenCategories) {
+            switch (c) {
+                case "games": {
+                    etsyCategoriesSet.add("geekery");
+                    break;
+                }
+                case "art": {
+                    etsyCategoriesSet.add("art");
+                    break;
+                }
+                case "sports": {
+                    //etsyCategories.add("888");
+                    break;
+                }
+                case "tech": {
+                    break;
+                }
+                case "travel": {
+                    etsyCategoriesSet.add("holidays");
+                    break;
+                }
+                case "baby":
+                case "newborn":
+                case "christening": {
+                    etsyCategoriesSet.add("baby");
+                    break;
+                }
+                case "kid": {
+                    etsyCategoriesSet.add("children");
+                    etsyCategoriesSet.add("toys");
+                    break;
+                }
+                case "young": {
+                    //etsyCategories.add("172008");
+                    break;
+                }
+                case "wedding": {
+                    //ebayCategories.add("14339");
+                    break;
+                }
+                case "handcraft": {
+                    etsyCategoriesSet.add("needlecraft");
+                    etsyCategoriesSet.add("knitting");
+                    break;
+                }
+                case "anniversary":
+                case "engagement": {
+                    etsyCategoriesSet.add("jewelry");
+                    break;
+                }
+            }
+
+        }
+
+        etsyCategories.addAll(etsyCategoriesSet);
+
+        if (etsyCategoriesSet.isEmpty()) {
+            etsyCategoriesSet.add("");
+        }
+        return etsyCategories;
     }
 }

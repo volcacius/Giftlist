@@ -21,6 +21,12 @@
     <string name="action_add_product">Add Product</string>
     <string name="action_add_wishlist">Add Wishlist</string>
     <string name="ages_prompt">Select age</string>
+    <string name="checkbox_sports">Sports</string>
+    <string name="checkbox_games">Videogames</string>
+    <string name="checkbox_art">Art</string>
+    <string name="checkbox_technology">Technology</string>
+    <string name="checkbox_travelling">Travelling</string>
+    <string name="checkbox_handcraft">Handcraft</string>
 
     <string-array name="ages">
         <item>baby</item>
