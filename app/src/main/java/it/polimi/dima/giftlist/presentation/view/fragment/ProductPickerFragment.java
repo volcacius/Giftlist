@@ -22,6 +22,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
@@ -56,9 +57,7 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
     @Arg
     HashMap<Class, Boolean> enabledProductRepositoryMap;
     @Arg
-    ArrayList<String> chosenCategoriesList;
-    @Arg
-    String category;
+    ArrayList<CategoryType> chosenCategoriesList;
     @Arg
     String keywords;
 

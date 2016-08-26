@@ -15,6 +15,7 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
@@ -38,26 +39,23 @@ public class ProductPickerModule {
 
     //keywords and category has to be initialized by default to something since they are used in the @Provides, otherwise Dagger won't build
     private String keywords = EMPTY_STRING;
-    private String category = EMPTY_STRING;
     private Float maxprice = DEFAULT_MAX_PRICE;
     private Float minprice = DEFAULT_MIN_PRICE;
     private Map<Class, Boolean> enabledRepositoryMap = new HashMap<Class, Boolean>();
-    private List<String> chosenCategoriesList = new ArrayList<String>();
+    private List<CategoryType> chosenCategoriesList = new ArrayList<CategoryType>();
     private Context context;
     private long wishlistId;
 
-    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, String category, long wishlistId) {
+    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;
-        this.category = category;
         this.wishlistId = wishlistId;
     }
 
-    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, List<String> chosenCategoriesList, String category, String keywords, Float maxprice, Float minprice, long wishlistId) {
+    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, List<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;
         this.chosenCategoriesList = chosenCategoriesList;
-        this.category = category;
         this.keywords = keywords;
         this.maxprice = maxprice;
         this.minprice = minprice;
@@ -69,7 +67,7 @@ public class ProductPickerModule {
     GetNetProductsUseCase provideGetNetProductListUseCase(List<ProductRepository> productRepositoryList,
                                                        CurrencyRepository currencyRepository,
                                                        EventBus eventBus) {
-        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, chosenCategoriesList, category, keywords, maxprice, minprice, wishlistId, eventBus);
+        return new GetNetProductsUseCase(productRepositoryList, currencyRepository, chosenCategoriesList, keywords, maxprice, minprice, wishlistId, eventBus);
     }
 
     //Edit this method to add new product data sources

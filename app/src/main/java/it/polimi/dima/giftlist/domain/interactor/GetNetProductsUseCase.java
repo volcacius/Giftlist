@@ -18,6 +18,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Currency;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
@@ -38,9 +39,8 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
     private List<ProductRepository> productRepositoryList;
-    private List<String> chosenCategoriesList;
+    private List<CategoryType> chosenCategoriesList;
     private CurrencyRepository currencyRepository;
-    private String category;
     private String keywords;
     private Float maxprice;
     private Float minprice;
@@ -51,8 +51,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     @Inject
     public GetNetProductsUseCase(List<ProductRepository> productRepositoryList,
                                  CurrencyRepository currencyRepository,
-                                 List<String> chosenCategoriesList,
-                                 String category,
+                                 List<CategoryType> chosenCategoriesList,
                                  String keywords,
                                  Float maxprice,
                                  Float minprice,
@@ -61,7 +60,6 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
         this.currencyRepository = currencyRepository;
         this.productRepositoryList = productRepositoryList;
         this.chosenCategoriesList = chosenCategoriesList;
-        this.category = category;
         this.keywords = keywords;
         this.maxprice = maxprice;
         this.minprice = minprice;

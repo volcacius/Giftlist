@@ -11,6 +11,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import hugo.weaving.DebugLog;
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductDetailsPagerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerActivity;
@@ -28,8 +29,8 @@ public class IntentStarter {
     public IntentStarter() {
     }
 
-                                           public void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<String> chosenCategoriesList, String category, String keywords, Float maxprice, Float minprice, long wishlistId) {
-        Intent intentToLaunch = ProductPickerActivity.getCallingIntent(context, enabledRepositoryMap, chosenCategoriesList, category, keywords, maxprice, minprice, wishlistId);
+                                           public void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId) {
+        Intent intentToLaunch = ProductPickerActivity.getCallingIntent(context, enabledRepositoryMap, chosenCategoriesList, keywords, maxprice, minprice, wishlistId);
         context.startActivity(intentToLaunch);
     }
 

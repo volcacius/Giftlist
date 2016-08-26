@@ -4,6 +4,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import org.greenrobot.eventbus.EventBus;
 
+import clojure.lang.Compiler;
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.currency.CurrencyXmlModel;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
@@ -41,58 +43,55 @@ public class EtsyProductDataSource implements ProductRepository {
     }
 
     @Override
-    public List<String> getProperCategory(List<String> chosenCategories) {
+    public List<String> getProperCategory(List<CategoryType> chosenCategories) {
 
         HashSet<String> etsyCategoriesSet = new HashSet<>();
         List<String> etsyCategories = new ArrayList<>();
 
-        for (String c : chosenCategories) {
+        for (CategoryType c : chosenCategories) {
             switch (c) {
-                case "games": {
+                case NERD: {
                     etsyCategoriesSet.add("geekery");
                     break;
                 }
-                case "art": {
+                case ART: {
                     etsyCategoriesSet.add("art");
                     break;
                 }
-                case "sports": {
+                case SPORT: {
                     //etsyCategories.add("888");
                     break;
                 }
-                case "tech": {
+                case TECH: {
                     break;
                 }
-                case "travel": {
+                case TRAVEL: {
                     etsyCategoriesSet.add("holidays");
                     break;
                 }
-                case "baby":
-                case "newborn":
-                case "christening": {
+                case BABY: {
                     etsyCategoriesSet.add("baby");
                     break;
                 }
-                case "kid": {
+                case KID: {
                     etsyCategoriesSet.add("children");
                     etsyCategoriesSet.add("toys");
                     break;
                 }
-                case "young": {
+                case YOUNG: {
                     //etsyCategories.add("172008");
                     break;
                 }
-                case "wedding": {
+                case WEDDING: {
                     //ebayCategories.add("14339");
                     break;
                 }
-                case "handcraft": {
+                case HANDCRAFT: {
                     etsyCategoriesSet.add("needlecraft");
                     etsyCategoriesSet.add("knitting");
                     break;
                 }
-                case "anniversary":
-                case "engagement": {
+                case ROMANTIC: {
                     etsyCategoriesSet.add("jewelry");
                     break;
                 }

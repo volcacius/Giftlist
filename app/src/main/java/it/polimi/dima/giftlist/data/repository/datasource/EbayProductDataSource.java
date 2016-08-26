@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import hugo.weaving.DebugLog;
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.net.ebay.EbayApi;
@@ -88,57 +89,55 @@ public class EbayProductDataSource implements ProductRepository {
     }
 
     @Override
-    public List<String> getProperCategory(List<String> chosenCategories) {
+    public List<String> getProperCategory(List<CategoryType> chosenCategories) {
         HashSet<String> ebayCategoriesSet = new HashSet<>();
         List<String> ebayCategories = new ArrayList<>();
-        for (String c : chosenCategories) {
+        for (CategoryType c : chosenCategories) {
+
             Timber.d("getNetProd" + c);
             switch (c) {
-                case "games": {
+                case NERD: {
                     ebayCategoriesSet.add("1249");
                     break;
                 }
-                case "art": {
+                case ART: {
                     ebayCategoriesSet.add("550");
                     break;
                 }
-                case "sports": {
+                case SPORT: {
                     ebayCategoriesSet.add("888");
                     break;
                 }
-                case "tech": {
+                case TECH: {
                     ebayCategoriesSet.add("293");
                     ebayCategoriesSet.add("58058");
                     break;
                 }
-                case "travel": {
+                case TRAVEL: {
                     ebayCategoriesSet.add("3252");
                     break;
                 }
-                case "baby":
-                case "newborn":
-                case "christening": {
+                case BABY:{
                     ebayCategoriesSet.add("2984");
                     break;
                 }
-                case "kid": {
+                case KID: {
                     ebayCategoriesSet.add("220");
                     break;
                 }
-                case "young": {
+                case YOUNG: {
                     ebayCategoriesSet.add("172008");
                     break;
                 }
-                case "wedding": {
+                case WEDDING: {
                     //ebayCategories.add("14339");
                     break;
                 }
-                case "handcraft": {
+                case HANDCRAFT: {
                     ebayCategoriesSet.add("14339");
                     break;
                 }
-                case "anniversary":
-                case "engagement": {
+                case ROMANTIC: {
                     ebayCategoriesSet.add("281");
                     break;
                 }

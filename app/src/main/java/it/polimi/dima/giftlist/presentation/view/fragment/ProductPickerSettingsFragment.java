@@ -25,6 +25,7 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
+import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
@@ -88,7 +89,7 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     LinearLayout categoryCheckboxes;
 
     HashMap<Class,Boolean> enabledRepositoryMap;
-    ArrayList<String> chosenCategoriesList;
+    ArrayList<CategoryType> chosenCategoriesList;
 
     @OnItemSelected(R.id.select_age)
     public void onItemSelected(int position) {
@@ -133,39 +134,38 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         intentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 chosenCategoriesList,
-                                                EMPTY_STRING,//TODO remove later
                                                 keywordsEditText.getText().toString(),
                                                 maxprice,
                                                 minprice,
                                                 wishlistId);
     }
 
-    private ArrayList<String> getChosenCategoriesFromUI() {
+    private ArrayList<CategoryType> getChosenCategoriesFromUI() {
         chosenCategoriesList = new ArrayList<>();
         String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
-        chosenCategoriesList.add(occasion);
+        chosenCategoriesList.add(CategoryType.find(occasion));
         if (ageSpinner.getVisibility()==View.VISIBLE) {
-            chosenCategoriesList.add(ageSelected);
+            chosenCategoriesList.add(CategoryType.find(ageSelected));
         }
 
         if (categoryCheckboxes.getVisibility() == View.VISIBLE) {
             if (gamesCheckbox.isChecked()) {
-                chosenCategoriesList.add("games");
+                chosenCategoriesList.add(CategoryType.NERD);
             }
             if (handcraftCheckbox.isChecked()) {
-                chosenCategoriesList.add("handcraft");
+                chosenCategoriesList.add(CategoryType.HANDCRAFT);
             }
             if (techCheckbox.isChecked()) {
-                chosenCategoriesList.add("tech");
+                chosenCategoriesList.add(CategoryType.TECH);
             }
             if (sportsCheckbox.isChecked()) {
-                chosenCategoriesList.add("sports");
+                chosenCategoriesList.add(CategoryType.SPORT);
             }
             if (travelCheckbox.isChecked()) {
-                chosenCategoriesList.add("travel");
+                chosenCategoriesList.add(CategoryType.TRAVEL);
             }
             if (artCheckbox.isChecked()) {
-                chosenCategoriesList.add("art");
+                chosenCategoriesList.add(CategoryType.ART);
             }
         }
 
