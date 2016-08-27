@@ -101,8 +101,8 @@ public class EtsyProductDataSource implements ProductRepository {
 
         etsyCategories.addAll(etsyCategoriesSet);
 
-        if (etsyCategoriesSet.isEmpty()) {
-            etsyCategoriesSet.add("");
+        if (etsyCategories.isEmpty()) {
+            etsyCategories.add("");
         }
         return etsyCategories;
     }

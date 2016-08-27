@@ -226,7 +226,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         targets.add(myTarget);
         picasso
                 .load(product.getImageUrl())
-                .resize(ImageConstants.IMAGE_WIDTH, ImageConstants.IMAGE_HEIGHT)//The other dimension will be scaled properly preserving aspect ratio
+                .resize(ImageConstants.IMAGE_WIDTH_SAVE, ImageConstants.IMAGE_HEIGHT_SAVE)//The other dimension will be scaled properly preserving aspect ratio
                 .centerInside()
                 .onlyScaleDown()
                 .into(myTarget);

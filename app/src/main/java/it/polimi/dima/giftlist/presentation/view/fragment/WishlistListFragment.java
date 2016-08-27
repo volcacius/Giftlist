@@ -24,6 +24,7 @@ import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
 import it.polimi.dima.giftlist.util.ToastFactory;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -42,6 +43,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timber.d("wlList fragment onCreated");
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
@@ -58,6 +60,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Timber.d("wlList fragment onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistListAdapter);
 
@@ -88,11 +91,13 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override public void setData(List<Wishlist> data) {
+        Timber.d("wlList fragment setData");
         wishlistListAdapter.setWishlistList(data);
         wishlistListAdapter.notifyDataSetChanged();
     }
 
     @Override public void loadData(boolean pullToRefresh) {
+        Timber.d("wlList fragment loadData");
         presenter.subscribe(pullToRefresh);
     }
 

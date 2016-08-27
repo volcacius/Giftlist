@@ -1,11 +1,7 @@
 package it.polimi.dima.giftlist.presentation.view.adapter;
 
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import javax.inject.Inject;
 
@@ -36,10 +24,7 @@ import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
-import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
-import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.util.ImageConstants;
-import rx.Observer;
 import timber.log.Timber;
 
 /**
@@ -107,7 +92,7 @@ public class ProductPickerAdapter extends BaseAdapter {
             productPickerViewHolder.productThumb.setImageDrawable(colorDrawable);
         } else {
             picasso.load(currentProduct.getImageUrl())
-                    .resize(ImageConstants.IMAGE_WIDTH, ImageConstants.IMAGE_HEIGHT)
+                    .resize(ImageConstants.IMAGE_WIDTH_VIEW, ImageConstants.IMAGE_HEIGHT_VIEW)
                     .centerCrop()
                     .into(productPickerViewHolder.productThumb);
         }

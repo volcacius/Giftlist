@@ -25,6 +25,7 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
 
     private final LayoutInflater layoutInflater;
     private final Context context;
+
     private List<Wishlist> wishlistList;
     private OnWishlistClickListener onWishlistClickListener;
 

@@ -30,6 +30,7 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
+        //deal with rotation?
         createComponent();
         if (savedInstanceState == null) {
             addFragment(R.id.wishlistlist_activity_content, new WishlistListFragment());

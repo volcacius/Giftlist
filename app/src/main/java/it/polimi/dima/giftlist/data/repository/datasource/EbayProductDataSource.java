@@ -71,6 +71,7 @@ public class EbayProductDataSource implements ProductRepository {
                 count++;
             }
         } catch (Exception e) {
+            Timber.d("HQ url is " + product.getProductPage());
             Timber.d("Ebay HQ image exception is: " + e.getMessage());
         }
 
@@ -94,7 +95,7 @@ public class EbayProductDataSource implements ProductRepository {
         List<String> ebayCategories = new ArrayList<>();
         for (CategoryType c : chosenCategories) {
 
-            Timber.d("getNetProd" + c);
+            Timber.d("getNetProd " + c);
             switch (c) {
                 case NERD: {
                     ebayCategoriesSet.add("1249");
@@ -146,9 +147,11 @@ public class EbayProductDataSource implements ProductRepository {
         }
 
         ebayCategories.addAll(ebayCategoriesSet);
-        if (ebayCategoriesSet.isEmpty()) {
-            ebayCategoriesSet.add("99");
+
+        if (ebayCategories.isEmpty()) {
+            ebayCategories.add("99");
         }
+
         return ebayCategories;
     }
 }

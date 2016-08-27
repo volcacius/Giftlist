@@ -29,10 +29,14 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
 
     @Override
     public void subscribe(boolean pullToRefresh) {
+        if(!useCase.isUnsubscribed()) {
+            unsubscribe();
+        }
+        useCase.execute(new BaseSubscriber(pullToRefresh));
         if (isViewAttached()) {
             getView().showLoading(pullToRefresh);
         }
-        useCase.execute(new BaseSubscriber(pullToRefresh));
+
     }
 
     @Override
@@ -50,10 +54,10 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
 
     @Override
     protected void onNext(List<Wishlist> data) {
+        getView().setData(data);
         if (isViewAttached()) {
             getView().showContent();
         }
-        getView().setData(data);
     }
 
     @Subscribe

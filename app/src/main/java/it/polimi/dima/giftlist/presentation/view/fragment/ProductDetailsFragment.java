@@ -17,7 +17,6 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.BindColor;
-import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
@@ -78,7 +77,7 @@ public class ProductDetailsFragment extends BaseFragment {
             File f = new File(product.getImageUri());
             picasso
                     .load(f)
-                    .resize(ImageConstants.IMAGE_WIDTH, ImageConstants.IMAGE_HEIGHT)
+                    .resize(ImageConstants.IMAGE_WIDTH_VIEW, ImageConstants.IMAGE_HEIGHT_VIEW)
                     .centerCrop()
                     .into(productThumb);
         }

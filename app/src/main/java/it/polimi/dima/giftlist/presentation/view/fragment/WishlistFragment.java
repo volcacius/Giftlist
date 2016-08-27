@@ -46,6 +46,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Timber.d("wl fragment onViewCreated");
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
@@ -63,8 +64,10 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Timber.d("wl fragment onViewCreated");
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistAdapter);
+
         wishlistAdapter.setOnProductClickListener(new WishlistAdapter.OnProductClickListener() {
             @Override
             public void onItemClick(View v , int position) {
@@ -96,13 +99,14 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @Override
     public void setData(List<Product> data) {
-        Timber.d("Fragment setData");
+        Timber.d("wl fragment setData");
         wishlistAdapter.setProductList(data);
+        wishlistAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void loadData(boolean pullToRefresh) {
-        Timber.d("Fragment loadData");
+        Timber.d("wl fragment loadData");
         presenter.subscribe(pullToRefresh);
     }
 

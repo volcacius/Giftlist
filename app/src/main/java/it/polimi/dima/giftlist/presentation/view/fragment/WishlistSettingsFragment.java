@@ -54,15 +54,18 @@ public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsVi
     public void startProductPickerSettings(){
 
         String wlName = wlNameEditText.getText().toString();
-        if (wlName == "") {
-            wlName = "Unnamed wl";
-        }
+
+
 
         //If it is 0, it's a wl created from scratch, otherwise I need the id to load previous settings
         if(wishlistId == 0) {
-            Timber.d("new wl");
             Random random = new Random();
             wishlistId = Math.abs(random.nextLong());
+        }
+
+        if (wlName.length() == 0) {
+            Timber.d("the name is empty");
+            wlName = "wl number " + wishlistId;
         }
 
         //addWishlist will either update/insert the wishlist thanks to storio

@@ -77,11 +77,10 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
         for (ProductRepository pr : productRepositoryList) {
             //TODO: implement
             List<String> repoCategories = pr.getProperCategory(chosenCategoriesList);
-            int calls = 0;
+
             if (!repoCategories.isEmpty()) {
                 for (String cat : repoCategories) {
                         productListObservableList.add(pr.getProductList(cat, keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));
-                        calls++;
                     }
             } else {
                 productListObservableList.add(pr.getProductList("",keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));
