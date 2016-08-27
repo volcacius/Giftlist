@@ -59,7 +59,7 @@
 # Gson rules
 -keepattributes Signature
 -keep class sun.misc.Unsafe { *; }
-# Keep non static or private fields of models so Gson can find their names
+# Keep non static or private fields of models so Gson can getCategoryTypeFromString their names
 -keepclassmembers class it.polimi.dima.giftlist.data.model.** {
     !static !private <fields>;
 }

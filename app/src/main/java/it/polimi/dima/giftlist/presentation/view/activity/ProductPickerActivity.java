@@ -29,7 +29,6 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
 
     private static final String EXTRA_REPOSITORIES_SELECTED = "repositories";
     private static final String EXTRA_CHOSEN_CATEGORIES_SELECTED = "chosen_categories";
-    private static final String EXTRA_CATEGORY_SELECTED = "category"; //TODO soon redundant
     private static final String EXTRA_KEYWORDS = "keywords";
     private static final String EXTRA_MAXPRICE = "maxprice";
     private static final String EXTRA_MINPRICE = "minprice";
@@ -54,7 +53,6 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         if (savedInstanceState == null) {
             enabledRepositoryMap = (HashMap<Class, Boolean>) getIntent().getSerializableExtra(EXTRA_REPOSITORIES_SELECTED);
             chosenCategoriesList = (ArrayList<CategoryType>) getIntent().getSerializableExtra(EXTRA_CHOSEN_CATEGORIES_SELECTED);
-            category = getIntent().getStringExtra(EXTRA_CATEGORY_SELECTED);
             keywords = getIntent().getStringExtra(EXTRA_KEYWORDS);
             maxprice = getIntent().getFloatExtra(EXTRA_MAXPRICE, (float) 1000.00);
             minprice = getIntent().getFloatExtra(EXTRA_MINPRICE, (float) 0.00);

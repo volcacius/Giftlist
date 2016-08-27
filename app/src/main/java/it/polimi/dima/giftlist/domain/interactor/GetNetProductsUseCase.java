@@ -76,18 +76,14 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
 
         for (ProductRepository pr : productRepositoryList) {
             //TODO: implement
-            Timber.d("getNetProduct " + pr.getClass().toString());
             List<String> repoCategories = pr.getProperCategory(chosenCategoriesList);
-            Timber.d("getNetProduct list is " + repoCategories.size() + " long");
             int calls = 0;
             if (!repoCategories.isEmpty()) {
                 for (String cat : repoCategories) {
-                    Timber.d("getNetProduct category selected: " + cat + " call  number " + calls);
                         productListObservableList.add(pr.getProductList(cat, keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));
                         calls++;
                     }
             } else {
-                Timber.d("getNetProduct empty chosenCategoriesList");
                 productListObservableList.add(pr.getProductList("",keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));
             }
         }

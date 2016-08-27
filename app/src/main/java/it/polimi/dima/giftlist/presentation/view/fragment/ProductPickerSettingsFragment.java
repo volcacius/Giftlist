@@ -2,14 +2,11 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
@@ -23,17 +20,13 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
-import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
-import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
 import it.polimi.dima.giftlist.presentation.presenter.ProductPickerSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerSettingsView;
-import it.polimi.dima.giftlist.util.CategoryDeterminer;
-import timber.log.Timber;
 
 /**
  * Created by Elena on 10/02/2016.
@@ -143,9 +136,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     private ArrayList<CategoryType> getChosenCategoriesFromUI() {
         chosenCategoriesList = new ArrayList<>();
         String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
-        chosenCategoriesList.add(CategoryType.find(occasion));
+        chosenCategoriesList.add(CategoryType.getCategoryTypeFromString(occasion));
         if (ageSpinner.getVisibility()==View.VISIBLE) {
-            chosenCategoriesList.add(CategoryType.find(ageSelected));
+            chosenCategoriesList.add(CategoryType.getCategoryTypeFromString(ageSelected));
         }
 
         if (categoryCheckboxes.getVisibility() == View.VISIBLE) {

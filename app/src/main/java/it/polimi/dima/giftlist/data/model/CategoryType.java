@@ -32,7 +32,7 @@ public enum CategoryType {
         return text;
     }
 
-    public static CategoryType find(String name) {
+    public static CategoryType getCategoryTypeFromString(String name) {
         for (CategoryType c : CategoryType.values()) {
             if (c.getValues().contains(name)) {
                 return c;
