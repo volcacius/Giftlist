@@ -170,6 +170,8 @@ dependencies {
     compile("com.crashlytics.sdk.android:crashlytics:$CRASHLYTICS_VERSION") {
         transitive = true;
     }
+    compile 'com.bignerdranch.android:recyclerview-multiselect:+'
+
 
     //dependencies provided on compile only on debug builds
     debugCompile "com.jakewharton.timber:timber:$TIMBER_VERSION"

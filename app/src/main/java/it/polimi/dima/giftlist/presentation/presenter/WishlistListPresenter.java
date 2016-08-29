@@ -2,6 +2,8 @@ package it.polimi.dima.giftlist.presentation.presenter;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
+import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -10,12 +12,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import it.polimi.dima.giftlist.data.db.table.WishlistTable;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.domain.interactor.GetWishlistListUseCase;
 import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -70,6 +74,18 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                 .asRxObservable()
                 .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
                 .subscribe(observer);
+    }
+
+    public void removeWishlist(long wishlistId) {
+        Timber.d("deleting wishlist " +wishlistId);
+        db.delete()
+                .byQuery(DeleteQuery.builder()
+                        .table(WishlistTable.TABLE)
+                        .where("id = ?")
+                        .whereArgs(wishlistId)
+                        .build())
+                .prepare()
+                .executeAsBlocking();
     }
 
     private class WishlistPutObserver implements Observer<PutResults<Wishlist>> {
