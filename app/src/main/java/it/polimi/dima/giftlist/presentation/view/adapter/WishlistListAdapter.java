@@ -21,7 +21,7 @@ import timber.log.Timber;
 /**
  * Created by Alessandro on 24/04/16.
  */
-public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapter.ViewHolder> {
+public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.ViewHolder> {
 
     private final LayoutInflater layoutInflater;
     private final Context context;
@@ -46,6 +46,10 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         String wishlistName = wishlistList.get(position).getName();
         holder.wishlistNameTextView.setText(wishlistName);
+
+        // Highlight the item if it's selected
+        holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+
     }
 
     @Override
@@ -56,6 +60,15 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
     @Override
     public int getItemCount() {
         return wishlistList.size();
+    }
+
+    public List<Wishlist> getSelectedWishlists() {
+        List<Integer> positions = super.getSelectedItems();
+        List<Wishlist> selectedWishlists = new ArrayList<>(positions.size());
+        for (Integer i : positions) {
+            selectedWishlists.add(wishlistList.get(i));
+        }
+        return selectedWishlists;
     }
 
     public List<Wishlist> getWishlistList() {
@@ -76,17 +89,31 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
         @Bind(R.id.wishlist_name)
         TextView wishlistNameTextView;
 
+        @Bind(R.id.selected_overlay)
+        View selectedOverlay;
+
         public ViewHolder(View view, OnWishlistClickListener onWishlistClickListener) {
             super(view);
             ButterKnife.bind(this, view);
             bindListener(view, onWishlistClickListener);
+            //itemView.setOnLongClickListener(this);
+
         }
 
         //method to bind the listener
         private void bindListener(View view, OnWishlistClickListener onWishlistClickListener) {
             view.setOnClickListener(v ->
             onWishlistClickListener.onItemClick(v, getPosition()));
+
+            view.setOnLongClickListener(v ->
+                    onWishlistClickListener.onItemLongClick(v, getPosition()));
         }
+/*
+        @Override
+        public boolean onLongClick(View v) {
+            Timber.d("long click");
+            return false;
+        }*/
     }
 
 
@@ -95,5 +122,7 @@ public class WishlistListAdapter extends RecyclerView.Adapter<WishlistListAdapte
     //In Avengers: RecyclerClickListener
     public interface OnWishlistClickListener {
         public void onItemClick(View view , int position);
+
+        public boolean onItemLongClick(View view, int position);
     }
 }
