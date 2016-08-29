@@ -50,6 +50,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Timber.d("wlList fragment onCreated");
+
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);
@@ -67,6 +68,10 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Timber.d("wlList fragment onViewCreated");
+        //to avoid bugs. it would be better to retain selected instances but this is a good enough tradeoff
+        if (actionMode!=null) {
+            actionMode.finish();
+        }
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistListAdapter);
 
@@ -83,10 +88,13 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             @Override
             public boolean onItemLongClick(View view, int position) {
                 Timber.d("fragment long click");
-                if (actionMode == null) {
-                    actionMode =((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
-                }
 
+                if (actionMode == null) {
+                    Timber.d("I'm not in action mode");
+                    actionMode =((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
+                } else {
+                    Timber.d("I'm in action mode");
+                }
                 toggleSelection(position);
 
                 return true;
@@ -94,6 +102,9 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
+
+
+
 
     private void toggleSelection(int position) {
         wishlistListAdapter.toggleSelection(position);
@@ -180,7 +191,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                         removeWishlist(w.getId());
                     }
                     wishlistListAdapter.notifyDataSetChanged();
-                    //wishlistListAdapter.removeItems(adapter.getSelectedItems());
                     mode.finish();
                     return true;
 
@@ -191,8 +201,10 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            Timber.d("destroying action mode");
             wishlistListAdapter.clearSelection();
             actionMode = null;
+            Timber.d("now I have " + wishlistListAdapter.getSelectedWishlists().size());
         }
     }
 }
