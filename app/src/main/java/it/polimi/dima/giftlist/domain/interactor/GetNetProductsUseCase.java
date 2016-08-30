@@ -75,9 +75,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
 
         for (ProductRepository pr : productRepositoryList) {
-            //TODO: implement
             List<String> repoCategories = pr.getProperCategory(chosenCategoriesList);
-
             if (!repoCategories.isEmpty()) {
                 for (String cat : repoCategories) {
                         productListObservableList.add(pr.getProductList(cat, keywords, maxprice, minprice, searchOffset * PRODUCT_PER_PAGE));

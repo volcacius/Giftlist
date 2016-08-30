@@ -92,17 +92,10 @@ public abstract class BaseFragment extends Fragment {
         refWatcher.watch(this);
     }
 
-    /*
-     * This method is useful only to the implementation of injectDependencies in this superclass
-     * If injectDependencies were abstract, it wouldn't be necessary
-     */
     protected ApplicationComponent getApplicationComponent() {
         return ((GiftlistApplication) getActivity().getApplication()).getApplicationComponent();
     }
-
-    /*
-     *
-     */
+    
     abstract protected void injectDependencies();
 
     /**

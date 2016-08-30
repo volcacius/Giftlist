@@ -15,8 +15,7 @@ import it.polimi.dima.giftlist.presentation.module.ProductPickerSettingsModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistSettingsModule;
-import it.polimi.dima.giftlist.presentation.view.activity.BaseActivity;
-import it.polimi.dima.giftlist.presentation.view.activity.MainActivity;
+import it.polimi.dima.giftlist.presentation.view.activity.WelcomeActivity;
 import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductDetailsFragment;
 
@@ -27,7 +26,7 @@ import it.polimi.dima.giftlist.presentation.view.fragment.ProductDetailsFragment
  */
 public interface ApplicationComponent {
 
-    void inject(MainActivity mainActivity);
+    void inject(WelcomeActivity welcomeActivity);
     void inject(BaseFragment baseFragment);
     void inject(ProductDetailsFragment productDetailsFragment);
     void inject(EtsyProductDataSource etsyProductDataSource);

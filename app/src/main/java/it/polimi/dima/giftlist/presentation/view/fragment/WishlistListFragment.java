@@ -38,19 +38,18 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Bind(R.id.contentView)
     RecyclerView recyclerView;
 
-    private ActionModeCallback actionModeCallback = new ActionModeCallback();
-    private ActionMode actionMode;
-
     @Inject
     WishlistListAdapter wishlistListAdapter;
-
     @Inject
     IntentStarter intentStarter;
+
+    //TODO: why init here and not in oncreate?
+    private ActionModeCallback actionModeCallback = new ActionModeCallback();
+    private ActionMode actionMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Timber.d("wlList fragment onCreated");
-
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         setHasOptionsMenu(true);

@@ -133,7 +133,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
     }
 
     @Subscribe
-    public void onProductImageSaved(ProductImageSavedEvent event) throws UnknownProductException{
+    public void onProductImageSaved(ProductImageSavedEvent event) throws UnknownProductException {
 
         Observer observer;
         Product product = event.getProduct();
