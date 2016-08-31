@@ -34,13 +34,13 @@ import timber.log.Timber;
 public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Product>, GetDbProductListUseCase> {
 
     @Inject
-    public WishlistPresenter(EventBus eventBus, GetDbProductListUseCase getDbProductListUseCase, StorIOSQLite db) {
-        super(eventBus, getDbProductListUseCase, db);
+    public WishlistPresenter(GetDbProductListUseCase getDbProductListUseCase, StorIOSQLite db) {
+        super(null, getDbProductListUseCase, db);
     }
 
     @Override
     public void subscribe(boolean pullToRefresh) {
-        if(!useCase.isUnsubscribed()) {
+        if (!useCase.isUnsubscribed()) {
             unsubscribe();
         }
         useCase.execute(new BaseSubscriber(pullToRefresh));
@@ -98,40 +98,15 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
 
     private void deleteImages(String uri) {
 
-            File fdelete = new File(uri);
-            if (fdelete.exists()) {
-                if (fdelete.delete()) {
-                    Timber.d("file Deleted");
-                } else {
-                    Timber.d("file not Deleted");
-                }
+        File fdelete = new File(uri);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                Timber.d("file Deleted");
+            } else {
+                Timber.d("file not Deleted");
             }
+        }
 
     }
 
-    @Subscribe
-    public void onWishlistAddedEvent(WishlistAddedEvent event) {
-        Wishlist wishlist = event.getWishlist();
-        Observer observer = new WishlistPutObserver();
-        db.put()
-                .object(wishlist)
-                .prepare()
-                .asRxObservable()
-                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(observer);
-    }
-
-    private class WishlistPutObserver implements Observer<PutResults<Wishlist>> {
-        @Override
-        public void onCompleted() {
-        }
-        @Override
-        public void onError(Throwable e) {
-
-        }
-        @Override
-        public void onNext(PutResults<Wishlist> wishlistPutResults) {
-
-        }
-    }
 }

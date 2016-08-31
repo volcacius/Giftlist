@@ -1,6 +1,7 @@
 package it.polimi.dima.giftlist.presentation.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,12 +46,10 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String wishlistName = wishlistList.get(position).getName();
-        holder.wishlistNameTextView.setText(wishlistName);
-
+        holder.wishlistNameTextView.setText(wishlistList.get(position).getName());
+        holder.wishlistOccasionTextView.setText(wishlistList.get(position).getOccasion());
         // Highlight the item if it's selected
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
-
     }
 
     @Override
@@ -90,6 +89,9 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         @Bind(R.id.wishlist_name)
         TextView wishlistNameTextView;
 
+        @Bind(R.id.wishlist_occasion)
+        TextView wishlistOccasionTextView;
+
         @Bind(R.id.selected_overlay)
         View selectedOverlay;
 
@@ -107,12 +109,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             view.setOnLongClickListener(v ->
                     onWishlistClickListener.onItemLongClick(v, getPosition()));
         }
-/*
-        @Override
-        public boolean onLongClick(View v) {
-            Timber.d("long click");
-            return false;
-        }*/
     }
 
 

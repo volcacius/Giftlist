@@ -84,8 +84,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
             @Override
             public boolean onItemLongClick(View view, int position) {
-                Timber.d("fragment long click");
-
                 if (actionMode == null) {
                     Timber.d("I'm not in action mode");
                     actionMode =((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);

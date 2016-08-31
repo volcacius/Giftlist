@@ -19,23 +19,20 @@
             android:id="@+id/wishlist_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:singleLine="true"
             android:textSize="16sp"
-            android:textColor="@android:color/black"
-            android:maxLines="1"
             android:ellipsize="end"
-            />
+            android:textColor="@color/material_deep_teal_500"
+            style="@style/Base.TextAppearance.AppCompat.Headline" />
 
         <TextView
-            android:id="@+id/choice_mode_indicator"
-            android:layout_width="wrap_content"
+            android:id="@+id/wishlist_occasion"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:textSize="16sp"
-            android:text="*"
-            android:textColor="@android:color/holo_green_light"
-            android:visibility="invisible"
-            />
+            android:layout_weight="1"
+            android:layout_below="@+id/wishlist_name"
+            android:textColor="@color/material_blue_grey_900"
+            style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
     </RelativeLayout>
 

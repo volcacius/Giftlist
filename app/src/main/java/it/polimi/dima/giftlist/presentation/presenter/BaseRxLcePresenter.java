@@ -62,7 +62,9 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
     @Override
     public void attachView(V view) {
         super.attachView(view);
-        eventBus.register(this);
+        if (eventBus!=null) {
+            eventBus.register(this);
+        }
     }
 
     @Override
@@ -71,7 +73,9 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
         if (!retainInstance) {
             unsubscribe();
         }
-        eventBus.unregister(this);
+        if (eventBus!=null) {
+            eventBus.unregister(this);
+        }
     }
 
     final class BaseSubscriber extends Subscriber<M> {

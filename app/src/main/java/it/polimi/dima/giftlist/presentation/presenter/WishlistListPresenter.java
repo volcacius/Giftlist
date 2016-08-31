@@ -39,8 +39,8 @@ import timber.log.Timber;
 public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, List<Wishlist>, GetWishlistListUseCase> {
 
     @Inject
-    public WishlistListPresenter(EventBus eventBus, GetWishlistListUseCase useCase, StorIOSQLite db) {
-        super(eventBus, useCase, db);
+    public WishlistListPresenter(GetWishlistListUseCase useCase, StorIOSQLite db) {
+        super(null, useCase, db);
     }
 
     @Override
@@ -76,17 +76,6 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
         }
     }
 
-    @Subscribe
-    public void onWishlistAddedEvent(WishlistAddedEvent event) {
-        Wishlist wishlist = event.getWishlist();
-        Observer observer = new WishlistPutObserver();
-        db.put()
-                .object(wishlist)
-                .prepare()
-                .asRxObservable()
-                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(observer);
-    }
 
     public void removeWishlist(Wishlist wishlist) {
 
@@ -167,20 +156,6 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                     Timber.d("file not Deleted :" + p.getImageUri());
                 }
             }
-        }
-    }
-
-    private class WishlistPutObserver implements Observer<PutResults<Wishlist>> {
-        @Override
-        public void onCompleted() {
-        }
-        @Override
-        public void onError(Throwable e) {
-
-        }
-        @Override
-        public void onNext(PutResults<Wishlist> wishlistPutResults) {
-
         }
     }
 
