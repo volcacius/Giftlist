@@ -21,12 +21,10 @@ import butterknife.Bind;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
-import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
-import it.polimi.dima.giftlist.util.ToastFactory;
 import timber.log.Timber;
 
 /**
@@ -43,14 +41,14 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Inject
     IntentStarter intentStarter;
 
-    //TODO: why init here and not in oncreate?
-    private ActionModeCallback actionModeCallback = new ActionModeCallback();
+    private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Timber.d("wlList fragment onCreated");
         super.onCreate(savedInstanceState);
+        actionModeCallback = new ActionModeCallback();
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
@@ -101,9 +99,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
-
-
 
     private void toggleSelection(int position) {
         wishlistListAdapter.toggleSelection(position);
@@ -161,8 +156,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
-    public void removeWishlist(long wishlistId) {
-        getPresenter().removeWishlist(wishlistId);
+    public void removeWishlist(Wishlist wishlist) {
+        getPresenter().removeWishlist(wishlist);
     }
 
 
@@ -172,7 +167,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate (R.menu.wishlist_list_item_context, menu);
+            mode.getMenuInflater().inflate (R.menu.delete_item_context_menu, menu);
             return true;
         }
 
@@ -187,7 +182,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 case R.id.menu_remove:
                     Timber.d("remove action");
                     for (Wishlist w : wishlistListAdapter.getSelectedWishlists()) {
-                        removeWishlist(w.getId());
+                        removeWishlist(w);
                     }
                     wishlistListAdapter.notifyDataSetChanged();
                     mode.finish();

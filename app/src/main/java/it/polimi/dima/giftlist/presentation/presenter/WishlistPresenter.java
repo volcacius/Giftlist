@@ -1,18 +1,31 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
+import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
+import com.pushtorefresh.storio.sqlite.queries.Query;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import it.polimi.dima.giftlist.data.db.table.EbayProductTable;
+import it.polimi.dima.giftlist.data.db.table.EtsyProductTable;
+import it.polimi.dima.giftlist.data.db.table.WishlistTable;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
+import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.domain.interactor.GetDbProductListUseCase;
 import it.polimi.dima.giftlist.presentation.event.ProductRemovedEvent;
+import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
 import it.polimi.dima.giftlist.presentation.view.WishlistView;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
@@ -57,10 +70,68 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
         }
     }
 
+    public void removeProduct(Product product) {
+        long id = product.getId();
+        if (product instanceof EbayProduct) {
+            db.delete()
+                    .byQuery(DeleteQuery.builder()
+                            .table(EbayProductTable.TABLE)
+                            .where(EbayProductTable.COLUMN_ID + "= ?")
+                            .whereArgs(id)
+                            .build())
+                    .prepare()
+                    .executeAsBlocking();
+        } else {
+            db.delete()
+                    .byQuery(DeleteQuery.builder()
+                            .table(EtsyProductTable.TABLE)
+                            .where(EtsyProductTable.COLUMN_ID + "= ?")
+                            .whereArgs(id)
+                            .build())
+                    .prepare()
+                    .executeAsBlocking();
+        }
+
+        deleteImages(product.getImageUri());
+
+    }
+
+    private void deleteImages(String uri) {
+
+            File fdelete = new File(uri);
+            if (fdelete.exists()) {
+                if (fdelete.delete()) {
+                    Timber.d("file Deleted");
+                } else {
+                    Timber.d("file not Deleted");
+                }
+            }
+
+    }
+
     @Subscribe
-    public void onProductRemovedEvent(ProductRemovedEvent event) {
-        if (isViewAttached()) {
-            getView().removeProduct(event.getProduct());
+    public void onWishlistAddedEvent(WishlistAddedEvent event) {
+        Wishlist wishlist = event.getWishlist();
+        Observer observer = new WishlistPutObserver();
+        db.put()
+                .object(wishlist)
+                .prepare()
+                .asRxObservable()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(observer);
+    }
+
+    private class WishlistPutObserver implements Observer<PutResults<Wishlist>> {
+        @Override
+        public void onCompleted() {
+        }
+        @Override
+        public void onError(Throwable e) {
+
+        }
+        @Override
+        public void onNext(PutResults<Wishlist> wishlistPutResults) {
+
         }
     }
 }

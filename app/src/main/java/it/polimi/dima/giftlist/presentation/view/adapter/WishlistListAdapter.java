@@ -97,8 +97,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             super(view);
             ButterKnife.bind(this, view);
             bindListener(view, onWishlistClickListener);
-            //itemView.setOnLongClickListener(this);
-
         }
 
         //method to bind the listener

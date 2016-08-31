@@ -20,7 +20,7 @@ import it.polimi.dima.giftlist.data.model.Product;
 /**
  * Created by Alessandro on 24/04/16.
  */
-public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder> {
+public class WishlistAdapter extends SelectableAdapter<WishlistAdapter.ViewHolder> {
 
     Context context;
     LayoutInflater layoutInflater;
@@ -46,6 +46,9 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     public void onBindViewHolder(ViewHolder holder, int position) {
         String productName = productList.get(position).getName();
         holder.productNameTextView.setText(productName);
+
+        // Highlight the item if it's selected
+        holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
@@ -55,6 +58,15 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
 
     public Product getItem(int position) {
         return productList.get(position);
+    }
+
+    public List<Product> getSelectedWishlists() {
+        List<Integer> positions = super.getSelectedItems();
+        List<Product> selectedWishlists = new ArrayList<>(positions.size());
+        for (Integer i : positions) {
+            selectedWishlists.add(productList.get(i));
+        }
+        return selectedWishlists;
     }
 
     @Override
@@ -77,12 +89,17 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     //This is a pattern to declare an onClick in the ViewHolder but implement it in the fragment
     public interface OnProductClickListener {
         public void onItemClick(View view , int position);
+
+        public boolean onItemLongClick(View view, int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.wishlist_product_name)
         public TextView productNameTextView;
+
+        @Bind(R.id.selected_overlay)
+        View selectedOverlay;
 
         public ViewHolder(View view, OnProductClickListener onProductClickListener) {
             super(view);
@@ -94,6 +111,9 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         private void bindListener(View view, OnProductClickListener onProductClickListener) {
             view.setOnClickListener(v ->
                     onProductClickListener.onItemClick(v, getPosition()));
+
+            view.setOnLongClickListener(v ->
+                    onProductClickListener.onItemLongClick(v, getPosition()));
         }
     }
 }

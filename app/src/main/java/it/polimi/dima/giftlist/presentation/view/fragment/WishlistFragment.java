@@ -2,8 +2,11 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -41,6 +44,9 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     @Inject
     IntentStarter intentStarter;
 
+    private ActionModeCallback actionModeCallback;
+    private ActionMode actionMode;
+
     @Arg
     long wishlistId;
 
@@ -48,6 +54,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     public void onCreate(Bundle savedInstanceState) {
         Timber.d("wl fragment onViewCreated");
         super.onCreate(savedInstanceState);
+        actionModeCallback = new ActionModeCallback();
         setRetainInstance(true);
         setHasOptionsMenu(true);
     }
@@ -65,16 +72,52 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Timber.d("wl fragment onViewCreated");
+
+        //to avoid bugs. it would be better to retain selected instances but this is a good enough tradeoff
+        if (actionMode!=null) {
+            actionMode.finish();
+        }
+
         super.onViewCreated(view, savedInstanceState);
         recyclerView.setAdapter(wishlistAdapter);
 
-        wishlistAdapter.setOnProductClickListener(new WishlistAdapter.OnProductClickListener() {
-            @Override
-            public void onItemClick(View v , int position) {
+        wishlistAdapter.setOnProductClickListener(new WishlistAdapter.OnProductClickListener() {@Override
+        public void onItemClick(View v , int position) {
+            if (actionMode != null) {
+                toggleSelection(position);
+            } else {
                 intentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getProductList(), wishlistAdapter.getItem(position).getId());
+            }
+        }
+
+            @Override
+            public boolean onItemLongClick(View view, int position) {
+                Timber.d("fragment long click");
+
+                if (actionMode == null) {
+                    Timber.d("I'm not in action mode");
+                    actionMode =((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
+                } else {
+                    Timber.d("I'm in action mode");
+                }
+                toggleSelection(position);
+
+                return true;
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    private void toggleSelection(int position) {
+        wishlistAdapter.toggleSelection(position);
+        int count = wishlistAdapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
     }
 
     @Override
@@ -132,8 +175,50 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @Override
     public void removeProduct(Product product) {
+        getPresenter().removeProduct(product);
     }
 
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @SuppressWarnings("unused")
+        private final String TAG = ActionModeCallback.class.getSimpleName();
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate (R.menu.delete_item_context_menu, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.menu_remove:
+                    Timber.d("remove action");
+                    for (Product p : wishlistAdapter.getSelectedWishlists()) {
+                        removeProduct(p);
+                    }
+                    wishlistAdapter.notifyDataSetChanged();
+                    mode.finish();
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            Timber.d("destroying action mode");
+            wishlistAdapter.clearSelection();
+            actionMode = null;
+            Timber.d("now I have " + wishlistAdapter.getSelectedWishlists().size());
+        }
+    }
 
 
 }
