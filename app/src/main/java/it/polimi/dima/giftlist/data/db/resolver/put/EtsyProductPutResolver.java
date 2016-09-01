@@ -37,6 +37,7 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
                               object.getCurrencyType().toString(),
                               object.getImageUrl(),
                               object.getImageUri(),
+                              object.getProductPage(),
                               object.getWishlistId()};
 
         return UpdateQuery.builder()
@@ -45,9 +46,11 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
                 .where(EtsyProductTable.COLUMN_NAME + " = ?")
                 .where(EtsyProductTable.COLUMN_DESCRIPTION + " = ?")
                 .where(EtsyProductTable.COLUMN_PRICE + " = ?")
+                .where(EtsyProductTable.COLUMN_CONVERTED_PRICE + " = ?")
                 .where(EtsyProductTable.COLUMN_CURRENCY_TYPE + " = ?")
                 .where(EtsyProductTable.COLUMN_IMAGE_URL + " = ?")
                 .where(EtsyProductTable.COLUMN_IMAGE_URI + " = ?")
+                .where(EtsyProductTable.COLUMN_PRODUCT_PAGE + " = ?")
                 .where(EtsyProductTable.COLUMN_WISHLIST_ID + " = ?")
                 .whereArgs(Arrays.asList(argsArray))
                 .build();
@@ -61,9 +64,11 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
         values.put(EtsyProductTable.COLUMN_NAME, object.getName());
         values.put(EtsyProductTable.COLUMN_DESCRIPTION, object.getDescription());
         values.put(EtsyProductTable.COLUMN_PRICE, object.getPrice());
+        values.put(EtsyProductTable.COLUMN_CONVERTED_PRICE, object.getConvertedPrice());
         values.put(EtsyProductTable.COLUMN_CURRENCY_TYPE, object.getCurrencyType().toString());
         values.put(EtsyProductTable.COLUMN_IMAGE_URL, object.getImageUrl());
         values.put(EtsyProductTable.COLUMN_IMAGE_URI, object.getImageUri());
+        values.put(EtsyProductTable.COLUMN_PRODUCT_PAGE, object.getProductPage());
         values.put(EtsyProductTable.COLUMN_WISHLIST_ID, object.getWishlistId());
         return values;
     }

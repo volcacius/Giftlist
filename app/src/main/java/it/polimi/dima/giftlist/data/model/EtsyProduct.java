@@ -9,9 +9,9 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
 public class EtsyProduct extends Product {
 
-    int categoryId;
+    final static int CREATOR = 0;
 
-    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri) {
+    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri, String url_page) {
         this.name = name;
         this.description = description;
         this.id = id;
@@ -19,24 +19,19 @@ public class EtsyProduct extends Product {
         this.currencyType = currencyType;
         this.imageUrl = imageUrl;
         this.imageUri = imageUri;
+        this.productPage = url_page;
     }
 
-    public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri, long wishlistId) {
+    public EtsyProduct(String name, String description, long id, float price, float convertedPrice, CurrencyType currencyType, String imageUrl, String imageUri, String productPage, long wishlistId) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.price = price;
+        this.convertedPrice = convertedPrice;
         this.currencyType = currencyType;
         this.imageUrl = imageUrl;
         this.imageUri = imageUri;
+        this.productPage = productPage;
         this.wishlistId = wishlistId;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
     }
 }

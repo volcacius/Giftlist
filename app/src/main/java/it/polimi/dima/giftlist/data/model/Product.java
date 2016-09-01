@@ -21,6 +21,7 @@ public class Product implements Parcelable {
     String description;
     String imageUrl;
     String imageUri;
+    String productPage;
     long wishlistId;
 
     public String getName() {
@@ -79,6 +80,13 @@ public class Product implements Parcelable {
         this.wishlistId = wishlistId;
     }
 
+    public String getProductPage() {
+        return productPage;
+    }
+
+    public void setProductPage(String productPage) {
+        this.productPage = productPage;
+    }
 
     @Override
     public int describeContents() {

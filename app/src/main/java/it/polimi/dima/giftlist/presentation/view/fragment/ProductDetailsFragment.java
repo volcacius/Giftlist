@@ -1,9 +1,12 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.BindColor;
+import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
@@ -51,9 +55,18 @@ public class ProductDetailsFragment extends BaseFragment {
     
     @Bind(R.id.text_repository)
     TextView repositoryTextView;
+
+    @Bind(R.id.open_website)
+    Button openWebsiteButton;
     
     @BindColor(R.color.primary)
     int colorPrimary;
+
+    @OnClick(R.id.open_website)
+    public void openWebsite(){
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(product.getProductPage()));
+        startActivity(browserIntent);
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -61,8 +74,9 @@ public class ProductDetailsFragment extends BaseFragment {
         Timber.d("Product details fragment view created!");
         nameTextView.setText(product.getName());
         priceTextView.setText(product.getPrice() + " " + product.getCurrencyType().toString());
+
         if (product.getConvertedPrice() != 0 && !product.getCurrencyType().equals(CurrencyType.EUR)) {
-            convertedPriceTextView.setText("(" + product.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
+            convertedPriceTextView.setText("(approx. " + product.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
         }
         if (product instanceof EbayProduct) {
             repositoryTextView.setText(R.string.checkbox_ebay);

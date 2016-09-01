@@ -27,6 +27,7 @@ public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> 
     private static final String PRICE = "price";
     private static final String LISTING_ID = "listing_id";
     private static final String IMAGES = "Images";
+    private static final String PAGE_URL = "url";
     private static final String URL_570_X_N = "url_570xN";
     private static final float DEFAULT_PRICE = 0;
 
@@ -46,12 +47,13 @@ public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> 
                 CurrencyType currencyType = CurrencyType.valueOf(jsonProduct.getAsJsonObject().get(CURRENCY_CODE).getAsString().toUpperCase());
                 float price = jsonProduct.getAsJsonObject().get(PRICE).isJsonNull() ? DEFAULT_PRICE : jsonProduct.getAsJsonObject().get(PRICE).getAsFloat();
                 long listing_id = jsonProduct.getAsJsonObject().get(LISTING_ID).getAsLong();
+                String url_page = jsonProduct.getAsJsonObject().get(PAGE_URL).getAsString();
+
 
                 JsonElement images = jsonProduct.getAsJsonObject().get(IMAGES);
                 JsonArray imagesArray = images.getAsJsonArray();
                 JsonElement jsonImage = imagesArray.get(0);
                 String url_170x135 = jsonImage.getAsJsonObject().get(URL_570_X_N).getAsString();
-
                 //TODO later, to get more images
             /*
             for(int currentImage = 0; currentImage < imagesArray.size(); currentImage++) {
@@ -60,10 +62,10 @@ public class EtsyResultsDeserializer implements JsonDeserializer<List<Product>> 
                 String url_170x135 = jsonImage.getAsJsonObject().get("url_170x135").getAsString();
 
             }*/
-                EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currencyType, url_170x135, "uri");
+                EtsyProduct p = new EtsyProduct(title, description, listing_id, price, currencyType, url_170x135, "uri", url_page);
                 etsyProductsList.add(p);
             } catch (Exception e) {
-                Timber.d("Ebay deserializer exception message: " + e.getMessage());
+                Timber.d("Etsy deserializer exception message: " + e.getMessage());
             }
         }
 

@@ -55,8 +55,6 @@ public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsVi
 
         String wlName = wlNameEditText.getText().toString();
 
-
-
         //If it is 0, it's a wl created from scratch, otherwise I need the id to load previous settings
         if(wishlistId == 0) {
             Random random = new Random();

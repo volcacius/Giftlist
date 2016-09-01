@@ -5,7 +5,7 @@ package it.polimi.dima.giftlist.data.model;
  */
 public class EbayProduct extends Product {
 
-    String productPage;
+    final static int CREATOR = 0;
 
     public EbayProduct(String name, String description, long listing_id, float price,
                        CurrencyType currencyType, String url_170x135, String imageUri, String url_page) {
@@ -20,18 +20,17 @@ public class EbayProduct extends Product {
 
     }
 
-    public EbayProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri, long wishlistId) {
+    public EbayProduct(String name, String description, long id, float price, float convertedPrice, CurrencyType currencyType, String imageUrl, String imageUri, String productPage, long wishlistId) {
         this.name = name;
         this.description = description;
         this.id = id;
         this.price = price;
+        this.convertedPrice = convertedPrice;
         this.currencyType = currencyType;
         this.imageUrl = imageUrl;
         this.wishlistId = wishlistId;
         this.imageUri = imageUri;
+        this.productPage = productPage;
     }
 
-    public String getProductPage() {
-        return productPage;
-    }
 }

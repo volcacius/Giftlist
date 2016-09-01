@@ -54,4 +54,10 @@
         android:gravity="bottom|center"
         />
 
+    <Button
+        android:id="@+id/open_website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Go buy it!"
+        android:layout_gravity="bottom|center_horizontal"/>
 </LinearLayout>
