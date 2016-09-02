@@ -39,15 +39,15 @@
             />
         <activity
             android:name=".presentation.view.activity.ProductPickerSettingsActivity"
-            android:parentActivityName=".presentation.view.activity.MainActivity"
+            android:parentActivityName=".presentation.view.activity.WelcomeActivity"
             />
         <activity
             android:name=".presentation.view.activity.WishlistSettingsActivity"
-            android:parentActivityName=".presentation.view.activity.MainActivity"
+            android:parentActivityName=".presentation.view.activity.WelcomeActivity"
             />
         <activity
             android:name=".presentation.view.activity.ProductDetailsPagerActivity"
-            android:parentActivityName=".presentation.view.activity.MainActivity"
+            android:parentActivityName=".presentation.view.activity.WelcomeActivity"
             />
 
         <service android:name="it.polimi.dima.giftlist.data.SyncService"/>

@@ -33,5 +33,6 @@ allprojects {
         mavenCentral()
         maven { url 'https://maven.fabric.io/public' }
         maven { url "https://clojars.org/repo/" }
+        maven { url "https://jitpack.io" }
     }
 }

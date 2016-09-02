@@ -9,6 +9,8 @@
     <color name="icons">#212121</color>
     <color name="divider">#BDBDBD</color>
 
+    <color name="likeButtonColor">#767676</color>
+
     <color name="bg_item_normal_state">#fff0f0f0</color>
     <color name="bg_item_dragging_state">#ffffdddd</color>
     <color name="bg_item_dragging_active_state">#ffff9999</color>

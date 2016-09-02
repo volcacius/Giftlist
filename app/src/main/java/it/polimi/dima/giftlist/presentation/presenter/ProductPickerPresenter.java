@@ -145,6 +145,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
             throw new UnknownProductException();
         }
 
+        Timber.d("converted price :" + product.getConvertedPrice());
         db.put()
                 .object(product)
                 .prepare()

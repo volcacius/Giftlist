@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
 
     @Bind(R.id.activity_product_details_view_pager)
     ViewPager viewPager;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     @Inject
     ProductDetailsPagerAdapter productDetailsPagerAdapter;
@@ -42,6 +45,8 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setSupportActionBar(toolbar);
+
         ButterKnife.bind(this);
         if (savedInstanceState == null) {
             productList = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);

@@ -240,8 +240,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
-    public void removeWishlist(long wishlistId) {
-        getPresenter().removeWishlist(wishlistId);
+    public void removeWishlist(Wishlist wishlist) {
+        getPresenter().removeWishlist(wishlist);
     }
 
 
@@ -266,7 +266,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 case R.id.menu_remove:
                     Timber.d("remove action");
                     for (Wishlist w : wishlistListAdapter.getSelectedWishlists()) {
-                        removeWishlist(w.getId());
+                        removeWishlist(w);
                     }
                     wishlistListAdapter.notifyDataSetChanged();
                     mode.finish();

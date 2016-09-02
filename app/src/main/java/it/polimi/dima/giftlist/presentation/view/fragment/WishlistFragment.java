@@ -52,7 +52,6 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Timber.d("wl fragment onViewCreated");
         super.onCreate(savedInstanceState);
         actionModeCallback = new ActionModeCallback();
         setRetainInstance(true);

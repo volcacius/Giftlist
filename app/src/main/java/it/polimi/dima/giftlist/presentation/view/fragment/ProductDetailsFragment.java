@@ -66,6 +66,15 @@ public class ProductDetailsFragment extends BaseFragment {
     public void openWebsite(){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(product.getProductPage()));
         startActivity(browserIntent);
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
+
     }
 
     @Override

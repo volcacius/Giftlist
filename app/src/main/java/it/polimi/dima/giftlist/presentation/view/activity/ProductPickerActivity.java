@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import butterknife.Bind;
 import clojure.lang.Compiler;
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
@@ -20,6 +24,7 @@ import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerFragmentBuilder;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsFragment;
+import timber.log.Timber;
 
 
 /**
@@ -36,10 +41,12 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     private long wishlistId;
     private HashMap<Class, Boolean> enabledRepositoryMap;
     private ArrayList<CategoryType> chosenCategoriesList;
-    private String category;
     private String keywords;
     private Float maxprice;
     private Float minprice;
+
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     //The component has to be declared in the activity and not in the fragment since its lifecycle must be tied to the activity
     ProductPickerComponent productPickerComponent;
@@ -47,6 +54,8 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setSupportActionBar(toolbar);
+
         //I need repositories, category and keywords both for createComponent() and to launch the fragment
         //If it's the first time creating the activity, I get them from the Intent.
         //If the activity is recreated e.g. after rotation, they are restored by IcePick in the super.onCreate call
@@ -60,7 +69,7 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         }
         createComponent();
         if (savedInstanceState == null) {
-            addFragment(R.id.activity_frame, new ProductPickerFragmentBuilder(chosenCategoriesList, enabledRepositoryMap, keywords, wishlistId).build());
+            addFragment(R.id.product_picker_activity_content, new ProductPickerFragmentBuilder(chosenCategoriesList, enabledRepositoryMap, keywords, wishlistId).build());
         }
 
     }
@@ -68,6 +77,32 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_product_picker;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_product_picker, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_wishlist:
+                //implemented in the fragment
+                return false;
+
+            case R.id.action_settings:
+                //implemented in the fragment
+                return false;
+
+            default:
+                Timber.d("default option from activity");
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @DebugLog

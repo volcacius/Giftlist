@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -10,6 +11,8 @@ import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import java.util.ArrayList;
@@ -45,12 +48,15 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
 
     private static final boolean NO_PULL_TO_REFRESH = false;
 
-    @Bind(R.id.next_button)
-    Button nextProduct;
-    @Bind(R.id.reload_button)
-    Button reloadButton;
     @Bind(R.id.contentView)
     SwipeFlingAdapterView flingContainer;
+    @Bind(R.id.like_button)
+    LikeButton likeButton;
+    @Bind(R.id.discard_button)
+    LikeButton discardButton;
+    @Bind(R.id.reload_button)
+    Button reloadButton;
+
 
     @Arg
     long wishlistId;
@@ -63,32 +69,14 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
 
     @Inject
     ProductPickerAdapter productPickerAdapter;
+    @Inject
+    IntentStarter intentStarter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-    }
-
-    @Override
-    protected void injectDependencies() {
-        this.getComponent(ProductPickerComponent.class).inject(this);
-    }
-
-    @OnClick(R.id.next_button)
-    public void goNext() {
-        flingContainer.getTopCardListener().selectLeft();
-    }
-
-    @OnClick(R.id.reload_button)
-    public void reloadItems() {
-        loadData(NO_PULL_TO_REFRESH);
-    }
-
-    @NonNull
-    @Override
-    public ProductPickerPresenter createPresenter() {
-        return this.getComponent(ProductPickerComponent.class).provideProductListPresenter();
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -97,8 +85,8 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    protected void injectDependencies() {
+        this.getComponent(ProductPickerComponent.class).inject(this);
     }
 
     @Override
@@ -120,11 +108,13 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
                 String uri = root + name;
                 p.setImageUri(uri);
                 eventBus.post(new ProductAddedEvent(p));
+                likeButton.setLiked(false);
 
             }
 
             @Override
             public void onRightCardExit(Object o) {
+                discardButton.setLiked(false);
             }
 
             @Override
@@ -137,7 +127,51 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
 
             }
         });
+
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                flingContainer.getTopCardListener().selectLeft();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+            }
+        });
+
+        discardButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                flingContainer.getTopCardListener().selectRight();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+
+            }
+        });
     }
+
+    @OnClick(R.id.reload_button)
+    public void reloadItems() {
+        loadData(NO_PULL_TO_REFRESH);
+    }
+
+    @NonNull
+    @Override
+    public ProductPickerPresenter createPresenter() {
+        return this.getComponent(ProductPickerComponent.class).provideProductListPresenter();
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+
 
     @NonNull
     @Override
@@ -184,14 +218,16 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
     @Override
     public void showContent() {
         super.showContent();
-        nextProduct.setEnabled(true);
+        likeButton.setEnabled(true);
+        discardButton.setEnabled(true);
         reloadButton.setVisibility(View.GONE);
         reloadButton.setEnabled(false);
     }
 
     @Override
     public void showLoading(boolean pullToRefresh) {
-        nextProduct.setEnabled(false);
+        likeButton.setEnabled(false);
+        discardButton.setEnabled(false);
         super.showLoading(NO_PULL_TO_REFRESH);
     }
 
@@ -203,5 +239,25 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
     @Override
     public void showProductAddedSuccess() {
         ToastFactory.showShortToast(getContext(), R.string.product_added_error);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_wishlist:
+                Timber.d("button add pressed");
+                intentStarter.startWishlistActivity(getContext(), wishlistId);
+                return true;
+
+            case R.id.action_settings:
+                Timber.d("button settings pressed");
+                intentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
+                return true;
+
+            default:
+                break;
+
+        }
+        return false;
     }
 }

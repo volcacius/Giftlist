@@ -191,6 +191,7 @@ dependencies {
         transitive=true
     }
     compile "com.tonicartos:superslim:$SUPER_SLIM_VERSION"
+    compile "com.github.jd-alexander:LikeButton:0.2.0"
 
     //dependencies provided on compile only on debug builds
     debugCompile "com.jakewharton.timber:timber:$TIMBER_VERSION"
