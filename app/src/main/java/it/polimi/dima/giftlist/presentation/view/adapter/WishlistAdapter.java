@@ -28,7 +28,6 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     private List<Product> productList;
     private OnProductClickListener onProductClickListener;
 
-    @Inject
     public WishlistAdapter(Context context) {
         this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

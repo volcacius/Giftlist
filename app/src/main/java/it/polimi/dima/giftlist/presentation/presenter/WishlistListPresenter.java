@@ -77,7 +77,7 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     }
 
     public void removeWishlist(long wishlistId) {
-        Timber.d("deleting wishlist " +wishlistId);
+        Timber.d("deleting wishlist " + wishlistId);
         db.delete()
                 .byQuery(DeleteQuery.builder()
                         .table(WishlistTable.TABLE)
