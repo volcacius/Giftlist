@@ -95,6 +95,14 @@ public class EtsyProductDataSource implements ProductRepository {
                     etsyCategoriesSet.add("jewelry");
                     break;
                 }
+                case MUSIC: {
+                    etsyCategoriesSet.add("music");
+                    break;
+                }
+                case BOOK: {
+                    etsyCategoriesSet.add("books_and_zines");
+                    break;
+                }
             }
 
         }

@@ -27,6 +27,7 @@ import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
 import it.polimi.dima.giftlist.presentation.presenter.ProductPickerSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerSettingsView;
+import timber.log.Timber;
 
 /**
  * Created by Elena on 10/02/2016.
@@ -77,6 +78,15 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
 
     @Bind(R.id.checkbox_handcraft)
     CheckBox handcraftCheckbox;
+
+    @Bind(R.id.checkbox_nerd)
+    CheckBox nerdCheckbox;
+
+    @Bind(R.id.checkbox_books)
+    CheckBox bookCheckbox;
+
+    @Bind(R.id.checkbox_music)
+    CheckBox musicCheckbox;
 
     @Bind(R.id.category_checkboxes)
     LinearLayout categoryCheckboxes;
@@ -138,12 +148,13 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
         chosenCategoriesList.add(CategoryType.getCategoryTypeFromString(occasion));
         if (ageSpinner.getVisibility()==View.VISIBLE) {
+            Timber.d("adding "+ageSelected);
             chosenCategoriesList.add(CategoryType.getCategoryTypeFromString(ageSelected));
         }
 
         if (categoryCheckboxes.getVisibility() == View.VISIBLE) {
             if (gamesCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.NERD);
+                chosenCategoriesList.add(CategoryType.GAME);
             }
             if (handcraftCheckbox.isChecked()) {
                 chosenCategoriesList.add(CategoryType.HANDCRAFT);
@@ -159,6 +170,15 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
             }
             if (artCheckbox.isChecked()) {
                 chosenCategoriesList.add(CategoryType.ART);
+            }
+            if (nerdCheckbox.isChecked()) {
+                chosenCategoriesList.add(CategoryType.NERD);
+            }
+            if (bookCheckbox.isChecked()) {
+                chosenCategoriesList.add(CategoryType.BOOK);
+            }
+            if (musicCheckbox.isChecked()) {
+                chosenCategoriesList.add(CategoryType.MUSIC);
             }
         }
 

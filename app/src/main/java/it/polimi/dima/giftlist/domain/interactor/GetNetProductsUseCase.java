@@ -25,7 +25,6 @@ import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.domain.repository.CurrencyRepository;
 import it.polimi.dima.giftlist.domain.repository.ProductRepository;
-import it.polimi.dima.giftlist.util.CategoryDeterminer;
 import rx.Observable;
 import rx.functions.Func2;
 import timber.log.Timber;

@@ -27,6 +27,9 @@
     <string name="checkbox_technology">Technology</string>
     <string name="checkbox_travelling">Travelling</string>
     <string name="checkbox_handcraft">Handcraft</string>
+    <string name="checkbox_books">books</string>
+    <string name="checkbox_nerd">Geek stuff</string>
+    <string name="checkbox_music">music</string>
 
     <string-array name="ages">
         <item>baby</item>

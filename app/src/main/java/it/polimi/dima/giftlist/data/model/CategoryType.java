@@ -10,17 +10,20 @@ import java.util.List;
 public enum CategoryType {
 
     NERD("nerd"),
+    GAME("videogames"),
     TRAVEL("travel"),
     ART("art"),
     HANDCRAFT("handcraft"),
     TECH("tech"),
     SPORT("sport"),
-    BABY("baby"),
+    BABY("baby","christening"),
     KID("kid"),
     ROMANTIC("anniversary","engagement"),
     WEDDING("wedding"),
     YOUNG("young"),
-    OTHER("other");
+    OTHER("other"),
+    BOOK("book"),
+    MUSIC("music");
 
     private final List<String> text;
 

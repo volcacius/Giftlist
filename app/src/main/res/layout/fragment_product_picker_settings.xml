@@ -49,7 +49,6 @@
         android:text="More"/>
 
 
-
     <LinearLayout
         android:id="@+id/category_checkboxes"
         android:layout_width="match_parent"
@@ -58,46 +57,75 @@
         android:orientation="vertical">
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Does he like these things?"/>
-
-        <CheckBox
-            android:id="@+id/checkbox_handcraft"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/checkbox_handcraft"/>
+            android:text="Does he like these things?"/>
 
-        <CheckBox
-            android:id="@+id/checkbox_sports"
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/checkbox_sports"/>
+            android:visibility="visible"
+            android:rowCount="3"
+            android:columnCount="3"
+            android:orientation="vertical"
+            android:layout_gravity="bottom">
 
-        <CheckBox
-            android:id="@+id/checkbox_games"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/checkbox_games"/>
+            <CheckBox
+                android:id="@+id/checkbox_handcraft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_handcraft"/>
 
-        <CheckBox
-            android:id="@+id/checkbox_art"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/checkbox_art"/>
+            <CheckBox
+                android:id="@+id/checkbox_sports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_sports"/>
 
-        <CheckBox
-            android:id="@+id/checkbox_technology"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/checkbox_technology"/>
+            <CheckBox
+                android:id="@+id/checkbox_games"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_games"/>
 
-        <CheckBox
-            android:id="@+id/checkbox_travelling"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/checkbox_travelling"/>
+            <CheckBox
+                android:id="@+id/checkbox_art"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_art"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_technology"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_technology"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_travelling"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_travelling"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_books"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_books"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_nerd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_nerd"/>
+
+            <CheckBox
+                android:id="@+id/checkbox_music"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/checkbox_music"/>
+        </GridLayout>
     </LinearLayout>
+
 
     <Button
         android:id="@+id/button_start_product_activity"

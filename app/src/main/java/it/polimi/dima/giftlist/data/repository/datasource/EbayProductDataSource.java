@@ -97,7 +97,7 @@ public class EbayProductDataSource implements ProductRepository {
 
             Timber.d("getNetProd " + c);
             switch (c) {
-                case NERD: {
+                case GAME: {
                     ebayCategoriesSet.add("1249");
                     break;
                 }
@@ -142,6 +142,19 @@ public class EbayProductDataSource implements ProductRepository {
                     ebayCategoriesSet.add("281");
                     break;
                 }
+                case NERD: {
+                    ebayCategoriesSet.add("45100");
+                    break;
+                }
+                case MUSIC: {
+                    ebayCategoriesSet.add("11233");
+                    break;
+                }
+                case BOOK: {
+                    ebayCategoriesSet.add("267");
+                    break;
+                }
+
             }
 
         }
