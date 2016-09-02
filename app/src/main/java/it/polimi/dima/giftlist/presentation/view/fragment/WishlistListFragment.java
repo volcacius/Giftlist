@@ -1,7 +1,10 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
+import android.graphics.drawable.NinePatchDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +13,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
+import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
+import com.h6ah4i.android.widget.advrecyclerview.decoration.ItemShadowDecorator;
+import com.h6ah4i.android.widget.advrecyclerview.decoration.SimpleListDividerDecorator;
+import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropManager;
+import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
+import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager;
+import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 
@@ -41,6 +52,11 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Inject
     IntentStarter intentStarter;
 
+    RecyclerViewDragDropManager recyclerViewDragDropManager;
+    RecyclerViewSwipeManager recyclerViewSwipeManager;
+    RecyclerViewTouchActionGuardManager recyclerViewTouchActionGuardManager;
+    RecyclerView.Adapter wrappedAdapter;
+
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
 
@@ -70,7 +86,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             actionMode.finish();
         }
         super.onViewCreated(view, savedInstanceState);
-        recyclerView.setAdapter(wishlistListAdapter);
 
         wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
             @Override
@@ -95,13 +110,86 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 return true;
             }
         });
+
+        // touch guard manager  (this class is required to suppress scrolling while swipe-dismiss animation is running)
+        recyclerViewTouchActionGuardManager = new RecyclerViewTouchActionGuardManager();
+        recyclerViewTouchActionGuardManager.setInterceptVerticalScrollingWhileAnimationRunning(true);
+        recyclerViewTouchActionGuardManager.setEnabled(true);
+
+        // drag & drop manager
+        recyclerViewDragDropManager = new RecyclerViewDragDropManager();
+        recyclerViewDragDropManager.setDraggingItemShadowDrawable(
+                (NinePatchDrawable) ContextCompat.getDrawable(getContext(), R.drawable.material_shadow_z3));
+
+        // swipe manager
+        recyclerViewSwipeManager = new RecyclerViewSwipeManager();
+
+        wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(wishlistListAdapter);      // wrap for dragging
+        wrappedAdapter = recyclerViewSwipeManager.createWrappedAdapter(wrappedAdapter);      // wrap for swiping
+
+        GeneralItemAnimator animator = new SwipeDismissItemAnimator();
+
+        // Change animations are enabled by default since support-v7-recyclerview v22.
+        // Disable the change animation in order to make turning back animation of swiped item works properly.
+        animator.setSupportsChangeAnimations(false);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(wrappedAdapter);  // requires *wrapped* adapter
+        recyclerView.setItemAnimator(animator);
+
+        // additional decorations
+        //noinspection StatementWithEmptyBody
+        if (supportsViewElevation()) {
+            // Lollipop or later has native drop shadow feature. ItemShadowDecorator is not required.
+        } else {
+            recyclerView.addItemDecoration(new ItemShadowDecorator((NinePatchDrawable) ContextCompat.getDrawable(getContext(), R.drawable.material_shadow_z1)));
+        }
+        recyclerView.addItemDecoration(new SimpleListDividerDecorator(ContextCompat.getDrawable(getContext(), R.drawable.list_divider_h), true));
+
+        // NOTE:
+        // The initialization order is very important! This order determines the priority of touch event handling.
+        //
+        // priority: TouchActionGuard > Swipe > DragAndDrop
+        recyclerViewTouchActionGuardManager.attachRecyclerView(recyclerView);
+        recyclerViewSwipeManager.attachRecyclerView(recyclerView);
+        recyclerViewDragDropManager.attachRecyclerView(recyclerView);
+    }
+
+
+    @Override
+    public void onPause() {
+        recyclerViewDragDropManager.cancelDrag();
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        if (recyclerViewDragDropManager != null) {
+            recyclerViewDragDropManager.release();
+            recyclerViewDragDropManager = null;
+        }
+
+        if (recyclerViewSwipeManager != null) {
+            recyclerViewSwipeManager.release();
+            recyclerViewSwipeManager = null;
+        }
+
+        if (recyclerViewTouchActionGuardManager != null) {
+            recyclerViewTouchActionGuardManager.release();
+            recyclerViewTouchActionGuardManager = null;
+        }
+
+        if (wrappedAdapter != null) {
+            WrapperAdapterUtils.releaseAll(wrappedAdapter);
+            wrappedAdapter = null;
+        }
+
+        super.onDestroyView();
     }
 
     private void toggleSelection(int position) {
         wishlistListAdapter.toggleSelection(position);
         int count = wishlistListAdapter.getSelectedItemCount();
-
         if (count == 0) {
             actionMode.finish();
         } else {
@@ -128,13 +216,11 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override public void setData(List<Wishlist> data) {
-        Timber.d("wlList fragment setData");
         wishlistListAdapter.setWishlistList(data);
         wishlistListAdapter.notifyDataSetChanged();
     }
 
     @Override public void loadData(boolean pullToRefresh) {
-        Timber.d("wlList fragment loadData");
         presenter.subscribe(pullToRefresh);
     }
 
@@ -154,8 +240,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
-    public void removeWishlist(Wishlist wishlist) {
-        getPresenter().removeWishlist(wishlist);
+    public void removeWishlist(long wishlistId) {
+        getPresenter().removeWishlist(wishlistId);
     }
 
 
@@ -180,7 +266,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 case R.id.menu_remove:
                     Timber.d("remove action");
                     for (Wishlist w : wishlistListAdapter.getSelectedWishlists()) {
-                        removeWishlist(w);
+                        removeWishlist(w.getId());
                     }
                     wishlistListAdapter.notifyDataSetChanged();
                     mode.finish();
@@ -198,6 +284,10 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             actionMode = null;
             Timber.d("now I have " + wishlistListAdapter.getSelectedWishlists().size());
         }
+    }
+
+    private boolean supportsViewElevation() {
+        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
     }
 }
 

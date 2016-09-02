@@ -39,7 +39,6 @@ public class ProductPickerAdapter extends BaseAdapter {
     Picasso picasso;
     List<Product> productList;
 
-    @Inject
     public ProductPickerAdapter(Context context, Picasso picasso) {
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.picasso = picasso;
