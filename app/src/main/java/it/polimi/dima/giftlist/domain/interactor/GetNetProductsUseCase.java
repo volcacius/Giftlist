@@ -99,6 +99,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
                         //Set converted price
                         for (Currency c : currencies) {
                             if (c.getCurrencyType().equals(product.getCurrencyType())) {
+                                Timber.d("set converted price");
                                 product.setConvertedPrice(round(product.getPrice() / c.getRate(), DIGITS));
                             }
                         }

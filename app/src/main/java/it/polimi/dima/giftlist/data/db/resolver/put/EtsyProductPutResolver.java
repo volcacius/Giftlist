@@ -34,6 +34,7 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
                               object.getName(),
                               object.getDescription(),
                               object.getPrice(),
+                              object.getConvertedPrice(),
                               object.getCurrencyType().toString(),
                               object.getImageUrl(),
                               object.getImageUri(),

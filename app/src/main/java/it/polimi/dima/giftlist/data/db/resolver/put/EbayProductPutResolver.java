@@ -33,6 +33,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
                               object.getName(),
                               object.getDescription(),
                               object.getPrice(),
+                              object.getConvertedPrice(),
                               object.getCurrencyType().toString(),
                               object.getImageUrl(),
                               object.getImageUri(),
@@ -45,6 +46,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
                 .where(EbayProductTable.COLUMN_NAME + " = ?")
                 .where(EbayProductTable.COLUMN_DESCRIPTION + " = ?")
                 .where(EbayProductTable.COLUMN_PRICE + " = ?")
+                .where(EbayProductTable.COLUMN_CONVERTED_PRICE + " = ?")
                 .where(EbayProductTable.COLUMN_CURRENCY_TYPE + " = ?")
                 .where(EbayProductTable.COLUMN_IMAGE_URL + " = ?")
                 .where(EbayProductTable.COLUMN_IMAGE_URI + " = ?")
@@ -62,6 +64,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
         values.put(EbayProductTable.COLUMN_NAME, object.getName());
         values.put(EbayProductTable.COLUMN_DESCRIPTION, object.getDescription());
         values.put(EbayProductTable.COLUMN_PRICE, object.getPrice());
+        values.put(EbayProductTable.COLUMN_CONVERTED_PRICE, object.getConvertedPrice());
         values.put(EbayProductTable.COLUMN_CURRENCY_TYPE, object.getCurrencyType().toString());
         values.put(EbayProductTable.COLUMN_IMAGE_URL, object.getImageUrl());
         values.put(EbayProductTable.COLUMN_IMAGE_URI, object.getImageUri());
