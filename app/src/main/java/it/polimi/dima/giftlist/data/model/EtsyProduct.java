@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.data.model;
 
+import android.os.Parcel;
+
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 
@@ -8,8 +10,6 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
  */
 
 public class EtsyProduct extends Product {
-
-    final static int CREATOR = 0;
 
     public EtsyProduct(String name, String description, long id, float price, CurrencyType currencyType, String imageUrl, String imageUri, String url_page) {
         this.name = name;
@@ -34,4 +34,15 @@ public class EtsyProduct extends Product {
         this.productPage = productPage;
         this.wishlistId = wishlistId;
     }
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        public Product createFromParcel(Parcel source) {
+            Product target = new Product();
+            ProductParcelablePlease.readFromParcel(target, source);
+            return target;
+        }
+
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

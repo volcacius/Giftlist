@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +53,7 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
         super.onCreate(savedInstanceState);
         setSupportActionBar(toolbar);
 
-        ButterKnife.bind(this);
+        //ButterKnife.bind(this);
         if (savedInstanceState == null) {
             productList = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);
             selectedProductId = getIntent().getLongExtra(EXTRA_SELECTED_PRODUCT_ID, Product.DEFAULT_ID);
@@ -70,13 +72,36 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
         }
     }
 
-
-    //Don't know why icePick doesn't work. Maybe because is a list. Anyway, leave this here and everything will be fine
+        //Don't know why icePick doesn't work. Maybe because is a list. Anyway, leave this here and everything will be fine
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList("products", productList);
         super.onSaveInstanceState(outState);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_product_details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                //implemented in the fragment
+                return false;
+
+            default:
+                Timber.d("default option from activity");
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
 
     @Override
     protected int getLayoutRes() {
@@ -97,11 +122,6 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
 
     @Override
     public void createComponent() {
-        if (productList==null) {
-            productList = new ArrayList<>();
-            productList.add(new EbayProduct("name","d",20,10,20, CurrencyType.AUD,"ee","dd","d",11));
-        }
-
         productDetailsPagerComponent = getApplicationComponent().plus(new ProductDetailsPagerModule(getSupportFragmentManager(), productList));
     }
 

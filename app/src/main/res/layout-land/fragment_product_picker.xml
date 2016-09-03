@@ -33,23 +33,8 @@
             app:dots_secondary_color="@color/material_red_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-
-            android:layout_weight="1"/>
-
-        <com.like.LikeButton
-            app:icon_size="30dp"
-            android:id="@+id/discard_button"
-            app:like_drawable="@drawable/delete_forever"
-            app:unlike_drawable="@drawable/delete_forever"
-            app:circle_start_color="@color/material_blue_500"
-            app:circle_end_color="@color/material_blue_900"
-            app:dots_primary_color="@color/material_blue_900"
-            app:dots_secondary_color="@color/material_blue_500"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:layout_weight="1"/>
+            android:layout_gravity="bottom|left"
+            />
 
         <Button
             android:id="@+id/reload_button"
@@ -59,7 +44,22 @@
             android:contentDescription="reload"
             android:text="try reloading"
             android:visibility="gone"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            />
 
     </LinearLayout>
+
+    <com.like.LikeButton
+        app:icon_size="30dp"
+        android:id="@+id/discard_button"
+        app:like_drawable="@drawable/delete_forever"
+        app:unlike_drawable="@drawable/delete_forever"
+        app:circle_start_color="@color/material_blue_500"
+        app:circle_end_color="@color/material_blue_900"
+        app:dots_primary_color="@color/material_blue_900"
+        app:dots_secondary_color="@color/material_blue_500"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|bottom"
+        />
 </FrameLayout>

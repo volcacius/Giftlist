@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -74,6 +75,7 @@ public class ProductPickerAdapter extends BaseAdapter {
         }
 
         Product currentProduct = getItem(position);
+        productPickerViewHolder.openWebsiteButton.setVisibility(View.GONE);
         productPickerViewHolder.nameTextView.setText(currentProduct.getName());
         productPickerViewHolder.priceTextView.setText(currentProduct.getPrice() + " " + currentProduct.getCurrencyType().toString());
         if (currentProduct.getConvertedPrice() != 0 && !currentProduct.getCurrencyType().equals(CurrencyType.EUR)) {
@@ -128,6 +130,8 @@ public class ProductPickerAdapter extends BaseAdapter {
         TextView convertedPriceTextView;
         @Bind(R.id.text_repository)
         TextView repositoryTextView;
+        @Bind(R.id.open_website)
+        Button openWebsiteButton;
         @BindColor(R.color.primary)
         int colorPrimary;
 
