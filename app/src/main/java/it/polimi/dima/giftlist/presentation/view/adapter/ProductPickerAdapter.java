@@ -132,7 +132,7 @@ public class ProductPickerAdapter extends BaseAdapter {
         TextView repositoryTextView;
         @Bind(R.id.open_website)
         Button openWebsiteButton;
-        @BindColor(R.color.primary)
+        @BindColor(R.color.colorPrimary)
         int colorPrimary;
 
         public ProductPickerViewHolder(View view) {
