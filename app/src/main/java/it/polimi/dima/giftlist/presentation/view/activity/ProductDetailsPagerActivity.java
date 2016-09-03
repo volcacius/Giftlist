@@ -14,6 +14,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
+import it.polimi.dima.giftlist.data.model.CurrencyType;
+import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductDetailsPagerComponent;
@@ -39,7 +41,9 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
     @Inject
     ProductDetailsPagerAdapter productDetailsPagerAdapter;
 
-    private List<Product> productList;
+
+
+    private ArrayList<Product> productList;
     private long selectedProductId;
 
     @Override
@@ -51,6 +55,8 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
         if (savedInstanceState == null) {
             productList = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);
             selectedProductId = getIntent().getLongExtra(EXTRA_SELECTED_PRODUCT_ID, Product.DEFAULT_ID);
+        } else {
+            productList = savedInstanceState.getParcelableArrayList("products");
         }
         createComponent();
         injectDependencies();
@@ -62,6 +68,14 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
                 break;
             }
         }
+    }
+
+
+    //Don't know why icePick doesn't work. Maybe because is a list. Anyway, leave this here and everything will be fine
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("products", productList);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -83,6 +97,11 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
 
     @Override
     public void createComponent() {
+        if (productList==null) {
+            productList = new ArrayList<>();
+            productList.add(new EbayProduct("name","d",20,10,20, CurrencyType.AUD,"ee","dd","d",11));
+        }
+
         productDetailsPagerComponent = getApplicationComponent().plus(new ProductDetailsPagerModule(getSupportFragmentManager(), productList));
     }
 

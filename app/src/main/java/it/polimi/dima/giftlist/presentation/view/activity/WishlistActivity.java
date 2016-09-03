@@ -39,7 +39,7 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
         //If the activity is recreated e.g. after rotation, it is restored by IcePick in the super.onCreate call
         if (savedInstanceState == null) {
             wishlistId = getIntent().getLongExtra(EXTRA_WISHLIST_ID, Wishlist.DEFAULT_ID);
-        }
+        } 
         createComponent();
         if (savedInstanceState == null) {
             addFragment(R.id.wishlist_activity_content, new WishlistFragmentBuilder(wishlistId).build());

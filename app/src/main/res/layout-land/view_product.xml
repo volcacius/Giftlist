@@ -3,8 +3,9 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@android:color/white"
-              android:layout_marginTop="64dp">
+              android:background="@android:color/white">
+
+
 
     <ImageView
         android:id="@+id/product_thumb"
@@ -58,6 +59,14 @@
             android:layout_height="wrap_content"
             android:gravity="bottom|center"
             />
+
+
+        <Button
+            android:id="@+id/open_website"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/go_buy_it"
+            android:layout_gravity="bottom|right"/>
     </LinearLayout>
 
 </LinearLayout>

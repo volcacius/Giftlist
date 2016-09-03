@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,10 +21,10 @@ import timber.log.Timber;
  */
 public class ProductDetailsPagerAdapter extends FragmentStatePagerAdapter {
 
-    List<Product> productList;
+    ArrayList<Product> productList;
 
     @DebugLog
-    public ProductDetailsPagerAdapter(FragmentManager fm, List<Product> productList) {
+    public ProductDetailsPagerAdapter(FragmentManager fm, ArrayList<Product> productList) {
         super(fm);
         this.productList = productList;
     }
