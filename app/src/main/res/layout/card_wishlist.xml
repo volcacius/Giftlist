@@ -30,9 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/thumbnail"
-                android:paddingLeft="@dimen/wishlist_title_padding"
-                android:paddingRight="@dimen/wishlist_title_padding"
-                android:paddingTop="@dimen/wishlist_title_padding"
+                android:paddingLeft="@dimen/wishlist_inner_margin"
+                android:paddingRight="@dimen/wishlist_inner_margin"
+                android:paddingTop="@dimen/wishlist_inner_margin"
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/wishlist_title" />
 
@@ -42,8 +42,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
                 android:paddingBottom="@dimen/products_count_padding_bottom"
-                android:paddingLeft="@dimen/wishlist_title_padding"
-                android:paddingRight="@dimen/wishlist_title_padding"
+                android:paddingLeft="@dimen/wishlist_inner_margin"
+                android:paddingRight="@dimen/wishlist_inner_margin"
                 android:textSize="@dimen/wishlist_subtitle" />
 
             <ImageView
@@ -52,7 +52,7 @@
                 android:layout_height="@dimen/ic_wishlist_overflow_height"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/thumbnail"
-                android:layout_marginTop="@dimen/ic_wishlist_overflow_margin_top"
+                android:layout_marginTop="@dimen/ic_wishlist_overflow_margin_bottom"
                 android:scaleType="centerCrop" />
 
         </RelativeLayout>

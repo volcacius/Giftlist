@@ -36,6 +36,16 @@
     <string name="go_buy_it">Go buy it!</string>
     <string name="your_wishlists">Your Wishlists</string>
 
+    <string name="birthday">Birthday</string>
+    <string name="anniversary">Anniversary</string>
+    <string name="graduation">Graduation</string>
+    <string name="christmas">Christmas</string>
+    <string name="wedding">Wedding</string>
+    <string name="christening">Christening</string>
+    <string name="thankyou">Thank You</string>
+    <string name="engagement">Engagement</string>
+    <string name="other">Other</string>
+
     <string-array name="ages">
         <item>baby</item>
         <item>kid</item>
@@ -112,14 +122,14 @@
         <item>Everything Else</item>
     </string-array>
     <string-array name="occasions">
-        <item>birthday</item>
-        <item>anniversary</item>
-        <item>graduation</item>
-        <item>Christmas</item>
-        <item>wedding</item>
-        <item>christening</item>
-        <item>thank you</item>
-        <item>engagement</item>
-        <item>other</item>
+        <item>@string/birthday</item>
+        <item>@string/anniversary</item>
+        <item>@string/graduation</item>
+        <item>@string/christmas</item>
+        <item>@string/wedding</item>
+        <item>@string/christening</item>
+        <item>@string/thankyou</item>
+        <item>@string/engagement</item>
+        <item>@string/other</item>
     </string-array>
 </resources>

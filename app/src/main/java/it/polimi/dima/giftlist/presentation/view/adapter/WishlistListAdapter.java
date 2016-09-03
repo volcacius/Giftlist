@@ -2,6 +2,7 @@ package it.polimi.dima.giftlist.presentation.view.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultAct
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.action.SwipeResultActionMoveToSwipedDirection;
 import com.h6ah4i.android.widget.advrecyclerview.utils.AbstractDraggableSwipeableItemViewHolder;
 import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,6 +46,8 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         implements SwipeableItemAdapter<WishlistListAdapter.ViewHolder>,
         DraggableItemAdapter<WishlistListAdapter.ViewHolder> {
 
+    Picasso picasso;
+
     private static final int[] EMPTY_STATE = new int[] {};
 
     private Context context;
@@ -51,8 +55,9 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     private List<Wishlist> wishlistList;
     private OnWishlistClickListener onWishlistClickListener;
 
-    public WishlistListAdapter(Context context) {
+    public WishlistListAdapter(Context context, Picasso picasso) {
         this.context = context;
+        this.picasso = picasso;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.wishlistList = new LinkedList<>();
         // DraggableItemAdapter and SwipeableItemAdapter require stable ID, and also
@@ -67,11 +72,33 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         return vh;
     }
 
+    private int getWishlistThumbnail(String occasion) {
+        if (occasion == context.getString(R.string.birthday)) {
+            return R.drawable.birthday;
+        } else if (occasion == context.getString(R.string.anniversary)) {
+            return R.drawable.cake_anniversary;
+        } else if (occasion == context.getString(R.string.graduation)) {
+            return R.drawable.beer;
+        } else if (occasion == context.getString(R.string.wedding)) {
+            return R.drawable.wife;
+        } else {
+            return R.drawable.lights;
+        }
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String wishlistName = wishlistList.get(position).getName();
+        String occasion = wishlistList.get(position).getOccasion();
+
         holder.wishlistNameTextView.setText(wishlistName);
-        holder.wishlistOccasionTextView.setText(wishlistList.get(position).getOccasion());
+        holder.wishlistOccasionTextView.setText(occasion);
+
+        picasso.load(getWishlistThumbnail(occasion))
+                .fit()
+                .centerCrop()
+                .into(holder.thumbnail);
+
         // Highlight the item if it's selected
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
@@ -232,6 +259,8 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         View dragHandle;
         @Bind(R.id.overflow)
         ImageView overflowIcon;
+        @Bind(R.id.thumbnail)
+        ImageView thumbnail;
 
         public ViewHolder(View view, OnWishlistClickListener onWishlistClickListener) {
             super(view);

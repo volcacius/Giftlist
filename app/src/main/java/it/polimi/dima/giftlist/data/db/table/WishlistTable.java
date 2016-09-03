@@ -23,7 +23,7 @@ public class WishlistTable {
         return "CREATE TABLE " + TABLE + "("
                 + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, "
                 + COLUMN_NAME + " TEXT NOT NULL, "
-                + COLUMN_OCCASION + " elenaTEXT NOT NULL"
+                + COLUMN_OCCASION + " TEXT NOT NULL"
                 + ");";
     }
 

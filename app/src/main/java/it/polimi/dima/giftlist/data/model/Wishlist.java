@@ -20,10 +20,6 @@ public class Wishlist {
         this.name = name;
         this.occasion = occasion;
     }
-    /*Test: is this really necessary?
-    public Wishlist(String name) {
-        this.name = name;
-    }*/
 
     public String getName() {
         return name;

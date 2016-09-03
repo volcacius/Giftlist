@@ -3,6 +3,8 @@ package it.polimi.dima.giftlist.presentation.module;
 import android.content.Context;
 
 
+import com.squareup.picasso.Picasso;
+
 import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.di.PerActivity;
@@ -27,8 +29,8 @@ public class WishlistListModule {
 
     @Provides
     @PerActivity
-    public WishlistListAdapter providesWishlistListAdapter() {
-        return new WishlistListAdapter(context);
+    public WishlistListAdapter providesWishlistListAdapter(Picasso picasso) {
+        return new WishlistListAdapter(context, picasso);
     }
 
 

@@ -158,6 +158,9 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         // requires *wrapped* adapter
         recyclerView.setAdapter(wrappedAdapter);
+        //For smooth image loading
+        recyclerView.setItemViewCacheSize(10);
+        recyclerView.setDrawingCacheEnabled(true);
 
         // additional decorations
         //noinspection StatementWithEmptyBody
