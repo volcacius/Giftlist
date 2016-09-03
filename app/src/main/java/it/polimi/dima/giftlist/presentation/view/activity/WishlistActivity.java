@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.di.HasComponent;
@@ -61,7 +60,7 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
+            case R.id.action_search:
                 //implemented in the fragment
                 return false;
 

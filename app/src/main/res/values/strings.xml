@@ -19,7 +19,7 @@
     <string name="product_added_error">Error adding product</string>
     <string name="wishlist_added">Wishlist added</string>
     <string name="action_add_product">Add Product</string>
-    <string name="action_add_wishlist">Add Wishlist</string>
+    <string name="action_search_wishlist">Search Wishlist</string>
     <string name="ages_prompt">Select age</string>
     <string name="checkbox_sports">Sports</string>
     <string name="checkbox_games">Videogames</string>
@@ -33,6 +33,7 @@
     <string name="reload">reload</string>
     <string name="try_reloading">try reloading</string>
     <string name="back_to_wl">See your products</string>
+    <string name="your_wishlists">Your Wishlists</string>
 
     <string-array name="ages">
         <item>baby</item>

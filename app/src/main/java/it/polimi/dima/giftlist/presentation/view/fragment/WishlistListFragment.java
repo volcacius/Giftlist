@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,9 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.h6ah4i.android.widget.advrecyclerview.animator.GeneralItemAnimator;
 import com.h6ah4i.android.widget.advrecyclerview.animator.SwipeDismissItemAnimator;
@@ -23,12 +29,14 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
 import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
@@ -46,11 +54,26 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @Bind(R.id.contentView)
     RecyclerView recyclerView;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
+    @Bind(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbar;
+    @Bind(R.id.appbar)
+    AppBarLayout appBarLayout;
+    @Bind(R.id.backdrop)
+    ImageView collapseBackdrop;
+
+    @OnClick(R.id.fab)
+    void onFabClick() {
+        intentStarter.startWishlistSettingsActivity(getContext(), 0);
+    }
 
     @Inject
     WishlistListAdapter wishlistListAdapter;
     @Inject
     IntentStarter intentStarter;
+    @Inject
+    Picasso picasso;
 
     RecyclerViewDragDropManager recyclerViewDragDropManager;
     RecyclerViewSwipeManager recyclerViewSwipeManager;
@@ -62,7 +85,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Timber.d("wlList fragment onCreated");
         super.onCreate(savedInstanceState);
         actionModeCallback = new ActionModeCallback();
         setRetainInstance(true);
@@ -80,12 +102,16 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Timber.d("wlList fragment onViewCreated");
         //to avoid bugs. it would be better to retain selected instances but this is a good enough tradeoff
         if (actionMode!=null) {
             actionMode.finish();
         }
         super.onViewCreated(view, savedInstanceState);
+
+        //Set collapsing bar as activity's actionbar
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.setSupportActionBar(toolbar);
+        initCollapsingToolbar();
 
         wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
             @Override
@@ -100,13 +126,11 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             @Override
             public boolean onItemLongClick(View view, int position) {
                 if (actionMode == null) {
-                    Timber.d("I'm not in action mode");
                     actionMode =((AppCompatActivity) getActivity()).startSupportActionMode(actionModeCallback);
                 } else {
-                    Timber.d("I'm in action mode");
+                    //null
                 }
                 toggleSelection(position);
-
                 return true;
             }
         });
@@ -115,27 +139,25 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         recyclerViewTouchActionGuardManager = new RecyclerViewTouchActionGuardManager();
         recyclerViewTouchActionGuardManager.setInterceptVerticalScrollingWhileAnimationRunning(true);
         recyclerViewTouchActionGuardManager.setEnabled(true);
-
         // drag & drop manager
         recyclerViewDragDropManager = new RecyclerViewDragDropManager();
-        recyclerViewDragDropManager.setDraggingItemShadowDrawable(
-                (NinePatchDrawable) ContextCompat.getDrawable(getContext(), R.drawable.material_shadow_z3));
-
+        recyclerViewDragDropManager.setDraggingItemShadowDrawable((NinePatchDrawable) ContextCompat.getDrawable(getContext(), R.drawable.material_shadow_z3));
         // swipe manager
         recyclerViewSwipeManager = new RecyclerViewSwipeManager();
-
-        wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(wishlistListAdapter);      // wrap for dragging
-        wrappedAdapter = recyclerViewSwipeManager.createWrappedAdapter(wrappedAdapter);      // wrap for swiping
+        // wrap for dragging
+        wrappedAdapter = recyclerViewDragDropManager.createWrappedAdapter(wishlistListAdapter);
+        // wrap for swiping
+        wrappedAdapter = recyclerViewSwipeManager.createWrappedAdapter(wrappedAdapter);
 
         GeneralItemAnimator animator = new SwipeDismissItemAnimator();
-
         // Change animations are enabled by default since support-v7-recyclerview v22.
         // Disable the change animation in order to make turning back animation of swiped item works properly.
         animator.setSupportsChangeAnimations(false);
+        recyclerView.setItemAnimator(animator);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(wrappedAdapter);  // requires *wrapped* adapter
-        recyclerView.setItemAnimator(animator);
+        // requires *wrapped* adapter
+        recyclerView.setAdapter(wrappedAdapter);
 
         // additional decorations
         //noinspection StatementWithEmptyBody
@@ -148,13 +170,11 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
         // NOTE:
         // The initialization order is very important! This order determines the priority of touch event handling.
-        //
         // priority: TouchActionGuard > Swipe > DragAndDrop
         recyclerViewTouchActionGuardManager.attachRecyclerView(recyclerView);
         recyclerViewSwipeManager.attachRecyclerView(recyclerView);
         recyclerViewDragDropManager.attachRecyclerView(recyclerView);
     }
-
 
     @Override
     public void onPause() {
@@ -168,22 +188,18 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             recyclerViewDragDropManager.release();
             recyclerViewDragDropManager = null;
         }
-
         if (recyclerViewSwipeManager != null) {
             recyclerViewSwipeManager.release();
             recyclerViewSwipeManager = null;
         }
-
         if (recyclerViewTouchActionGuardManager != null) {
             recyclerViewTouchActionGuardManager.release();
             recyclerViewTouchActionGuardManager = null;
         }
-
         if (wrappedAdapter != null) {
             WrapperAdapterUtils.releaseAll(wrappedAdapter);
             wrappedAdapter = null;
         }
-
         super.onDestroyView();
     }
 
@@ -226,15 +242,11 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
-            case R.id.action_add:
-                intentStarter.startWishlistSettingsActivity(getContext(), 0);
+            case R.id.action_search:
                 return true;
-
             default:
                 break;
-
         }
         return false;
     }
@@ -264,14 +276,12 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_remove:
-                    Timber.d("remove action");
                     for (Wishlist w : wishlistListAdapter.getSelectedWishlists()) {
                         removeWishlist(w);
                     }
                     wishlistListAdapter.notifyDataSetChanged();
                     mode.finish();
                     return true;
-
                 default:
                     return false;
             }
@@ -279,15 +289,88 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Timber.d("destroying action mode");
             wishlistListAdapter.clearSelection();
             actionMode = null;
-            Timber.d("now I have " + wishlistListAdapter.getSelectedWishlists().size());
         }
     }
 
     private boolean supportsViewElevation() {
         return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
     }
+
+    /**
+     * Initializing collapsing toolbar
+     * Will show and hide the toolbar title on scroll
+     */
+    private void initCollapsingToolbar() {
+        collapsingToolbar.setTitle(" ");
+        collapseBackdrop.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        int width = collapseBackdrop.getMeasuredWidth();
+        int height = collapseBackdrop.getMeasuredHeight();
+        picasso.load(R.drawable.party)
+                .resize(width, height)
+                .centerCrop()
+                .into(collapseBackdrop);
+
+        appBarLayout.setExpanded(true);
+
+        // hiding & showing the title when toolbar expanded & collapsed
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbar.setTitle(getString(R.string.app_name));
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbar.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
+    /**
+     * RecyclerView item decoration - give equal margin around grid item
+    public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
+
+        private int spanCount;
+        private int spacing;
+        private boolean includeEdge;
+
+        public GridSpacingItemDecoration(int spanCount, int spacing, boolean includeEdge) {
+            this.spanCount = spanCount;
+            this.spacing = spacing;
+            this.includeEdge = includeEdge;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            int position = parent.getChildAdapterPosition(view); // item position
+            int column = position % spanCount; // item column
+
+            if (includeEdge) {
+                outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
+                outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
+
+                if (position < spanCount) { // top edge
+                    outRect.top = spacing;
+                }
+                outRect.bottom = spacing; // item bottom
+            } else {
+                outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
+                outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+                if (position >= spanCount) {
+                    outRect.top = spacing; // item top
+                }
+            }
+        }
+    }
+     */
 }
 

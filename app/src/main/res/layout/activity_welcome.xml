@@ -9,10 +9,10 @@
         android:id="@+id/coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/material_purple_600"
-        app:showIndicators="false"
+        android:background="@color/colorPrimary"
+        app:showIndicators="true"
         app:indicatorUnselected="#99b7b7b7"
-        app:indicatorSelected="#bfb7b7b7" />
+        app:indicatorSelected="@color/secondary_text" />
 
     <Button
         style="?attr/borderlessButtonStyle"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="skip"
-        android:textColor="@color/material_light_white"
+        android:textColor="@color/white"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dp"/>
 

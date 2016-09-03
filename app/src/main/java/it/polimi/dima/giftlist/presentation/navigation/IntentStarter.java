@@ -29,32 +29,32 @@ public class IntentStarter {
     public IntentStarter() {
     }
 
-                                           public void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId) {
+    public static void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId) {
         Intent intentToLaunch = ProductPickerActivity.getCallingIntent(context, enabledRepositoryMap, chosenCategoriesList, keywords, maxprice, minprice, wishlistId);
         context.startActivity(intentToLaunch);
     }
 
-    public void startWishlistActivity(@NonNull Context context, long wishlistId) {
+    public static void startWishlistActivity(@NonNull Context context, long wishlistId) {
         Intent intentToLaunch = WishlistActivity.getCallingIntent(context, wishlistId);
         context.startActivity(intentToLaunch);
     }
 
-    public void startWishlistListActivity(@NonNull Context context) {
+    public static void startWishlistListActivity(@NonNull Context context) {
         Intent intentToLaunch = WishlistListActivity.getCallingIntent(context);
         context.startActivity(intentToLaunch);
     }
 
-    public void startProductPickerSettingsActivity(@NonNull Context context, long wishlistId) {
+    public static void startProductPickerSettingsActivity(@NonNull Context context, long wishlistId) {
         Intent intentToLaunch = ProductPickerSettingsActivity.getCallingIntent(context, wishlistId);
         context.startActivity(intentToLaunch);
     }
 
-    public void startWishlistSettingsActivity(@NonNull Context context, long wishlistId) {
+    public static void startWishlistSettingsActivity(@NonNull Context context, long wishlistId) {
         Intent intentToLaunch = WishlistSettingsActivity.getCallingIntent(context,wishlistId);
         context.startActivity(intentToLaunch);
     }
 
-    public void startProductDetailsPagerActivity(@NonNull Context context, List<Product> productList, long selectedProductId) {
+    public static void startProductDetailsPagerActivity(@NonNull Context context, List<Product> productList, long selectedProductId) {
         ArrayList<Product> productArrayList = new ArrayList<>(productList);
         Intent intentToLaunch = ProductDetailsPagerActivity.getCallingIntent(context, productArrayList, selectedProductId);
         context.startActivity(intentToLaunch);

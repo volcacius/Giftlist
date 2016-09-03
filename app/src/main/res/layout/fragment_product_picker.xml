@@ -22,7 +22,6 @@
                   android:orientation="horizontal">
 
         <com.like.LikeButton
-
             app:like_drawable="@drawable/heart"
             app:unlike_drawable="@drawable/heart"
             app:icon_size="30dp"

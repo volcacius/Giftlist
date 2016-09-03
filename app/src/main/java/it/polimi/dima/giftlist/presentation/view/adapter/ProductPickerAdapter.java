@@ -128,7 +128,7 @@ public class ProductPickerAdapter extends BaseAdapter {
         TextView convertedPriceTextView;
         @Bind(R.id.text_repository)
         TextView repositoryTextView;
-        @BindColor(R.color.primary)
+        @BindColor(R.color.colorPrimary)
         int colorPrimary;
 
         public ProductPickerViewHolder(View view) {

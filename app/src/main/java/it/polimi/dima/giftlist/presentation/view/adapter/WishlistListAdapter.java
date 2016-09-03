@@ -3,13 +3,14 @@ package it.polimi.dima.giftlist.presentation.view.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.widget.DrawableUtils;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.ViewUtils;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.h6ah4i.android.widget.advrecyclerview.draggable.DraggableItemAdapter;
@@ -33,6 +34,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
+import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import timber.log.Timber;
 
 /**
@@ -44,12 +46,13 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     private static final int[] EMPTY_STATE = new int[] {};
 
+    private Context context;
     private final LayoutInflater layoutInflater;
-
     private List<Wishlist> wishlistList;
     private OnWishlistClickListener onWishlistClickListener;
 
     public WishlistListAdapter(Context context) {
+        this.context = context;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.wishlistList = new LinkedList<>();
         // DraggableItemAdapter and SwipeableItemAdapter require stable ID, and also
@@ -69,7 +72,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         String wishlistName = wishlistList.get(position).getName();
         holder.wishlistNameTextView.setText(wishlistName);
         holder.wishlistOccasionTextView.setText(wishlistList.get(position).getOccasion());
-
         // Highlight the item if it's selected
         holder.selectedOverlay.setVisibility(isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
@@ -97,6 +99,12 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
                 bgResId = R.drawable.bg_item_normal_state;
             }
             holder.container.setBackgroundResource(bgResId);
+            holder.overflowIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showPopupMenu(v, wishlistList.get(position).getId());
+                }
+            });
         }
         // set swiping properties
         holder.setSwipeItemHorizontalSlideAmount(0);
@@ -197,7 +205,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     @Override
     public SwipeResultAction onSwipeItem(ViewHolder holder, int position, int result) {
-        Timber.d("onSwipeItem(position = " + position + ", result = " + result + ")");
         switch (result) {
             // swipe right
             case SwipeableItemConstants.RESULT_SWIPED_RIGHT:
@@ -215,16 +222,16 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
         @Bind(R.id.wishlist_name)
         TextView wishlistNameTextView;
-
-        @Bind(R.id.wishlist_occasion)
+        @Bind(R.id.occasion)
         TextView wishlistOccasionTextView;
-
         @Bind(R.id.selected_overlay)
         View selectedOverlay;
         @Bind(R.id.container)
-        public FrameLayout container;
+        FrameLayout container;
         @Bind(R.id.drag_handle)
-        public View dragHandle;
+        View dragHandle;
+        @Bind(R.id.overflow)
+        ImageView overflowIcon;
 
         public ViewHolder(View view, OnWishlistClickListener onWishlistClickListener) {
             super(view);
@@ -294,5 +301,44 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         final int bottom = v.getBottom() + ty;
 
         return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
+    }
+
+    /**
+     * Showing popup menu when tapping on 3 dots
+     */
+    private void showPopupMenu(View view, long wishlistId) {
+        // inflate menu
+        PopupMenu popup = new PopupMenu(context, view);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.menu_wishlist, popup.getMenu());
+        popup.setOnMenuItemClickListener(new WishlistPopupClickListener(wishlistId));
+        popup.show();
+    }
+
+    /**
+     * Click listener for popup menu items
+     */
+    class WishlistPopupClickListener implements PopupMenu.OnMenuItemClickListener {
+
+        long wishlistId;
+
+        public WishlistPopupClickListener(long wishlistId) {
+            this.wishlistId = wishlistId;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem menuItem) {
+            switch (menuItem.getItemId()) {
+                case R.id.action_search:
+                    IntentStarter.startProductPickerSettingsActivity(context, wishlistId);
+                    return true;
+                case R.id.action_settings:
+                    IntentStarter.startWishlistSettingsActivity(context, wishlistId);
+                    return true;
+                default:
+                    break;
+            }
+            return false;
+        }
     }
 }

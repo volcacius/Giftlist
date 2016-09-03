@@ -155,7 +155,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
+            case R.id.action_search:
                 Timber.d("button add pressed");
                 intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
                 return true;

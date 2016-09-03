@@ -59,7 +59,7 @@ public class ProductDetailsFragment extends BaseFragment {
     @Bind(R.id.open_website)
     Button openWebsiteButton;
     
-    @BindColor(R.color.primary)
+    @BindColor(R.color.colorPrimary)
     int colorPrimary;
 
     @OnClick(R.id.open_website)

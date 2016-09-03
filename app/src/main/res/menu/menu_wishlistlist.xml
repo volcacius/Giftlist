@@ -4,9 +4,9 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_add"
-        android:icon="@drawable/common_google_signin_btn_icon_light"
-        android:title="@string/action_add_wishlist"
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="@string/action_search_wishlist"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->

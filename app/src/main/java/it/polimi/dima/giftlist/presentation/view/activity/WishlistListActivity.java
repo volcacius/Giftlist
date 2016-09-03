@@ -3,34 +3,26 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistListFragment;
-import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
  */
 public class WishlistListActivity extends BaseActivity implements HasComponent<WishlistListComponent> {
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
     WishlistListComponent wishlistListComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSupportActionBar(toolbar);
-        //deal with rotation?
+        //TODO: deal with rotation?
         createComponent();
         if (savedInstanceState == null) {
             addFragment(R.id.wishlistlist_activity_content, new WishlistListFragment());
@@ -51,7 +43,7 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_add:
+            case R.id.action_search:
                  //implemented in the fragment
                 return false;
             default:
