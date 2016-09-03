@@ -2,6 +2,7 @@ package it.polimi.dima.giftlist.presentation.module;
 
 import android.support.v4.app.FragmentManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import dagger.Module;
@@ -17,9 +18,9 @@ import it.polimi.dima.giftlist.presentation.view.adapter.ProductDetailsPagerAdap
 public class ProductDetailsPagerModule {
 
     private FragmentManager fragmentManager;
-    private List<Product> productList;
+    private ArrayList<Product> productList;
 
-    public ProductDetailsPagerModule(FragmentManager fragmentManager, List<Product> productList) {
+    public ProductDetailsPagerModule(FragmentManager fragmentManager, ArrayList<Product> productList) {
         this.fragmentManager = fragmentManager;
         this.productList = productList;
     }

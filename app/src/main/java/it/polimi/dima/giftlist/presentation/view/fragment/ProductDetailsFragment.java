@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -66,7 +67,6 @@ public class ProductDetailsFragment extends BaseFragment {
     public void openWebsite(){
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(product.getProductPage()));
         startActivity(browserIntent);
-
     }
 
     @Override
@@ -116,6 +116,21 @@ public class ProductDetailsFragment extends BaseFragment {
     @Override
     protected int getLayoutRes() {
         return R.layout.fragment_product_details;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case R.id.action_settings:
+                //TODO
+                Timber.d("button settings pressed: to implement");
+                return true;
+
+            default:
+                break;
+
+        }
+        return false;
     }
 
 }

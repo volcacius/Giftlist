@@ -1,11 +1,11 @@
 package it.polimi.dima.giftlist.data.model;
 
+import android.os.Parcel;
+
 /**
  * Created by Elena on 26/03/2016.
  */
 public class EbayProduct extends Product {
-
-    final static int CREATOR = 0;
 
     public EbayProduct(String name, String description, long listing_id, float price,
                        CurrencyType currencyType, String url_170x135, String imageUri, String url_page) {
@@ -33,4 +33,15 @@ public class EbayProduct extends Product {
         this.productPage = productPage;
     }
 
+    public static final Creator<Product> CREATOR = new Creator<Product>() {
+        public Product createFromParcel(Parcel source) {
+            Product target = new Product();
+            ProductParcelablePlease.readFromParcel(target, source);
+            return target;
+        }
+
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }
