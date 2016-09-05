@@ -105,6 +105,7 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlin
                 String name = p.getId() + "_pic.jpg";
                 String uri = root + name;
                 p.setImageUri(uri);
+                p.setPrimaryKeyId(p.getId()+"-"+p.getWishlistId());
                 eventBus.post(new ProductAddedEvent(p));
                 likeButton.setLiked(false);
 

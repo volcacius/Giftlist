@@ -20,6 +20,7 @@ public class EtsyProduct extends Product {
         this.imageUrl = imageUrl;
         this.imageUri = imageUri;
         this.productPage = url_page;
+        this.primaryKeyId = id + "-" + wishlistId;
     }
 
     public EtsyProduct(String name, String description, long id, float price, float convertedPrice, CurrencyType currencyType, String imageUrl, String imageUri, String productPage, long wishlistId) {

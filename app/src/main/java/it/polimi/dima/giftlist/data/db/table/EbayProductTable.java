@@ -15,6 +15,7 @@ public class EbayProductTable {
     public static final String COLUMN_IMAGE_URI = "image_uri";
     public static final String COLUMN_PRODUCT_PAGE = "product_page";
     public static final String COLUMN_WISHLIST_ID = "wishlist_id";
+    public static final String COLUMN_PRIMARY_ID = "primary_id";
     public static final String COLUMN_NAME_WITH_TABLE_PREFIX = TABLE + "." + COLUMN_NAME;
     public static final String COLUMN_DESCRIPTION_WITH_TABLE_PREFIX = TABLE + "." + COLUMN_DESCRIPTION;
     public static final String COLUMN_ID_TABLE_PREFIX = TABLE + "." + COLUMN_ID;
@@ -33,7 +34,8 @@ public class EbayProductTable {
 
     public static String getCreateTableQuery() {
         return "CREATE TABLE " + TABLE + "("
-                + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, "
+                + COLUMN_PRIMARY_ID + " STRING NOT NULL PRIMARY KEY, "
+                + COLUMN_ID + " INTEGER NOT NULL, "
                 + COLUMN_DESCRIPTION + " TEXT NOT NULL, "
                 + COLUMN_NAME + " TEXT NOT NULL, "
                 + COLUMN_PRICE + " FLOAT NOT NULL, "

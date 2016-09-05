@@ -15,9 +15,6 @@ public interface EtsyApi {
     String END_POINT       = "https://openapi.etsy.com/";
     String PARAM_API_KEY   = "api_key";
 
-    @GET("v2/listings/active?fields=listing_id,title,currency_code,price,description,url&includes=Images(url_570xN,hex_code)")
-    Observable<List<Product>> getItems(@Query("category") String category, @Query("offset") int offset);
-
     @GET("v2/listings/active?fields=listing_id,title,currency_code,price,url,description&includes=Images(url_570xN,hex_code)")
     Observable<List<Product>> getItems(@Query("category") String category,
                                        @Query("tags") String keywords,
