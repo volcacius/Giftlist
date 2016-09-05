@@ -16,4 +16,5 @@ public interface WishlistListView extends MvpLceView<List<Wishlist>> {
     boolean isUndoBarVisible();
     void clearSearchView();
     void backlogDeletionDBCleanup();
+    boolean isSelectModeEnabled();
 }

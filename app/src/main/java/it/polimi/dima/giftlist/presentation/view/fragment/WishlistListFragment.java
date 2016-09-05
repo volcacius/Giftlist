@@ -216,6 +216,15 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
+    public boolean isSelectModeEnabled() {
+        if (actionMode != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public void onPause() {
         recyclerViewDragDropManager.cancelDrag();
         super.onPause();
@@ -344,7 +353,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate (R.menu.delete_item_context_menu, menu);
+            mode.getMenuInflater().inflate(R.menu.delete_item_context_menu, menu);
             return true;
         }
 
@@ -391,12 +400,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
      */
     private void initCollapsingToolbar() {
         collapsingToolbar.setTitle(" ");
-        collapseBackdrop.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        int width = collapseBackdrop.getMeasuredWidth();
-        int height = collapseBackdrop.getMeasuredHeight();
         picasso.load(R.drawable.party)
-                .resize(width, height)
-                .centerCrop()
+                .fit()
                 .into(collapseBackdrop);
 
         appBarLayout.setExpanded(true);

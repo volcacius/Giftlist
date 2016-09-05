@@ -188,9 +188,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
                 }
             });
         }
-        // set swiping properties
         holder.setSwipeItemHorizontalSlideAmount(0);
-
     }
 
     private int getWishlistThumbnail(String occasion) {
@@ -203,12 +201,17 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         } else if (occasion.equals(context.getString(R.string.wedding))) {
             return R.drawable.wife;
         } else {
-            return R.drawable.party;
+            return R.drawable.lights;
         }
     }
 
     @Override
     public boolean onCheckCanStartDrag(ViewHolder holder, int position, int x, int y) {
+        //Can't start dragging if it is selecting
+        if (wishlistListView.isSelectModeEnabled()) {
+            return false;
+        }
+
         //Can't start dragging if it is filtering
         if (filterableWishlistList.size() != wishlistList.size()) {
             return false;
@@ -263,10 +266,10 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     @Override
     public int onGetSwipeReactionType(ViewHolder holder, int position, int x, int y) {
-        if (onCheckCanStartDrag(holder, position, x, y)) {
-            return SwipeableItemConstants.REACTION_CAN_NOT_SWIPE_BOTH_H;
+        if (!wishlistListView.isSelectModeEnabled()) {
+            return SwipeableItemConstants.REACTION_CAN_SWIPE_LEFT;
         } else {
-            return SwipeableItemConstants.REACTION_CAN_SWIPE_BOTH_H;
+            return SwipeableItemConstants.REACTION_CAN_NOT_SWIPE_ANY;
         }
     }
 

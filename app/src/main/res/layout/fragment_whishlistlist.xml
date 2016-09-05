@@ -35,7 +35,6 @@ android:fitsSystemWindows="true">
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/lights"
                 app:layout_collapseMode="parallax" />
 
             <LinearLayout
