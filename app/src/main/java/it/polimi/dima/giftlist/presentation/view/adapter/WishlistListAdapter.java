@@ -97,6 +97,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         this.filterableWishlistList.clear();
         this.wishlistList.addAll(wishlistList);
         this.filterableWishlistList.addAll(wishlistList);
+        notifyDataSetChanged();
     }
 
     //Called from fragment
