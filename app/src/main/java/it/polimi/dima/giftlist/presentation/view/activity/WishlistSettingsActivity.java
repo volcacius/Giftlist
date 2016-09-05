@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import butterknife.ButterKnife;
+import icepick.State;
 import it.polimi.dima.giftlist.ApplicationComponent;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.di.HasComponent;
-import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
-import it.polimi.dima.giftlist.presentation.module.WishlistSettingsModule;
+import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
+import it.polimi.dima.giftlist.presentation.module.WishlistModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistListFragment;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistSettingsFragmentBuilder;
 import timber.log.Timber;
@@ -18,11 +19,14 @@ import timber.log.Timber;
 /**
  * Created by Elena on 10/08/2016.
  */
-public class WishlistSettingsActivity extends BaseActivity implements HasComponent<WishlistSettingsComponent> {
+public class WishlistSettingsActivity extends BaseActivity implements HasComponent<WishlistComponent> {
 
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
+
+    @State
     long wishlistId;
-    WishlistSettingsComponent wishlistSettingsComponent;
+
+    WishlistComponent wishlistComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +39,12 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
         //If the activity is recreated e.g. after rotation, it is restored by IcePick in the super.onCreate call
         if (savedInstanceState == null) {
             wishlistId = getIntent().getLongExtra(EXTRA_WISHLIST_ID, Wishlist.DEFAULT_ID);
+            addFragment(R.id.wishlist_settings_activity_content, new WishlistSettingsFragmentBuilder(wishlistId).build());
         }
         createComponent();
         if (savedInstanceState == null) {
             addFragment(R.id.wishlist_settings_activity_content, new WishlistSettingsFragmentBuilder(wishlistId).build());
         }
-
     }
 
     @Override
@@ -55,12 +59,12 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
     }
 
     @Override
-    public WishlistSettingsComponent getComponent() {
-        return wishlistSettingsComponent;
+    public WishlistComponent getComponent() {
+        return wishlistComponent;
     }
 
     @Override
     public void createComponent() {
-        wishlistSettingsComponent = getApplicationComponent().plus(new WishlistSettingsModule());
+        wishlistComponent = getApplicationComponent().plus(new WishlistModule(this, wishlistId));
     }
 }

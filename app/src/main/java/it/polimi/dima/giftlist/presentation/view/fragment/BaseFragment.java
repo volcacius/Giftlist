@@ -46,9 +46,6 @@ import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
  */
 public abstract class BaseFragment extends Fragment {
 
-    @Inject
-    IntentStarter intentStarter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

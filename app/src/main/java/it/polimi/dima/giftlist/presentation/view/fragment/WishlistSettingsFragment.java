@@ -10,6 +10,8 @@ import android.widget.Spinner;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
+import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
+import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 
 import java.util.Random;
 
@@ -18,7 +20,8 @@ import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
-import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
+import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
+import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistSettingsView;
 import timber.log.Timber;
@@ -28,59 +31,65 @@ import timber.log.Timber;
  */
 
 @FragmentWithArgs
-public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsView, WishlistSettingsPresenter>
+public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist, WishlistSettingsView, WishlistSettingsPresenter>
         implements WishlistSettingsView {
+
+    private static final String DEFAULT_WISHLIST_NAME = "New Wishlist";
 
     @Arg
     long wishlistId;
 
     @Bind(R.id.settings_wishlist_name)
-    EditText wlNameEditText;
+    EditText wishlistNameEditText;
 
     @Bind(R.id.settings_wishlist_occasion)
-    Spinner wlOccasionSpinner;
+    Spinner wishlistOccasionSpinner;
 
     @Bind(R.id.button_start_product_picker_settings_activity)
     Button startProductPickerSettingsButton;
 
+    Wishlist wishlist;
     String occasionSelected;
 
     @OnItemSelected(R.id.settings_wishlist_occasion)
     public void onItemSelected(int position) {
-        occasionSelected = String.valueOf(wlOccasionSpinner.getSelectedItem());
+        occasionSelected = String.valueOf(wishlistOccasionSpinner.getSelectedItem());
     }
 
     @OnClick(R.id.button_start_product_picker_settings_activity)
-    public void startProductPickerSettings(){
-
-        String wlName = wlNameEditText.getText().toString();
-
-        //If it is 0, it's a wl created from scratch, otherwise I need the id to load previous settings
-        if(wishlistId == 0) {
+    public void startProductPickerSettings() {
+        String wishlistName = wishlistNameEditText.getText().toString();
+        if (wishlistName.length() == 0) {
+            wishlistName = DEFAULT_WISHLIST_NAME;
+        }
+        //If it is 0, it's a new wishlist
+        if(wishlistId == Wishlist.DEFAULT_ID) {
             Random random = new Random();
             wishlistId = Math.abs(random.nextLong());
+            getPresenter().addWishlist(wishlistId, wishlistName, occasionSelected);
+            IntentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
+        } else {
+            getPresenter().updateWishlist(wishlistId, wishlistName, occasionSelected);
+            IntentStarter.startWishlistActivity(getContext(), wishlistId);
         }
-
-        if (wlName.length() == 0) {
-            Timber.d("the name is empty");
-            wlName = "wl number " + wishlistId;
-        }
-
-        //addWishlist will either update/insert the wishlist thanks to storio
-        getPresenter().addWishlist(new Wishlist(wishlistId, wlName, occasionSelected));
-        intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Timber.d("id of wishlist is: " + wishlistId);
+        Timber.d("ID of wishlist is: " + wishlistId);
+        //wishlistId is passed as an arg
+        //If it is zero, then an empty wishlist is created (since mosby LCE requires a piece of data to exist)
+        //If it isn't zero, it is retrieved from the presenter in load data
+        if (wishlistId == Wishlist.DEFAULT_ID) {
+            wishlist = new Wishlist(Wishlist.DEFAULT_ID, "", "", Wishlist.DEFAULT_ORDER);
+        }
         setRetainInstance(true);
     }
 
     @Override
     public WishlistSettingsPresenter createPresenter() {
-        return this.getComponent(WishlistSettingsComponent.class).providePresenter();
+        return getComponent(WishlistComponent.class).provideWishlistSettingsPresenter();
     }
 
     @Override
@@ -91,32 +100,33 @@ public class WishlistSettingsFragment extends BaseMvpFragment<WishlistSettingsVi
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setTextBoxes();
     }
 
-    protected void setTextBoxes(){
-        if (wishlistId==0) {
-            Timber.d("new wl");
-        } else {
-            Wishlist currentWishlist = getPresenter().onWishlistSettingsLoaded(wishlistId);
-            wlNameEditText.setText(currentWishlist.getName());
-            wlOccasionSpinner.setSelection(((ArrayAdapter)(wlOccasionSpinner.getAdapter())).getPosition(currentWishlist.getOccasion()));
-
-        }
+    @Override
+    protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
+        return null;
     }
 
     @Override
     protected void injectDependencies() {
-        this.getComponent(WishlistSettingsComponent.class).inject(this);
+        //No field dependencies to inject
     }
 
     @Override
-    public void showWishlistAddedError() {
-        Timber.d("error in adding wl");
+    public void setData(Wishlist data) {
+        wishlist = data;
+        if (wishlist.getId() != Wishlist.DEFAULT_ID) {
+            wishlistNameEditText.setText(data.getName());
+            wishlistOccasionSpinner.setSelection(((ArrayAdapter)(wishlistOccasionSpinner.getAdapter())).getPosition(data.getOccasion()));
+        }
     }
 
     @Override
-    public void showWishlistAddedSuccess() {
-        Timber.d("success in adding wl");
+    public void loadData(boolean pullToRefresh) {
+        if (wishlist.getId() == Wishlist.DEFAULT_ID) {
+            showContent();
+        } else {
+            presenter.subscribe(false);
+        }
     }
 }

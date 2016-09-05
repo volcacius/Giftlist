@@ -2,71 +2,106 @@ package it.polimi.dima.giftlist.presentation.presenter;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
-import com.pushtorefresh.storio.sqlite.operations.get.PreparedGetObject;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
-import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio.sqlite.queries.RawQuery;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import it.polimi.dima.giftlist.data.db.table.WishlistTable;
 import it.polimi.dima.giftlist.data.model.Wishlist;
-import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
+import it.polimi.dima.giftlist.domain.interactor.GetWishlistUseCase;
 import it.polimi.dima.giftlist.presentation.view.WishlistSettingsView;
-import rx.Observer;
-import rx.Single;
+import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 /**
  * Created by Elena on 10/08/2016.
  */
-public class WishlistSettingsPresenter extends MvpBasePresenter<WishlistSettingsView> {
-
-    protected StorIOSQLite db;
+public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettingsView, Wishlist, GetWishlistUseCase> {
 
     @Inject
-    public WishlistSettingsPresenter(StorIOSQLite db) {
-        this.db = db;
+    public WishlistSettingsPresenter(GetWishlistUseCase getWishlistUseCase, StorIOSQLite db) {
+        super(getWishlistUseCase, db);
     }
 
-    public Wishlist onWishlistSettingsLoaded(long wishlistId) {
-        return db.get()
-                .object(Wishlist.class)
-                .withQuery(Query.builder()
-                        .table(WishlistTable.TABLE)
-                        .where("id = ?")
-                        .whereArgs(wishlistId)
+    @Override
+    public void subscribe(boolean pullToRefresh) {
+        if(!useCase.isUnsubscribed()) {
+            unsubscribe();
+        }
+        if (isViewAttached()) {
+            getView().showLoading(pullToRefresh);
+        }
+        useCase.execute(new BaseSubscriber(pullToRefresh));
+    }
+
+    @Override
+    protected void onCompleted() {
+        //DB subscriptions does not complete
+    }
+
+    @Override
+    protected void onError(Throwable e, boolean pullToRefresh) {
+        if (isViewAttached()) {
+            getView().showError(e, pullToRefresh);
+        }
+        unsubscribe();
+    }
+
+    @Override
+    protected void onNext(Wishlist data) {
+        if (isViewAttached()) {
+            getView().showLoading(false);
+        }
+        getView().setData(data);
+        if (isViewAttached()) {
+            getView().showContent();
+        }
+    }
+
+    public void addWishlist(long wishlistId, String wishlistName, String occasion) {
+        WishlistPutSubscriber subscriber = new WishlistPutSubscriber();
+        Timber.d("Wishlist insert query is: %s", WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion));
+        db.executeSQL()
+                .withQuery(RawQuery.builder()
+                        .query(WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion))
+                        .affectsTables(WishlistTable.TABLE) // optional: you can specify affected tables to notify Observers
                         .build())
                 .prepare()
-                .executeAsBlocking();
-    }
-
-    public void addWishlist(Wishlist wishlist) {
-        Observer observer = new WishlistPutObserver();
-        db.put()
-                .object(wishlist)
-                .prepare()
-                .asRxObservable()
+                .asRxSingle()
                 .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(observer);
+                .subscribe(subscriber);
     }
 
-    private class WishlistPutObserver implements Observer<PutResult> {
-        @Override
-        public void onCompleted() {
-        }
-        @Override
-        public void onError(Throwable e) {
-            getView().showWishlistAddedError();
-        }
-
-        @Override
-        public void onNext(PutResult putResult) {
-            getView().showWishlistAddedSuccess();
-        }
-
+    public void updateWishlist(long wishlistId, String wishlistName, String occasion) {
+        WishlistPutSubscriber subscriber = new WishlistPutSubscriber();
+        Timber.d("Wishlist update query is: %s", WishlistTable.getNameOccasionUpdateQuery(wishlistId, wishlistName, occasion));
+        db.executeSQL()
+                .withQuery(RawQuery.builder()
+                        .query(WishlistTable.getNameOccasionUpdateQuery(wishlistId, wishlistName, occasion))
+                        .affectsTables(WishlistTable.TABLE)
+                        .build())
+                .prepare()
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(subscriber);
     }
 
+    private class WishlistPutSubscriber extends SingleSubscriber<Object> {
 
+        @Override
+        public void onSuccess(Object value) {
+            Timber.d("Success in adding/updating the wishlist");
+        }
+
+        @Override
+        public void onError(Throwable error) {
+            Timber.d("Error in adding/updating the wishlist");
+        }
+    }
 }

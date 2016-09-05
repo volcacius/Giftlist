@@ -20,7 +20,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
-import it.polimi.dima.giftlist.util.ErrorMessageDeterminer;
 import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -63,17 +62,6 @@ public class ApplicationModule {
         return AndroidSchedulers.mainThread();
     }
 
-    @Provides
-    @Singleton
-    public ErrorMessageDeterminer providesErrorMessageDeterminer(){
-        return new ErrorMessageDeterminer();
-    }
-
-    @Provides
-    @Singleton
-    IntentStarter providesIntentStarter() {
-        return new IntentStarter();
-    }
 
     @Provides
     @Singleton

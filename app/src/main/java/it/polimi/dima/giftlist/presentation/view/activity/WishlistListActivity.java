@@ -34,24 +34,6 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
         return R.layout.activity_wishlistlist;
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
-                 //implemented in the fragment
-                return false;
-            default:
-                break;
-        }
-        return false;
-    }
-
     //I need to expose the component so that I can perform injection from the fragment
     @Override
     public WishlistListComponent getComponent() {

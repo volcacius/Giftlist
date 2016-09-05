@@ -25,6 +25,7 @@ import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
+import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.ProductPickerSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerSettingsView;
 import timber.log.Timber;
@@ -134,7 +135,7 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
             maxprice = DEFAULT_MAX;
         }
 
-        intentStarter.startProductPickerActivity(this.getContext(),
+        IntentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 chosenCategoriesList,
                                                 keywordsEditText.getText().toString(),

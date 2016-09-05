@@ -26,14 +26,10 @@ public class WishlistPutResolver extends DefaultPutResolver<Wishlist> {
     @NonNull
     @Override
     protected UpdateQuery mapToUpdateQuery(@NonNull Wishlist object) {
-
-        /*Object[] argsArray = {object.getId(),
-                              object.getName()};*/
-
         return UpdateQuery.builder()
                 .table(WishlistTable.TABLE)
                 .where(WishlistTable.COLUMN_ID + " = ?")
-                .whereArgs(object.getId())//Arrays.asList(argsArray))
+                .whereArgs(object.getId())
                 .build();
     }
 
@@ -44,6 +40,7 @@ public class WishlistPutResolver extends DefaultPutResolver<Wishlist> {
         values.put(WishlistTable.COLUMN_ID, object.getId());
         values.put(WishlistTable.COLUMN_NAME, object.getName());
         values.put(WishlistTable.COLUMN_OCCASION, object.getOccasion());
+        values.put(WishlistTable.COLUMN_DISPLAY_ORDER, object.getDisplayOrder());
         return values;
     }
 }

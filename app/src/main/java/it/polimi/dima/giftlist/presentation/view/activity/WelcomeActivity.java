@@ -25,9 +25,6 @@ import it.polimi.dima.giftlist.presentation.view.animation.GiftAnimator;
  */
 public class WelcomeActivity extends BaseActivity {
 
-    @Inject
-    IntentStarter intentStarter;
-
     @Bind(R.id.coordinator)
     WelcomeCoordinatorLayout coordinatorLayout;
 
@@ -137,6 +134,6 @@ public class WelcomeActivity extends BaseActivity {
 
     @OnClick(R.id.skip)
     void skip() {
-        intentStarter.startWishlistListActivity(this);
+        IntentStarter.startWishlistListActivity(this);
     }
 }

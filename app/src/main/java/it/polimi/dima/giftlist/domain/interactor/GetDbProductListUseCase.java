@@ -27,22 +27,23 @@ import timber.log.Timber;
  */
 public class GetDbProductListUseCase extends UseCase<List<Product>> {
 
-    EventBus eventBus;
     StorIOSQLite db;
     long wishlistId;
 
     @Inject
-    public GetDbProductListUseCase(EventBus eventBus, StorIOSQLite db, long wishlistId) {
-        this.eventBus = eventBus;
+    public GetDbProductListUseCase(StorIOSQLite db, long wishlistId) {
         this.db = db;
         this.wishlistId = wishlistId;
     }
 
     @Override
     protected Observable<List<Product>> buildUseCaseObservable() {
-        Timber.d("useCase buildUseCase");
-        return Observable.combineLatest(getWishlistEtsyProductList(),
-                getWishlistEbayProductList(),
+        return getWishlistEbayEtsyProductList(db, wishlistId);
+    }
+
+    public static Observable<List<Product>> getWishlistEbayEtsyProductList(StorIOSQLite db, long wishlistId) {
+        return Observable.combineLatest(getWishlistEtsyProductList(db, wishlistId),
+                getWishlistEbayProductList(db, wishlistId),
                 new Func2<List<EtsyProduct>, List<EbayProduct>, List<Product>>() {
                     @Override
                     public List<Product> call(List<EtsyProduct> etsyProducts, List<EbayProduct> ebayProducts) {
@@ -54,9 +55,7 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
                 });
     }
 
-
-
-    private Observable<List<EbayProduct>> getWishlistEbayProductList() {
+    public static Observable<List<EbayProduct>> getWishlistEbayProductList(StorIOSQLite db, long wishlistId) {
         Timber.d("useCase getEbayList");
         return db.get()
                 .listOfObjects(EbayProduct.class)
@@ -69,7 +68,7 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
                 .asRxObservable();
     }
 
-    private Observable<List<EtsyProduct>> getWishlistEtsyProductList() {
+    public static Observable<List<EtsyProduct>> getWishlistEtsyProductList(StorIOSQLite db, long wishlistId) {
         Timber.d("useCase getEtsyList");
         return db.get()
                 .listOfObjects(EtsyProduct.class)

@@ -43,8 +43,6 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
     @Inject
     ProductDetailsPagerAdapter productDetailsPagerAdapter;
 
-
-
     private ArrayList<Product> productList;
     private long selectedProductId;
 

@@ -53,13 +53,15 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
 
     private boolean isSubscriptionPending;
     Picasso picasso;
+    EventBus eventBus;
 
     //needed to avoid that the GC collects the image before it is stored
     final List<Target> targets;
 
     @Inject
     public ProductPickerPresenter(EventBus eventBus, GetNetProductsUseCase getNetProductsUseCase, StorIOSQLite db, Picasso picasso) {
-        super(eventBus, getNetProductsUseCase, db);
+        super(getNetProductsUseCase, db);
+        this.eventBus = eventBus;
         this.picasso = picasso;
         this.isSubscriptionPending = false;
         this.targets = new ArrayList<Target>();
@@ -105,6 +107,28 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         if (isViewAttached()) {
             getView().appendData(data);
             getView().showContent();
+        }
+    }
+
+    @Override
+    public void attachView(ProductPickerView view) {
+        super.attachView(view);
+        if (eventBus!=null) {
+            eventBus.register(this);
+        }
+    }
+
+    /*
+     * This gets automatically called by Mosby
+     */
+    @Override
+    public void detachView(boolean retainInstance) {
+        super.detachView(retainInstance);
+        if (!retainInstance) {
+            unsubscribe();
+        }
+        if (eventBus!=null) {
+            eventBus.unregister(this);
         }
     }
 

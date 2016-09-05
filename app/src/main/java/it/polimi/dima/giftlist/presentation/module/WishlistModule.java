@@ -10,6 +10,7 @@ import dagger.Module;
 import dagger.Provides;
 import it.polimi.dima.giftlist.di.PerActivity;
 import it.polimi.dima.giftlist.domain.interactor.GetDbProductListUseCase;
+import it.polimi.dima.giftlist.domain.interactor.GetWishlistUseCase;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistAdapter;
 
 /**
@@ -30,8 +31,14 @@ public class WishlistModule {
 
     @Provides
     @PerActivity
-    GetDbProductListUseCase provideDbProductListUseCase(EventBus eventBus, StorIOSQLite db) {
-        return new GetDbProductListUseCase(eventBus, db, wishlistId);
+    GetDbProductListUseCase provideDbProductListUseCase(StorIOSQLite db) {
+        return new GetDbProductListUseCase(db, wishlistId);
+    }
+
+    @Provides
+    @PerActivity
+    GetWishlistUseCase providesWishlistUseCase(StorIOSQLite db) {
+        return new GetWishlistUseCase(db, wishlistId);
     }
 
     @Provides

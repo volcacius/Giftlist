@@ -1,20 +1,21 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,8 +28,6 @@ import com.h6ah4i.android.widget.advrecyclerview.draggable.RecyclerViewDragDropM
 import com.h6ah4i.android.widget.advrecyclerview.swipeable.RecyclerViewSwipeManager;
 import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchActionGuardManager;
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
-import com.hannesdorfmann.mosby.mvp.viewstate.lce.LceViewState;
-import com.hannesdorfmann.mosby.mvp.viewstate.lce.data.RetainingLceViewState;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -37,6 +36,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
@@ -44,7 +44,6 @@ import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
-import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -65,13 +64,11 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @OnClick(R.id.fab)
     void onFabClick() {
-        intentStarter.startWishlistSettingsActivity(getContext(), 0);
+        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID);
     }
 
     @Inject
     WishlistListAdapter wishlistListAdapter;
-    @Inject
-    IntentStarter intentStarter;
     @Inject
     Picasso picasso;
 
@@ -119,7 +116,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 if (actionMode != null) {
                     toggleSelection(position);
                 } else {
-                    intentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
+                    IntentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
                 }
             }
 
@@ -203,6 +200,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             WrapperAdapterUtils.releaseAll(wrappedAdapter);
             wrappedAdapter = null;
         }
+        //store the order of the wishlists
+        presenter.updateWishlistList(wishlistListAdapter.getWishlistList());
         super.onDestroyView();
     }
 
@@ -217,14 +216,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         }
     }
 
-    @Override public LceViewState<List<Wishlist>, WishlistListView> createViewState() {
-        return new RetainingLceViewState<>();
-    }
-
-    @Override public List<Wishlist> getData() {
-        return wishlistListAdapter.getWishlistList();
-    }
-
     @Override protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
         //return errorMessageDeterminer.getErrorMessage(e, pullToRefresh);
         return null;
@@ -234,24 +225,37 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         return this.getComponent(WishlistListComponent.class).providePresenter();
     }
 
-    @Override public void setData(List<Wishlist> data) {
+    @DebugLog
+    @Override
+    public void setData(List<Wishlist> data) {
         wishlistListAdapter.setWishlistList(data);
-        wishlistListAdapter.notifyDataSetChanged();
     }
 
-    @Override public void loadData(boolean pullToRefresh) {
+    @Override
+    @DebugLog
+    public void loadData(boolean pullToRefresh) {
         presenter.subscribe(pullToRefresh);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search:
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        getActivity().getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                final List<Wishlist> filteredModelList = Wishlist.filter(wishlistListAdapter.getWishlistList(), newText);
+                wishlistListAdapter.replaceFilterableWishlistList(filteredModelList);
+                recyclerView.scrollToPosition(0);
                 return true;
-            default:
-                break;
-        }
-        return false;
+            }
+        });
     }
 
     @Override

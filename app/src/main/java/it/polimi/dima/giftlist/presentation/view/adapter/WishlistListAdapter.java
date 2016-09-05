@@ -2,14 +2,16 @@ package it.polimi.dima.giftlist.presentation.view.adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,14 +28,12 @@ import com.h6ah4i.android.widget.advrecyclerview.utils.RecyclerViewAdapterUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
@@ -54,15 +54,108 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     private final LayoutInflater layoutInflater;
     private List<Wishlist> wishlistList;
     private OnWishlistClickListener onWishlistClickListener;
+    private SortedList<Wishlist> filterableWishlistList;
+
 
     public WishlistListAdapter(Context context, Picasso picasso) {
         this.context = context;
         this.picasso = picasso;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.wishlistList = new LinkedList<>();
+        this.filterableWishlistList = new SortedList<>(Wishlist.class, new SortedList.Callback<Wishlist>() {
+            @Override
+            public int compare(Wishlist a, Wishlist b) {
+                if (b.getDisplayOrder() > a.getDisplayOrder()) {
+                    return 1;
+                } else if (b.getDisplayOrder() == a.getDisplayOrder()) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+            @Override
+            public void onInserted(int position, int count) {
+                notifyItemRangeInserted(position, count);
+            }
+            @Override
+            public void onRemoved(int position, int count) {
+                notifyItemRangeRemoved(position, count);
+            }
+            @Override
+            public void onMoved(int fromPosition, int toPosition) {
+                notifyItemMoved(fromPosition, toPosition);
+            }
+            @Override
+            public void onChanged(int position, int count) {
+                notifyItemRangeChanged(position, count);
+            }
+            @Override
+            public boolean areContentsTheSame(Wishlist oldItem, Wishlist newItem) {
+                return oldItem.equals(newItem);
+            }
+            @Override
+            public boolean areItemsTheSame(Wishlist item1, Wishlist item2) {
+                return item1.getId() == item2.getId();
+            }
+        });
         // DraggableItemAdapter and SwipeableItemAdapter require stable ID, and also
         // have to implement the getItemId() method appropriately.
         setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return filterableWishlistList.get(position).getId();
+    }
+
+    @Override
+    public int getItemCount() {
+        return filterableWishlistList.size();
+    }
+
+    public List<Wishlist> getSelectedWishlists() {
+        List<Integer> positions = super.getSelectedItems();
+        List<Wishlist> selectedWishlists = new ArrayList<>(positions.size());
+        for (Integer i : positions) {
+            selectedWishlists.add(filterableWishlistList.get(i));
+        }
+        return selectedWishlists;
+    }
+
+    public List<Wishlist> getWishlistList() {
+        return wishlistList;
+    }
+
+    public SortedList<Wishlist> getFilterableWishlistList() {
+        return filterableWishlistList;
+    }
+
+    @DebugLog
+    public void setWishlistList(List<Wishlist> wishlistList) {
+        //Update the original list
+        this.wishlistList.clear();
+        this.wishlistList.addAll(wishlistList);
+        //Update the filterable list
+        replaceFilterableWishlistList(wishlistList);
+    }
+
+    @DebugLog
+    public void replaceFilterableWishlistList(List<Wishlist> wishlistList) {
+        filterableWishlistList.beginBatchedUpdates();
+        for (int i = filterableWishlistList.size() - 1; i >= 0; i--) {
+            final Wishlist wishlist = filterableWishlistList.get(i);
+            if (!wishlistList.contains(wishlist)) {
+                filterableWishlistList.remove(wishlist);
+            }
+        }
+        filterableWishlistList.addAll(wishlistList);
+        Timber.d("Filterable wishlist list size is %d", filterableWishlistList.size());
+        filterableWishlistList.endBatchedUpdates();
+    }
+
+    //Called from fragment
+    public void setOnWishlistClickListener(OnWishlistClickListener onWishlistClickListener) {
+        this.onWishlistClickListener = onWishlistClickListener;
     }
 
     @Override
@@ -72,26 +165,13 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         return vh;
     }
 
-    private int getWishlistThumbnail(String occasion) {
-        if (occasion == context.getString(R.string.birthday)) {
-            return R.drawable.birthday;
-        } else if (occasion == context.getString(R.string.anniversary)) {
-            return R.drawable.cake_anniversary;
-        } else if (occasion == context.getString(R.string.graduation)) {
-            return R.drawable.beer;
-        } else if (occasion == context.getString(R.string.wedding)) {
-            return R.drawable.wife;
-        } else {
-            return R.drawable.lights;
-        }
-    }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String wishlistName = wishlistList.get(position).getName();
-        String occasion = wishlistList.get(position).getOccasion();
+        String wishlistName = filterableWishlistList.get(position).getName();
+        String occasion = filterableWishlistList.get(position).getOccasion();
+        int order = filterableWishlistList.get(position).getDisplayOrder();
 
-        holder.wishlistNameTextView.setText(wishlistName);
+        holder.wishlistNameTextView.setText(String.format("%d %s", order, wishlistName));
         holder.wishlistOccasionTextView.setText(occasion);
 
         picasso.load(getWishlistThumbnail(occasion))
@@ -129,7 +209,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             holder.overflowIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showPopupMenu(v, wishlistList.get(position).getId());
+                    showPopupMenu(v, filterableWishlistList.get(position).getId());
                 }
             });
         }
@@ -138,41 +218,27 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     }
 
-    @Override
-    public long getItemId(int position) {
-        return wishlistList.get(position).getId();
-    }
-
-    @Override
-    public int getItemCount() {
-        return wishlistList.size();
-    }
-
-    public List<Wishlist> getSelectedWishlists() {
-        List<Integer> positions = super.getSelectedItems();
-        List<Wishlist> selectedWishlists = new ArrayList<>(positions.size());
-        for (Integer i : positions) {
-            selectedWishlists.add(wishlistList.get(i));
+    private int getWishlistThumbnail(String occasion) {
+        if (occasion == context.getString(R.string.birthday)) {
+            return R.drawable.birthday;
+        } else if (occasion == context.getString(R.string.anniversary)) {
+            return R.drawable.cake_anniversary;
+        } else if (occasion == context.getString(R.string.graduation)) {
+            return R.drawable.beer;
+        } else if (occasion == context.getString(R.string.wedding)) {
+            return R.drawable.wife;
+        } else {
+            return R.drawable.lights;
         }
-        return selectedWishlists;
-    }
-
-    public List<Wishlist> getWishlistList() {
-        return wishlistList;
-    }
-
-    public void setWishlistList(List<Wishlist> wishlistList) {
-        this.wishlistList.clear();
-        this.wishlistList.addAll(wishlistList);
-    }
-
-    //Called from fragment
-    public void setOnWishlistClickListener(OnWishlistClickListener onWishlistClickListener) {
-        this.onWishlistClickListener = onWishlistClickListener;
     }
 
     @Override
     public boolean onCheckCanStartDrag(ViewHolder holder, int position, int x, int y) {
+        //Can't start dragging if it is filtering
+        if (filterableWishlistList.size() != wishlistList.size()) {
+            return false;
+        }
+
         // x, y --- relative from the itemView's top-left
         final View containerView = holder.container;
         final View dragHandleView = holder.dragHandle;
@@ -194,9 +260,15 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         if (fromPosition == toPosition) {
             return;
         }
-        final Wishlist wishlist = wishlistList.remove(fromPosition);
+        //reorder sorted list
+        filterableWishlistList.get(fromPosition).setDisplayOrder(toPosition);
+        filterableWishlistList.updateItemAt(fromPosition, filterableWishlistList.get(fromPosition));
+        //reorder original wishlistlist
+        Wishlist wishlist = wishlistList.remove(fromPosition);
         wishlistList.add(toPosition, wishlist);
-        notifyItemMoved(fromPosition, toPosition);
+        for (int order = 0; order < wishlistList.size(); order++) {
+            wishlistList.get(order).setDisplayOrder(order);
+        }
     }
 
     @Override

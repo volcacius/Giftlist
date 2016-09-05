@@ -35,7 +35,7 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
 
     @Inject
     public WishlistPresenter(GetDbProductListUseCase getDbProductListUseCase, StorIOSQLite db) {
-        super(null, getDbProductListUseCase, db);
+        super(getDbProductListUseCase, db);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
 
     @Override
     protected void onCompleted() {
-        unsubscribe();
-    }
+        //DB subscriptions do not complete
+   }
 
     @Override
     protected void onError(Throwable e, boolean pullToRefresh) {
@@ -64,6 +64,7 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
 
     @Override
     protected void onNext(List<Product> data) {
+        getView().showLoading(false);
         getView().setData(data);
         if (isViewAttached()) {
             getView().showContent();

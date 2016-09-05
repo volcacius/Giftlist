@@ -1,7 +1,5 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +29,6 @@ import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
-import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
@@ -45,7 +42,7 @@ import timber.log.Timber;
  * Created by Elena on 19/01/2016.
  */
 @FragmentWithArgs
-public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterView, List<Product>, ProductPickerView, ProductPickerPresenter>
+public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlingAdapterView, List<Product>, ProductPickerView, ProductPickerPresenter>
         implements ProductPickerView {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
@@ -71,8 +68,6 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
 
     @Inject
     ProductPickerAdapter productPickerAdapter;
-    @Inject
-    IntentStarter intentStarter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -189,7 +184,7 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
 
     @Override
     protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
-        return errorMessageDeterminer.getErrorMessage(e);
+        return ErrorMessageDeterminer.getErrorMessage(e);
     }
 
     @DebugLog
@@ -248,12 +243,12 @@ public class ProductPickerFragment extends BaseMvpLceFragment<SwipeFlingAdapterV
         switch (item.getItemId()) {
             case R.id.action_wishlist:
                 Timber.d("button add pressed");
-                intentStarter.startWishlistActivity(getContext(), wishlistId);
+                IntentStarter.startWishlistActivity(getContext(), wishlistId);
                 return true;
 
             case R.id.action_settings:
                 Timber.d("button settings pressed");
-                intentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
+                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
                 return true;
 
             default:

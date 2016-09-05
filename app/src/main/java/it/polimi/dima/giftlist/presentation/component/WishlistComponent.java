@@ -4,6 +4,7 @@ import dagger.Subcomponent;
 import it.polimi.dima.giftlist.di.PerActivity;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistPresenter;
+import it.polimi.dima.giftlist.presentation.presenter.WishlistSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistActivity;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistFragment;
 
@@ -17,4 +18,6 @@ public interface WishlistComponent {
     void inject(WishlistFragment wishlistFragment);
 
     WishlistPresenter provideWishlistPresenter();
+    WishlistSettingsPresenter provideWishlistSettingsPresenter();
+
 }

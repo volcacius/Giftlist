@@ -8,13 +8,12 @@ import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistListComponent;
-import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductDetailsPagerModule;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerSettingsModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
-import it.polimi.dima.giftlist.presentation.module.WishlistSettingsModule;
+import it.polimi.dima.giftlist.presentation.presenter.WishlistSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.activity.WelcomeActivity;
 import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductDetailsFragment;
@@ -37,7 +36,6 @@ public interface ApplicationComponent {
     ProductPickerComponent plus(ProductPickerModule module);
     WishlistComponent plus(WishlistModule module);
     WishlistListComponent plus(WishlistListModule module);
-    WishlistSettingsComponent plus(WishlistSettingsModule module);
     ProductDetailsPagerComponent plus(ProductDetailsPagerModule module);
     ProductPickerSettingsComponent plus(ProductPickerSettingsModule module);
 }

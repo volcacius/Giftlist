@@ -1,29 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <EditText
-        android:id="@+id/settings_wishlist_name"
+    <LinearLayout android:id="@+id/contentView"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/wl_name_hint"/>
+        android:layout_height="match_parent">
 
-    <Spinner
-        android:id="@+id/settings_wishlist_occasion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
-        android:entries="@array/occasions"
-        android:prompt="@string/wl_occasion_hint"
-        android:spinnerMode="dropdown" />
+        <EditText
+            android:id="@+id/settings_wishlist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/wl_name_hint"/>
 
-    <Button
-        android:id="@+id/button_start_product_picker_settings_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:text="Continue"/>
+        <Spinner
+            android:id="@+id/settings_wishlist_occasion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:entries="@array/occasions"
+            android:prompt="@string/wl_occasion_hint"
+            android:spinnerMode="dropdown" />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/button_start_product_picker_settings_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:text="Continue"/>
+
+    </LinearLayout>
+
+    <include layout="@layout/view_loading" />
+    <include layout="@layout/view_error" />
+</FrameLayout>

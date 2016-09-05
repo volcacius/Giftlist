@@ -6,8 +6,12 @@ import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
+
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.domain.interactor.UseCase;
 import rx.Subscriber;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -19,15 +23,12 @@ import rx.Subscriber;
  * with their lifecycles.
  */
 public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends UseCase<M>>
-        extends com.hannesdorfmann.mosby.mvp.MvpBasePresenter<V>
-        implements com.hannesdorfmann.mosby.mvp.MvpPresenter<V> {
+        extends com.hannesdorfmann.mosby.mvp.MvpBasePresenter<V> {
 
-    protected EventBus eventBus;
     protected U useCase;
     protected StorIOSQLite db;
 
-    public BaseRxLcePresenter(EventBus eventBus, U useCase, StorIOSQLite db) {
-        this.eventBus = eventBus;
+    public BaseRxLcePresenter(U useCase, StorIOSQLite db) {
         this.useCase = useCase;
         this.db = db;
     }
@@ -36,6 +37,7 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      * Unsubscribes
      */
     protected void unsubscribe() {
+        Timber.d("Presenter unsubscribes from usecase");
         useCase.unsubscribe();
     }
 
@@ -44,9 +46,6 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
      * This pattern of calling onCompleted, onError and onNext of the Presenter from the inner subscriber class
      * allows, if necessary, to override them from classes that extends the Presenter while leaving the subscriber untouched.
      * To get an idea, see e.g. https://ideone.com/mIeavZ
-     *
-     * ShowLoading is not called here, otherwise it would show the loading view when subscribing in background, even if the
-     * is still stuff in the adapter. ShowLoading is called only as an empty view of the adapter
      *
      * @param pullToRefresh Pull to refresh?
      */
@@ -58,23 +57,14 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
 
     abstract protected void onNext(M data);
 
-
-    @Override
-    public void attachView(V view) {
-        super.attachView(view);
-        if (eventBus!=null) {
-            eventBus.register(this);
-        }
-    }
-
+    /*
+     * This gets automatically called by Mosby
+     */
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);
         if (!retainInstance) {
             unsubscribe();
-        }
-        if (eventBus!=null) {
-            eventBus.unregister(this);
         }
     }
 

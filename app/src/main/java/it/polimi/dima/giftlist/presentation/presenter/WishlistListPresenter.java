@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.data.db.resolver.delete.WishlistDeleteResolver;
 import it.polimi.dima.giftlist.data.db.table.EbayProductTable;
 import it.polimi.dima.giftlist.data.db.table.EtsyProductTable;
@@ -40,10 +41,11 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
 
     @Inject
     public WishlistListPresenter(GetWishlistListUseCase useCase, StorIOSQLite db) {
-        super(null, useCase, db);
+        super(useCase, db);
     }
 
     @Override
+    @DebugLog
     public void subscribe(boolean pullToRefresh) {
         if(!useCase.isUnsubscribed()) {
             unsubscribe();
@@ -57,7 +59,7 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
 
     @Override
     protected void onCompleted() {
-        unsubscribe();
+        //DB subscriptions do not complete
     }
 
     @Override
@@ -69,11 +71,20 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     }
 
     @Override
+    @DebugLog
     protected void onNext(List<Wishlist> data) {
+        getView().showLoading(false);
         getView().setData(data);
         if (isViewAttached()) {
             getView().showContent();
         }
+    }
+
+    public void updateWishlistList(List<Wishlist> wishlistList) {
+        db.put()
+                .objects(wishlistList)
+                .prepare()
+                .executeAsBlocking();
     }
 
 

@@ -33,7 +33,7 @@ import timber.log.Timber;
  * Created by Alessandro on 24/04/16.
  */
 @FragmentWithArgs
-public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Product>, WishlistView, WishlistPresenter>
+public class WishlistFragment extends BaseMvpLceViewStateFragment<RecyclerView, List<Product>, WishlistView, WishlistPresenter>
         implements WishlistView {
 
     @Bind(R.id.contentView)
@@ -41,8 +41,6 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @Inject
     WishlistAdapter wishlistAdapter;
-    @Inject
-    IntentStarter intentStarter;
 
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
@@ -85,7 +83,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
             if (actionMode != null) {
                 toggleSelection(position);
             } else {
-                intentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getProductList(), wishlistAdapter.getItem(position).getId());
+                IntentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getProductList(), wishlistAdapter.getItem(position).getId());
             }
         }
 
@@ -157,12 +155,12 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
         switch (item.getItemId()) {
             case R.id.action_search:
                 Timber.d("button add pressed");
-                intentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
+                IntentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
                 return true;
 
             case R.id.action_settings:
                 Timber.d("button settings pressed");
-                intentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
+                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
                 return true;
 
             default:
@@ -204,7 +202,6 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
                     wishlistAdapter.notifyDataSetChanged();
                     mode.finish();
                     return true;
-
                 default:
                     return false;
             }
