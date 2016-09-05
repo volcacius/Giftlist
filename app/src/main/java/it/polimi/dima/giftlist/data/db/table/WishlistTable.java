@@ -1,6 +1,10 @@
 package it.polimi.dima.giftlist.data.db.table;
 
 
+import com.pushtorefresh.storio.sqlite.queries.RawQuery;
+
+import it.polimi.dima.giftlist.data.model.Wishlist;
+
 /**
  * Created by Alessandro on 24/04/16.
  */
@@ -30,10 +34,10 @@ public class WishlistTable {
     }
 
     public static String getMaxDisplayOrderQuery() {
-        return "SELECT MAX(" + COLUMN_DISPLAY_ORDER + ") FROM " + TABLE;
+        return "SELECT MAX(" + COLUMN_DISPLAY_ORDER + ") + 1 FROM " + TABLE;
     }
 
-    public static String getCustomPutQuery(long id, String wishlistName, String wishlistOccasion) {
+    public static String getCustomPutQuery(long id, String wishlistName, String wishlistOccasion, int displayOrder) {
         return "INSERT INTO " + TABLE + " ("
                 + COLUMN_ID + ", "
                 + COLUMN_NAME + ", "
@@ -43,7 +47,7 @@ public class WishlistTable {
                 + "'" + id + "', "
                 + "'" + wishlistName + "', "
                 + "'" + wishlistOccasion + "', "
-                + "(" + "'0'" + ")"
+                + "'" + displayOrder + "'"
                 +");";
 
     }

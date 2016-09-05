@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistPresenter;
@@ -153,14 +154,15 @@ public class WishlistFragment extends BaseMvpLceViewStateFragment<RecyclerView, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.action_add:
                 Timber.d("button add pressed");
                 IntentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
                 return true;
 
             case R.id.action_settings:
                 Timber.d("button settings pressed");
-                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
+                //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
+                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
                 return true;
 
             default:

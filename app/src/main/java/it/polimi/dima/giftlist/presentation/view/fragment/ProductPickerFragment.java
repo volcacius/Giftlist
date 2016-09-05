@@ -27,6 +27,7 @@ import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.event.AdapterAboutToEmptyEvent;
 import it.polimi.dima.giftlist.presentation.event.ProductAddedEvent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
@@ -248,7 +249,8 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlin
 
             case R.id.action_settings:
                 Timber.d("button settings pressed");
-                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId);
+                //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
+                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
                 return true;
 
             default:

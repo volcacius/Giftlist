@@ -64,18 +64,18 @@ public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettin
         }
     }
 
-    public void addWishlist(long wishlistId, String wishlistName, String occasion) {
-        WishlistPutSubscriber subscriber = new WishlistPutSubscriber();
-        Timber.d("Wishlist insert query is: %s", WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion));
+    public void addWishlist(long wishlistId, String wishlistName, String occasion, int displayOrder) {
+        WishlistPutSubscriber insertSubscriber = new WishlistPutSubscriber();
+        Timber.d("Wishlist insert query is: %s", WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion, displayOrder));
         db.executeSQL()
                 .withQuery(RawQuery.builder()
-                        .query(WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion))
-                        .affectsTables(WishlistTable.TABLE) // optional: you can specify affected tables to notify Observers
+                        .query(WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion, displayOrder))
+                        .affectsTables(WishlistTable.TABLE)
                         .build())
                 .prepare()
                 .asRxSingle()
                 .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(subscriber);
+                .subscribe(insertSubscriber);
     }
 
     public void updateWishlist(long wishlistId, String wishlistName, String occasion) {

@@ -14,6 +14,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -74,7 +76,9 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     @DebugLog
     protected void onNext(List<Wishlist> data) {
         getView().showLoading(false);
-        getView().setData(data);
+        List<Wishlist> orderedList = new LinkedList<>(data);
+        Collections.sort(orderedList);
+        getView().setData(orderedList);
         if (isViewAttached()) {
             getView().showContent();
         }
@@ -86,7 +90,6 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                 .prepare()
                 .executeAsBlocking();
     }
-
 
     public void removeWishlist(Wishlist wishlist) {
 
@@ -119,9 +122,6 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                 .prepare()
                 .executeAsBlocking();
     }
-
-
-
 
     private void deleteImages(long wishlistId) {
 

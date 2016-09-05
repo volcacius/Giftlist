@@ -3,15 +3,12 @@ package it.polimi.dima.giftlist.presentation.view.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +34,6 @@ import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
-import timber.log.Timber;
 
 /**
  * Created by Alessandro on 24/04/16.
@@ -54,7 +50,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     private final LayoutInflater layoutInflater;
     private List<Wishlist> wishlistList;
     private OnWishlistClickListener onWishlistClickListener;
-    private SortedList<Wishlist> filterableWishlistList;
+    private LinkedList<Wishlist> filterableWishlistList;
 
 
     public WishlistListAdapter(Context context, Picasso picasso) {
@@ -62,42 +58,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         this.picasso = picasso;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.wishlistList = new LinkedList<>();
-        this.filterableWishlistList = new SortedList<>(Wishlist.class, new SortedList.Callback<Wishlist>() {
-            @Override
-            public int compare(Wishlist a, Wishlist b) {
-                if (b.getDisplayOrder() > a.getDisplayOrder()) {
-                    return 1;
-                } else if (b.getDisplayOrder() == a.getDisplayOrder()) {
-                    return 0;
-                } else {
-                    return -1;
-                }
-            }
-            @Override
-            public void onInserted(int position, int count) {
-                notifyItemRangeInserted(position, count);
-            }
-            @Override
-            public void onRemoved(int position, int count) {
-                notifyItemRangeRemoved(position, count);
-            }
-            @Override
-            public void onMoved(int fromPosition, int toPosition) {
-                notifyItemMoved(fromPosition, toPosition);
-            }
-            @Override
-            public void onChanged(int position, int count) {
-                notifyItemRangeChanged(position, count);
-            }
-            @Override
-            public boolean areContentsTheSame(Wishlist oldItem, Wishlist newItem) {
-                return oldItem.equals(newItem);
-            }
-            @Override
-            public boolean areItemsTheSame(Wishlist item1, Wishlist item2) {
-                return item1.getId() == item2.getId();
-            }
-        });
+        this.filterableWishlistList = new LinkedList<>();
         // DraggableItemAdapter and SwipeableItemAdapter require stable ID, and also
         // have to implement the getItemId() method appropriately.
         setHasStableIds(true);
@@ -126,31 +87,16 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         return wishlistList;
     }
 
-    public SortedList<Wishlist> getFilterableWishlistList() {
+    public LinkedList<Wishlist> getFilterableWishlistList() {
         return filterableWishlistList;
     }
 
     @DebugLog
     public void setWishlistList(List<Wishlist> wishlistList) {
-        //Update the original list
         this.wishlistList.clear();
+        this.filterableWishlistList.clear();
         this.wishlistList.addAll(wishlistList);
-        //Update the filterable list
-        replaceFilterableWishlistList(wishlistList);
-    }
-
-    @DebugLog
-    public void replaceFilterableWishlistList(List<Wishlist> wishlistList) {
-        filterableWishlistList.beginBatchedUpdates();
-        for (int i = filterableWishlistList.size() - 1; i >= 0; i--) {
-            final Wishlist wishlist = filterableWishlistList.get(i);
-            if (!wishlistList.contains(wishlist)) {
-                filterableWishlistList.remove(wishlist);
-            }
-        }
-        filterableWishlistList.addAll(wishlistList);
-        Timber.d("Filterable wishlist list size is %d", filterableWishlistList.size());
-        filterableWishlistList.endBatchedUpdates();
+        this.filterableWishlistList.addAll(wishlistList);
     }
 
     //Called from fragment
@@ -261,13 +207,19 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             return;
         }
         //reorder sorted list
-        filterableWishlistList.get(fromPosition).setDisplayOrder(toPosition);
-        filterableWishlistList.updateItemAt(fromPosition, filterableWishlistList.get(fromPosition));
+        Wishlist filterableWishlist = filterableWishlistList.remove(fromPosition);
+        filterableWishlistList.add(toPosition, filterableWishlist);
+        updateDisplayOrder(filterableWishlistList);
         //reorder original wishlistlist
         Wishlist wishlist = wishlistList.remove(fromPosition);
         wishlistList.add(toPosition, wishlist);
-        for (int order = 0; order < wishlistList.size(); order++) {
-            wishlistList.get(order).setDisplayOrder(order);
+        updateDisplayOrder(wishlistList);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    private void updateDisplayOrder(List<Wishlist> wishlistList) {
+        for (int order = wishlistList.size() - 1; order >= 0; order--) {
+            wishlistList.get(wishlistList.size() - 1 - order).setDisplayOrder(order);
         }
     }
 
@@ -315,6 +267,10 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             default:
                 return null;
         }
+    }
+
+    public void setFilterableWishlistList(LinkedList<Wishlist> filterableWishlistList) {
+        this.filterableWishlistList = filterableWishlistList;
     }
 
     class ViewHolder extends AbstractDraggableSwipeableItemViewHolder {
@@ -430,11 +386,12 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         @Override
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
-                case R.id.action_search:
+                case R.id.action_add:
                     IntentStarter.startProductPickerSettingsActivity(context, wishlistId);
                     return true;
                 case R.id.action_settings:
-                    IntentStarter.startWishlistSettingsActivity(context, wishlistId);
+                    //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
+                    IntentStarter.startWishlistSettingsActivity(context, wishlistId, Wishlist.DEFAULT_ORDER);
                     return true;
                 default:
                     break;

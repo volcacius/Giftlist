@@ -30,6 +30,8 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -64,7 +66,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @OnClick(R.id.fab)
     void onFabClick() {
-        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID);
+        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID, wishlistListAdapter.getWishlistList().size() + 1);
     }
 
     @Inject
@@ -179,6 +181,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Override
     public void onPause() {
         recyclerViewDragDropManager.cancelDrag();
+        //store the order of the wishlists
+        presenter.updateWishlistList(wishlistListAdapter.getWishlistList());
         super.onPause();
     }
 
@@ -200,8 +204,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             WrapperAdapterUtils.releaseAll(wrappedAdapter);
             wrappedAdapter = null;
         }
-        //store the order of the wishlists
-        presenter.updateWishlistList(wishlistListAdapter.getWishlistList());
         super.onDestroyView();
     }
 
@@ -240,7 +242,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final MenuItem searchItem = menu.findItem(R.id.action_add);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -250,9 +252,10 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                final List<Wishlist> filteredModelList = Wishlist.filter(wishlistListAdapter.getWishlistList(), newText);
-                wishlistListAdapter.replaceFilterableWishlistList(filteredModelList);
+                LinkedList<Wishlist> filteredModelList = Wishlist.filter(wishlistListAdapter.getWishlistList(), newText);
+                wishlistListAdapter.setFilterableWishlistList(filteredModelList);
                 recyclerView.scrollToPosition(0);
+                wishlistListAdapter.notifyDataSetChanged();
                 return true;
             }
         });

@@ -58,8 +58,8 @@ public abstract class BaseRxLcePresenter<V extends MvpLceView<M>, M, U extends U
     abstract protected void onNext(M data);
 
     /*
-     * This gets automatically called by Mosby
-     */
+         * This gets automatically called by Mosby
+         */
     @Override
     public void detachView(boolean retainInstance) {
         super.detachView(retainInstance);

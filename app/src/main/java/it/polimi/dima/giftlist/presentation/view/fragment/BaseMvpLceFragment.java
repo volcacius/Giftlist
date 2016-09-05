@@ -68,6 +68,11 @@ public abstract class BaseMvpLceFragment<CV extends View, M, V extends MvpLceVie
         injectDependencies();
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         loadData(false);
     }
 

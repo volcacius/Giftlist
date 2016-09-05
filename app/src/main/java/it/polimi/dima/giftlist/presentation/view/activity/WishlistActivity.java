@@ -60,7 +60,7 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_search:
+            case R.id.action_add:
                 //implemented in the fragment
                 return false;
 

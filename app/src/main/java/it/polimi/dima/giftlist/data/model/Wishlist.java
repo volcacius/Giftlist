@@ -1,12 +1,13 @@
 package it.polimi.dima.giftlist.data.model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class Wishlist {
+public class Wishlist implements Comparable<Wishlist> {
 
     public static final long DEFAULT_ID = 0;
     public static final int DEFAULT_ORDER = 0;
@@ -61,9 +62,9 @@ public class Wishlist {
         this.displayOrder = displayOrder;
     }
 
-    public static List<Wishlist> filter(List<Wishlist> wishlistList, String query) {
+    public static LinkedList<Wishlist> filter(List<Wishlist> wishlistList, String query) {
         final String lowerCaseQuery = query.toLowerCase();
-        final List<Wishlist> filteredModelList = new ArrayList<>();
+        final LinkedList<Wishlist> filteredModelList = new LinkedList<>();
         for (Wishlist wishlist : wishlistList) {
             final String name = wishlist.getName().toLowerCase();
             final String occasion = wishlist.getOccasion().toLowerCase();
@@ -90,5 +91,10 @@ public class Wishlist {
     @Override
     public int hashCode() {
         return (int) (id ^ (id >>> 32));
+    }
+
+    @Override
+    public int compareTo(Wishlist another) {
+        return another.getDisplayOrder() - getDisplayOrder();
     }
 }

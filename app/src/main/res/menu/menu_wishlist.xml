@@ -4,8 +4,8 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/common_google_signin_btn_icon_light"
+        android:id="@+id/action_add"
+        android:icon="@drawable/ic_add_white_24dp"
         android:title="@string/action_add_product"
         app:showAsAction="ifRoom"/>
 

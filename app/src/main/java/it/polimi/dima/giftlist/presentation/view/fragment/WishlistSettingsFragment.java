@@ -38,6 +38,9 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist,
 
     @Arg
     long wishlistId;
+    @Arg
+    int displayOrder;
+
 
     @Bind(R.id.settings_wishlist_name)
     EditText wishlistNameEditText;
@@ -48,7 +51,6 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist,
     @Bind(R.id.button_start_product_picker_settings_activity)
     Button startProductPickerSettingsButton;
 
-    Wishlist wishlist;
     String occasionSelected;
 
     @OnItemSelected(R.id.settings_wishlist_occasion)
@@ -66,7 +68,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist,
         if(wishlistId == Wishlist.DEFAULT_ID) {
             Random random = new Random();
             wishlistId = Math.abs(random.nextLong());
-            getPresenter().addWishlist(wishlistId, wishlistName, occasionSelected);
+            getPresenter().addWishlist(wishlistId, wishlistName, occasionSelected, displayOrder);
             IntentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
         } else {
             getPresenter().updateWishlist(wishlistId, wishlistName, occasionSelected);
@@ -78,12 +80,6 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist,
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Timber.d("ID of wishlist is: " + wishlistId);
-        //wishlistId is passed as an arg
-        //If it is zero, then an empty wishlist is created (since mosby LCE requires a piece of data to exist)
-        //If it isn't zero, it is retrieved from the presenter in load data
-        if (wishlistId == Wishlist.DEFAULT_ID) {
-            wishlist = new Wishlist(Wishlist.DEFAULT_ID, "", "", Wishlist.DEFAULT_ORDER);
-        }
         setRetainInstance(true);
     }
 
@@ -114,8 +110,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist,
 
     @Override
     public void setData(Wishlist data) {
-        wishlist = data;
-        if (wishlist.getId() != Wishlist.DEFAULT_ID) {
+        if (data.getId() != Wishlist.DEFAULT_ID) {
             wishlistNameEditText.setText(data.getName());
             wishlistOccasionSpinner.setSelection(((ArrayAdapter)(wishlistOccasionSpinner.getAdapter())).getPosition(data.getOccasion()));
         }
@@ -123,7 +118,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<View, Wishlist,
 
     @Override
     public void loadData(boolean pullToRefresh) {
-        if (wishlist.getId() == Wishlist.DEFAULT_ID) {
+        if (wishlistId == Wishlist.DEFAULT_ID) {
             showContent();
         } else {
             presenter.subscribe(false);

@@ -22,9 +22,12 @@ import timber.log.Timber;
 public class WishlistSettingsActivity extends BaseActivity implements HasComponent<WishlistComponent> {
 
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
+    private static final String EXTRA_WISHLIST_DISPLAY_ORDER = "wishlist_display_order";
 
     @State
     long wishlistId;
+    @State
+    int displayOrder;
 
     WishlistComponent wishlistComponent;
 
@@ -39,11 +42,11 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
         //If the activity is recreated e.g. after rotation, it is restored by IcePick in the super.onCreate call
         if (savedInstanceState == null) {
             wishlistId = getIntent().getLongExtra(EXTRA_WISHLIST_ID, Wishlist.DEFAULT_ID);
-            addFragment(R.id.wishlist_settings_activity_content, new WishlistSettingsFragmentBuilder(wishlistId).build());
+            displayOrder = getIntent().getIntExtra(EXTRA_WISHLIST_DISPLAY_ORDER, Wishlist.DEFAULT_ORDER);
         }
         createComponent();
         if (savedInstanceState == null) {
-            addFragment(R.id.wishlist_settings_activity_content, new WishlistSettingsFragmentBuilder(wishlistId).build());
+            addFragment(R.id.wishlist_settings_activity_content, new WishlistSettingsFragmentBuilder(displayOrder, wishlistId).build());
         }
     }
 
@@ -52,9 +55,10 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
         return R.layout.activity_wishlist_settings;
     }
 
-    public static Intent getCallingIntent(Context context, long wishlistId) {
+    public static Intent getCallingIntent(Context context, long wishlistId, int displayOrder) {
         Intent callingIntent = new Intent(context, WishlistSettingsActivity.class);
         callingIntent.putExtra(EXTRA_WISHLIST_ID, wishlistId);
+        callingIntent.putExtra(EXTRA_WISHLIST_DISPLAY_ORDER, displayOrder);
         return callingIntent;
     }
 
