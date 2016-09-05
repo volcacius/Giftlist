@@ -218,8 +218,9 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Override
     public void onPause() {
         recyclerViewDragDropManager.cancelDrag();
-        backlogDeletionDBCleanup();
         super.onPause();
+        backlogDeletionDBCleanup();
+        clearSearchView();
     }
 
     @Override
