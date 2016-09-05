@@ -4,6 +4,8 @@ import android.graphics.drawable.NinePatchDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -30,7 +32,6 @@ import com.h6ah4i.android.widget.advrecyclerview.touchguard.RecyclerViewTouchAct
 import com.h6ah4i.android.widget.advrecyclerview.utils.WrapperAdapterUtils;
 import com.squareup.picasso.Picasso;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,6 +64,8 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     AppBarLayout appBarLayout;
     @Bind(R.id.backdrop)
     ImageView collapseBackdrop;
+    @Bind(R.id.main_content)
+    CoordinatorLayout coordinatorLayout;
 
     @OnClick(R.id.fab)
     void onFabClick() {
@@ -81,6 +84,9 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
+
+    private Snackbar undoDeleteSnackBar;
+    private SearchView searchView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,7 +108,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         //to avoid bugs. it would be better to retain selected instances but this is a good enough tradeoff
-        if (actionMode!=null) {
+        if (actionMode != null) {
             actionMode.finish();
         }
         super.onViewCreated(view, savedInstanceState);
@@ -112,6 +118,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         activity.setSupportActionBar(toolbar);
         initCollapsingToolbar();
 
+        wishlistListAdapter.setWishlistListView(this);
         wishlistListAdapter.setOnWishlistClickListener(new WishlistListAdapter.OnWishlistClickListener() {
             @Override
             public void onItemClick(View v , int position) {
@@ -176,13 +183,42 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         recyclerViewTouchActionGuardManager.attachRecyclerView(recyclerView);
         recyclerViewSwipeManager.attachRecyclerView(recyclerView);
         recyclerViewDragDropManager.attachRecyclerView(recyclerView);
+
+        //Setup undo delete snackbar
+        undoDeleteSnackBar = Snackbar.make(
+                //Set the coordinator layout as parent to enable coordination with FAB
+                coordinatorLayout,
+                //set the displayed string here to empty, will be customized on show
+                "",
+                Snackbar.LENGTH_LONG);
+
+        undoDeleteSnackBar.setAction(R.string.snack_bar_action_undo, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onUndoDeleteWishlists();
+            }
+        });
+        undoDeleteSnackBar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.snackbar_action_color_done));
+        undoDeleteSnackBar.setCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                backlogDeletionDBCleanup();
+            }
+        });
+    }
+
+    @Override
+    public void backlogDeletionDBCleanup() {
+        //Perform any backlog deletion
+        removeWishlistsFromDBByIds(wishlistListAdapter.getWishlistsIdsToDelete());
+        //Update display order in db
+        updateWishlistsDisplayOrderInDB();
     }
 
     @Override
     public void onPause() {
         recyclerViewDragDropManager.cancelDrag();
-        //store the order of the wishlists
-        presenter.updateWishlistList(wishlistListAdapter.getWishlistList());
+        backlogDeletionDBCleanup();
         super.onPause();
     }
 
@@ -243,7 +279,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_add);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -262,10 +298,44 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
-    public void removeWishlist(Wishlist wishlist) {
-        getPresenter().removeWishlist(wishlist);
+    @DebugLog
+    public void removeWishlistsFromDBByIds(List<Long> wishlistIds) {
+        for (long id : wishlistIds) {
+            getPresenter().removeWishlist(id);
+        }
     }
 
+    @Override
+    @DebugLog
+    public void onWishlistsRemovedFromView() {
+        String message = wishlistListAdapter.getWishlistsIdsToDelete().size() + " wishlists deleted";
+        undoDeleteSnackBar.setText(message);
+        undoDeleteSnackBar.show();
+    }
+
+    private void onUndoDeleteWishlists() {
+        //In order to undo the delete, clear the list of wishlists to delete and reload the data from the DB
+        wishlistListAdapter.clearWishlistsIdsToDelete();
+        //clear search, if any
+        clearSearchView();
+        loadData(false);
+    }
+
+    @Override
+    public void clearSearchView() {
+        searchView.setQuery("", false);
+        searchView.clearFocus();
+    }
+
+    public void updateWishlistsDisplayOrderInDB() {
+        //store the order of the wishlists
+        presenter.updateWishlistListOrder(wishlistListAdapter.getWishlistList());
+    }
+
+    @Override
+    public boolean isUndoBarVisible() {
+        return undoDeleteSnackBar.isShownOrQueued();
+    }
 
     private class ActionModeCallback implements ActionMode.Callback {
         @SuppressWarnings("unused")
@@ -286,11 +356,17 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.menu_remove:
-                    for (Wishlist w : wishlistListAdapter.getSelectedWishlists()) {
-                        removeWishlist(w);
-                    }
-                    wishlistListAdapter.notifyDataSetChanged();
+                    //First get the list of ids to remove based on selection
+                    List<Long> wishlistsIdsToRemove = wishlistListAdapter.getSelectedWishlistsIds();
+                    //Perform deletion on the backlog
+                    removeWishlistsFromDBByIds(wishlistListAdapter.getWishlistsIdsToDelete());
+                    //set the current selected set as to delete
+                    wishlistListAdapter.updateWishlistsIdsToDelete(wishlistsIdsToRemove);
+                    //Then remove from view the current selected set
+                    wishlistListAdapter.removeSelectedFilteredWishlistsFromView(wishlistsIdsToRemove);
                     mode.finish();
+                    //Show undo message
+                    onWishlistsRemovedFromView();
                     return true;
                 default:
                     return false;

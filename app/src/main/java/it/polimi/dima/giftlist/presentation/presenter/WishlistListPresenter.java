@@ -8,6 +8,7 @@ import com.pushtorefresh.storio.sqlite.operations.delete.DeleteResult;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.queries.DeleteQuery;
 import com.pushtorefresh.storio.sqlite.queries.Query;
+import com.pushtorefresh.storio.sqlite.queries.RawQuery;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,6 +34,7 @@ import it.polimi.dima.giftlist.domain.interactor.GetWishlistListUseCase;
 import it.polimi.dima.giftlist.presentation.event.WishlistAddedEvent;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import rx.Observer;
+import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -84,27 +86,56 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
         }
     }
 
-    public void updateWishlistList(List<Wishlist> wishlistList) {
-        db.put()
-                .objects(wishlistList)
-                .prepare()
-                .executeAsBlocking();
+    //I do not want the observer to emit an unnecessary onNext
+    //So I manually run a delete query without adding the affected table
+    public void updateWishlistListOrder(List<Wishlist> wishlistList) {
+        for (Wishlist w : wishlistList) {
+            db.executeSQL()
+                    .withQuery(RawQuery.builder()
+                            .query(WishlistTable.getDisplayOrderUpdateQuery(w.getId(), w.getDisplayOrder()))
+                            .build())
+                    .prepare()
+                    .asRxSingle()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new SingleSubscriber<Object>() {
+                        @Override
+                        public void onSuccess(Object value) {
+                            Timber.d("Wishlist %d is set at order %d in DB", w.getId(), w.getDisplayOrder());
+                        }
+
+                        @Override
+                        public void onError(Throwable error) {
+                            Timber.d("Error in setting wishlist %d at order %d in DB", w.getId(), w.getDisplayOrder());
+                        }
+                    });
+        }
     }
 
-    public void removeWishlist(Wishlist wishlist) {
+    public void removeWishlist(long wishlistId) {
 
-        long wishlistId = wishlist.getId();
-        Timber.d("deleting wishlist " +wishlistId);
+        Timber.d("deleting wishlist %d", wishlistId);
         deleteImages(wishlistId);
-
-        db.delete()
-                .byQuery(DeleteQuery.builder()
-                        .table(WishlistTable.TABLE)
-                        .where(WishlistTable.COLUMN_ID + "= ?")
-                        .whereArgs(wishlistId)
+        //I do not want the observer to emit an onNext since it would mess up the deletion
+        //So I manually run a delete query without adding the affected table
+        db.executeSQL()
+                .withQuery(RawQuery.builder()
+                        .query(WishlistTable.getCustomDeleteQuery(wishlistId))
                         .build())
                 .prepare()
-                .executeAsBlocking();
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(new SingleSubscriber<Object>() {
+                    @Override
+                    public void onSuccess(Object value) {
+                        Timber.d("Success in deleting the wishlist %d", wishlistId);
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in deleting the wishlist %d", wishlistId);
+                    }
+                });
+
         db.delete()
                 .byQuery(DeleteQuery.builder()
                         .table(EtsyProductTable.TABLE)
@@ -112,7 +143,20 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                         .whereArgs(wishlistId)
                         .build())
                 .prepare()
-                .executeAsBlocking();
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(new SingleSubscriber<Object>() {
+                    @Override
+                    public void onSuccess(Object value) {
+                        Timber.d("Success in deleting the wishlist %d etsy products", wishlistId);
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in deleting the wishlist %d etsy products", wishlistId);
+                    }
+                });
+
         db.delete()
                 .byQuery(DeleteQuery.builder()
                         .table(EbayProductTable.TABLE)
@@ -120,54 +164,82 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                         .whereArgs(wishlistId)
                         .build())
                 .prepare()
-                .executeAsBlocking();
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(new SingleSubscriber<Object>() {
+                    @Override
+                    public void onSuccess(Object value) {
+                        Timber.d("Success in deleting the wishlist %d ebay products", wishlistId);
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in deleting the wishlist %d ebay products", wishlistId);
+                    }
+                });
     }
 
     private void deleteImages(long wishlistId) {
-
-        final List<EtsyProduct> etsyDelete = db
-                .get()
+        db.get()
                 .listOfObjects(EtsyProduct.class)
                 .withQuery(Query.builder()
                         .table(EtsyProductTable.TABLE)
                         .where(EtsyProductTable.COLUMN_WISHLIST_ID + " = ?")
-
                         .build())
                 .prepare()
-                .executeAsBlocking();
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<List<EtsyProduct>>() {
+                    @Override
+                    public void onSuccess(List<EtsyProduct> value) {
+                        for (EtsyProduct p : value) {
+                            File fdelete = new File(p.getImageUri());
+                            if (fdelete.exists()) {
+                                if (fdelete.delete()) {
+                                    Timber.d("file Deleted :" + p.getImageUri());
+                                } else {
+                                    Timber.d("file not Deleted :" + p.getImageUri());
+                                }
+                            }
+                        }
+                    }
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in deleting etsy images");
+                    }
+                });
 
-        for (EtsyProduct p : etsyDelete) {
-            File fdelete = new File(p.getImageUri());
-            if (fdelete.exists()) {
-                if (fdelete.delete()) {
-                    Timber.d("file Deleted :" + p.getImageUri());
-                } else {
-                    Timber.d("file not Deleted :" + p.getImageUri());
-                }
-            }
-        }
+        db.get()
+                .listOfObjects(EbayProduct.class)
+                .withQuery(Query.builder()
+                        .table(EbayProductTable.TABLE)
+                        .where(EbayProductTable.COLUMN_WISHLIST_ID + " = ?")
+                        .whereArgs(wishlistId)
+                        .build())
+                .prepare()
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<List<EbayProduct>>() {
+                    @Override
+                    public void onSuccess(List<EbayProduct> value) {
+                        for (EbayProduct p : value) {
+                            File fdelete = new File(p.getImageUri());
+                            if (fdelete.exists()) {
+                                if (fdelete.delete()) {
+                                    Timber.d("file Deleted :" + p.getImageUri());
+                                } else {
+                                    Timber.d("file not Deleted :" + p.getImageUri());
+                                }
+                            }
+                        }
+                    }
 
-        List<EbayProduct> ebayDelete =
-                db.get()
-                        .listOfObjects(EbayProduct.class)
-                        .withQuery(Query.builder()
-                                .table(EbayProductTable.TABLE)
-                                .where(EbayProductTable.COLUMN_WISHLIST_ID + " = ?")
-                                .whereArgs(wishlistId)
-                                .build())
-                        .prepare()
-                        .executeAsBlocking();
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in deleting ebay images");
 
-        for (EbayProduct p : ebayDelete) {
-            File fdelete = new File(p.getImageUri());
-            if (fdelete.exists()) {
-                if (fdelete.delete()) {
-                    Timber.d("file Deleted :" + p.getImageUri());
-                } else {
-                    Timber.d("file not Deleted :" + p.getImageUri());
-                }
-            }
-        }
+                    }
+                });
     }
 
 }

@@ -34,6 +34,8 @@ import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
+import it.polimi.dima.giftlist.presentation.view.WishlistListView;
+import it.polimi.dima.giftlist.util.ViewUtil;
 
 /**
  * Created by Alessandro on 24/04/16.
@@ -51,7 +53,8 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     private List<Wishlist> wishlistList;
     private OnWishlistClickListener onWishlistClickListener;
     private LinkedList<Wishlist> filterableWishlistList;
-
+    private List<Long> wishlistsIdsToDelete;
+    private WishlistListView wishlistListView;
 
     public WishlistListAdapter(Context context, Picasso picasso) {
         this.context = context;
@@ -59,6 +62,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.wishlistList = new LinkedList<>();
         this.filterableWishlistList = new LinkedList<>();
+        this.wishlistsIdsToDelete = new ArrayList<>();
         // DraggableItemAdapter and SwipeableItemAdapter require stable ID, and also
         // have to implement the getItemId() method appropriately.
         setHasStableIds(true);
@@ -74,13 +78,37 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         return filterableWishlistList.size();
     }
 
-    public List<Wishlist> getSelectedWishlists() {
+    @DebugLog
+    public List<Long> getSelectedWishlistsIds() {
         List<Integer> positions = super.getSelectedItems();
-        List<Wishlist> selectedWishlists = new ArrayList<>(positions.size());
+        List<Long> selectedWishlistsIds = new ArrayList<>(positions.size());
         for (Integer i : positions) {
-            selectedWishlists.add(filterableWishlistList.get(i));
+            selectedWishlistsIds.add(filterableWishlistList.get(i).getId());
         }
-        return selectedWishlists;
+        return selectedWishlistsIds;
+    }
+
+    @DebugLog
+    public void removeSelectedFilteredWishlistsFromView(List<Long> selectedFilteredWishlistIds) {
+        //Remove the wishlists from original and filtered list
+        for (long i : selectedFilteredWishlistIds) {
+            for (Wishlist wf : filterableWishlistList) {
+                if (i == wf.getId()) {
+                    filterableWishlistList.remove(wf);
+                    break;
+                }
+            }
+            for (Wishlist wf : wishlistList) {
+                if (i == wf.getId()) {
+                    wishlistList.remove(wf);
+                    break;
+                }
+            }
+        }
+        notifyDataSetChanged();
+        //Update the display order for both lists
+        updateDisplayOrder(filterableWishlistList);
+        updateDisplayOrder(wishlistList);
     }
 
     public List<Wishlist> getWishlistList() {
@@ -166,16 +194,16 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     }
 
     private int getWishlistThumbnail(String occasion) {
-        if (occasion == context.getString(R.string.birthday)) {
+        if (occasion.equals(context.getString(R.string.birthday))) {
             return R.drawable.birthday;
-        } else if (occasion == context.getString(R.string.anniversary)) {
+        } else if (occasion.equals(context.getString(R.string.anniversary))) {
             return R.drawable.cake_anniversary;
-        } else if (occasion == context.getString(R.string.graduation)) {
+        } else if (occasion.equals(context.getString(R.string.graduation))) {
             return R.drawable.beer;
-        } else if (occasion == context.getString(R.string.wedding)) {
+        } else if (occasion.equals(context.getString(R.string.wedding))) {
             return R.drawable.wife;
         } else {
-            return R.drawable.lights;
+            return R.drawable.party;
         }
     }
 
@@ -185,15 +213,16 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         if (filterableWishlistList.size() != wishlistList.size()) {
             return false;
         }
-
+        //can't start dragging if the view is showing undo delete
+        if (wishlistListView.isUndoBarVisible()) {
+            return false;
+        }
         // x, y --- relative from the itemView's top-left
         final View containerView = holder.container;
         final View dragHandleView = holder.dragHandle;
-
         final int offsetX = containerView.getLeft() + (int) (ViewCompat.getTranslationX(containerView) + 0.5f);
         final int offsetY = containerView.getTop() + (int) (ViewCompat.getTranslationY(containerView) + 0.5f);
-
-        return hitTest(dragHandleView, x - offsetX, y - offsetY);
+        return ViewUtil.hitTest(dragHandleView, x - offsetX, y - offsetY);
     }
 
     @Override
@@ -216,6 +245,9 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         wishlistList.add(toPosition, wishlist);
         updateDisplayOrder(wishlistList);
         notifyItemMoved(fromPosition, toPosition);
+        //Persist result to the DB
+        //Safe to do since can't move when a undo bar is showing
+        wishlistListView.backlogDeletionDBCleanup();
     }
 
     private void updateDisplayOrder(List<Wishlist> wishlistList) {
@@ -242,14 +274,13 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     public void onSetSwipeBackground(ViewHolder holder, int position, int type) {
         int bgRes = 0;
         switch (type) {
-            case SwipeableItemConstants.DRAWABLE_SWIPE_NEUTRAL_BACKGROUND:
-                bgRes = R.drawable.bg_swipe_item_neutral;
-                break;
             case SwipeableItemConstants.DRAWABLE_SWIPE_LEFT_BACKGROUND:
                 bgRes = R.drawable.bg_swipe_item_left;
                 break;
             case SwipeableItemConstants.DRAWABLE_SWIPE_RIGHT_BACKGROUND:
-                bgRes = R.drawable.bg_swipe_item_right;
+            case SwipeableItemConstants.DRAWABLE_SWIPE_NEUTRAL_BACKGROUND:
+            default:
+                bgRes = R.drawable.bg_swipe_item_neutral;
                 break;
         }
         holder.itemView.setBackgroundResource(bgRes);
@@ -259,11 +290,10 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     public SwipeResultAction onSwipeItem(ViewHolder holder, int position, int result) {
         switch (result) {
             // swipe right
-            case SwipeableItemConstants.RESULT_SWIPED_RIGHT:
-            // swipe left -- pin
             case SwipeableItemConstants.RESULT_SWIPED_LEFT:
-                return new SwipeLeftResultAction(this, position);
+                return new SwipeLeftResultAction(this, wishlistListView, position);
             // other --- do nothing
+            case SwipeableItemConstants.RESULT_SWIPED_RIGHT:
             case SwipeableItemConstants.RESULT_CANCELED:
             default:
                 return null;
@@ -272,6 +302,28 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     public void setFilterableWishlistList(LinkedList<Wishlist> filterableWishlistList) {
         this.filterableWishlistList = filterableWishlistList;
+    }
+
+    @DebugLog
+    public List<Long> getWishlistsIdsToDelete() {
+        return wishlistsIdsToDelete;
+    }
+
+    @DebugLog
+    public void updateWishlistsIdsToDelete(List<Long> newWishlistsIdsToDelete) {
+        //Clear the list of IDs (should be already done when performing backlog deletion)
+        clearWishlistsIdsToDelete();
+        //Add the new list of IDs to delete
+        wishlistsIdsToDelete.addAll(newWishlistsIdsToDelete);
+    }
+
+    @DebugLog
+    public void clearWishlistsIdsToDelete() {
+        wishlistsIdsToDelete.clear();
+    }
+
+    public void setWishlistListView(WishlistListView wishlistListView) {
+        this.wishlistListView = wishlistListView;
     }
 
     class ViewHolder extends AbstractDraggableSwipeableItemViewHolder {
@@ -316,30 +368,44 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     }
 
     private static class SwipeLeftResultAction extends SwipeResultActionMoveToSwipedDirection {
-        private WishlistListAdapter mAdapter;
-        private final int mPosition;
-        private boolean mSetPinned;
+        private WishlistListAdapter adapter;
+        private final int position;
+        private WishlistListView wishlistListView;
 
-        SwipeLeftResultAction(WishlistListAdapter adapter, int position) {
-            mAdapter = adapter;
-            mPosition = position;
+        SwipeLeftResultAction(WishlistListAdapter adapter, WishlistListView wishlistListView, int position) {
+            this.adapter = adapter;
+            this.position = position;
+            this.wishlistListView = wishlistListView;
         }
 
         @Override
         protected void onPerformAction() {
             super.onPerformAction();
+            //Get wishlist id to remove
+            long wishlistIdToRemove = adapter.filterableWishlistList.get(position).getId();
+            //Perform backlog deletion
+            wishlistListView.removeWishlistsFromDBByIds(adapter.getWishlistsIdsToDelete());
+            adapter.clearWishlistsIdsToDelete();
+            //Set the removed list as to be deleted
+            List<Long> wishlistIdToRemoveAsList = new ArrayList<>();
+            wishlistIdToRemoveAsList.add(wishlistIdToRemove);
+            adapter.updateWishlistsIdsToDelete(wishlistIdToRemoveAsList);
+            //Remove swiped wishlist from view
+            adapter.removeSelectedFilteredWishlistsFromView(wishlistIdToRemoveAsList);
         }
 
         @Override
         protected void onSlideAnimationEnd() {
             super.onSlideAnimationEnd();
+            //Show the undo button after removal from view
+            wishlistListView.onWishlistsRemovedFromView();
         }
 
         @Override
         protected void onCleanUp() {
             super.onCleanUp();
             // clear the references
-            mAdapter = null;
+            adapter = null;
         }
     }
 
@@ -348,17 +414,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     public interface OnWishlistClickListener {
         public void onItemClick(View view , int position);
         public boolean onItemLongClick(View view, int position);
-    }
-
-    public static boolean hitTest(View v, int x, int y) {
-        final int tx = (int) (ViewCompat.getTranslationX(v) + 0.5f);
-        final int ty = (int) (ViewCompat.getTranslationY(v) + 0.5f);
-        final int left = v.getLeft() + tx;
-        final int right = v.getRight() + tx;
-        final int top = v.getTop() + ty;
-        final int bottom = v.getBottom() + ty;
-
-        return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
     }
 
     /**

@@ -60,4 +60,18 @@ public class WishlistTable {
         + "WHERE "
         + COLUMN_ID + "='" + wishlistId +"';";
     }
+
+    public static String getCustomDeleteQuery(long wishlistId) {
+        return "DELETE FROM " + TABLE + " "
+                + "WHERE "
+                + COLUMN_ID + "='" + wishlistId +"';";
+    }
+
+    public static String getDisplayOrderUpdateQuery(long wishlistId, int displayOrder) {
+        return "UPDATE " + TABLE + " "
+                + "SET "
+                + COLUMN_DISPLAY_ORDER + "='" + displayOrder + "' "
+                + "WHERE "
+                + COLUMN_ID + "='" + wishlistId +"';";
+    }
 }

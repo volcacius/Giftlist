@@ -45,6 +45,7 @@
     <string name="thankyou">Thank You</string>
     <string name="engagement">Engagement</string>
     <string name="other">Other</string>
+    <string name="snack_bar_action_undo">Undo</string>
 
     <string-array name="ages">
         <item>baby</item>

@@ -11,5 +11,9 @@ import it.polimi.dima.giftlist.data.model.Wishlist;
  */
 public interface WishlistListView extends MvpLceView<List<Wishlist>> {
 
-    public void removeWishlist(Wishlist wishlist);
+    void removeWishlistsFromDBByIds(List<Long> wishlistIds);
+    void onWishlistsRemovedFromView();
+    boolean isUndoBarVisible();
+    void clearSearchView();
+    void backlogDeletionDBCleanup();
 }
