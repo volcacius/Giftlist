@@ -443,7 +443,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(name);
+                    collapsingToolbar.setTitle(String.format("%s' %s", name, occasion));
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbar.setTitle(" ");
