@@ -65,7 +65,6 @@ public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettin
     }
 
     public void addWishlist(long wishlistId, String wishlistName, String occasion, int displayOrder) {
-        WishlistPutSubscriber insertSubscriber = new WishlistPutSubscriber();
         Timber.d("Wishlist insert query is: %s", WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion, displayOrder));
         db.executeSQL()
                 .withQuery(RawQuery.builder()
@@ -75,11 +74,21 @@ public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettin
                 .prepare()
                 .asRxSingle()
                 .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(insertSubscriber);
+                .subscribe(new SingleSubscriber<Object>() {
+                    @Override
+                    public void onSuccess(Object value) {
+                        Timber.d("Success in inserting the wishlist %d", wishlistId);
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in inserting the wishlist %d", wishlistId);
+
+                    }
+                });
     }
 
     public void updateWishlist(long wishlistId, String wishlistName, String occasion) {
-        WishlistPutSubscriber subscriber = new WishlistPutSubscriber();
         Timber.d("Wishlist update query is: %s", WishlistTable.getNameOccasionUpdateQuery(wishlistId, wishlistName, occasion));
         db.executeSQL()
                 .withQuery(RawQuery.builder()
@@ -89,19 +98,17 @@ public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettin
                 .prepare()
                 .asRxSingle()
                 .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(subscriber);
-    }
+                .subscribe(new SingleSubscriber<Object>() {
+                    @Override
+                    public void onSuccess(Object value) {
+                        Timber.d("Success in updating the wishlist %d", wishlistId);
+                    }
 
-    private class WishlistPutSubscriber extends SingleSubscriber<Object> {
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in updating the wishlist %d", wishlistId);
 
-        @Override
-        public void onSuccess(Object value) {
-            Timber.d("Success in adding/updating the wishlist");
-        }
-
-        @Override
-        public void onError(Throwable error) {
-            Timber.d("Error in adding/updating the wishlist");
-        }
+                    }
+                });
     }
 }

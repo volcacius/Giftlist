@@ -22,7 +22,6 @@ public class WishlistListActivity extends BaseActivity implements HasComponent<W
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: deal with rotation?
         createComponent();
         if (savedInstanceState == null) {
             addFragment(R.id.wishlistlist_activity_content, new WishlistListFragment());
