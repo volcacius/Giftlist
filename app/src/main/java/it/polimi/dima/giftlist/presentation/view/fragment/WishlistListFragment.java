@@ -47,6 +47,7 @@ import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.WishlistListPresenter;
 import it.polimi.dima.giftlist.presentation.view.WishlistListView;
 import it.polimi.dima.giftlist.presentation.view.adapter.WishlistListAdapter;
+import it.polimi.dima.giftlist.util.ViewUtil;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -69,7 +70,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @OnClick(R.id.fab)
     void onFabClick() {
-        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID, wishlistListAdapter.getWishlistList().size() + 1);
+        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID, wishlistListAdapter.getWishlistList().size());
     }
 
     @Inject
@@ -84,7 +85,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     private ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
-
     private Snackbar undoDeleteSnackBar;
     private SearchView searchView;
 
@@ -107,7 +107,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        //to avoid bugs. it would be better to retain selected instances but this is a good enough tradeoff
         if (actionMode != null) {
             actionMode.finish();
         }
@@ -170,7 +169,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
         // additional decorations
         //noinspection StatementWithEmptyBody
-        if (supportsViewElevation()) {
+        if (ViewUtil.supportsViewElevation()) {
             // Lollipop or later has native drop shadow feature. ItemShadowDecorator is not required.
         } else {
             recyclerView.addItemDecoration(new ItemShadowDecorator((NinePatchDrawable) ContextCompat.getDrawable(getContext(), R.drawable.material_shadow_z1)));
@@ -208,23 +207,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
-    public void backlogDeletionDBCleanup() {
-        //Perform any backlog deletion
-        removeWishlistsFromDBByIds(wishlistListAdapter.getWishlistsIdsToDelete());
-        //Update display order in db
-        updateWishlistsDisplayOrderInDB();
-    }
-
-    @Override
-    public boolean isSelectModeEnabled() {
-        if (actionMode != null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    @Override
     public void onPause() {
         recyclerViewDragDropManager.cancelDrag();
         super.onPause();
@@ -253,38 +235,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         super.onDestroyView();
     }
 
-    private void toggleSelection(int position) {
-        wishlistListAdapter.toggleSelection(position);
-        int count = wishlistListAdapter.getSelectedItemCount();
-        if (count == 0) {
-            actionMode.finish();
-        } else {
-            actionMode.setTitle(String.valueOf(count));
-            actionMode.invalidate();
-        }
-    }
-
-    @Override protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
-        //return errorMessageDeterminer.getErrorMessage(e, pullToRefresh);
-        return null;
-    }
-
-    @Override public WishlistListPresenter createPresenter() {
-        return this.getComponent(WishlistListComponent.class).providePresenter();
-    }
-
-    @DebugLog
-    @Override
-    public void setData(List<Wishlist> data) {
-        wishlistListAdapter.setWishlistList(data);
-    }
-
-    @Override
-    @DebugLog
-    public void loadData(boolean pullToRefresh) {
-        presenter.subscribe(pullToRefresh);
-    }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
@@ -305,6 +255,55 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 return true;
             }
         });
+    }
+
+    @Override
+    public void backlogDeletionDBCleanup() {
+        //Perform any backlog deletion
+        removeWishlistsFromDBByIds(wishlistListAdapter.getWishlistsIdsToDelete());
+        //Update display order in db
+        updateWishlistsDisplayOrderInDB();
+    }
+
+    @Override
+    public boolean isSelectModeEnabled() {
+        if (actionMode != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void toggleSelection(int position) {
+        wishlistListAdapter.toggleSelection(position);
+        int count = wishlistListAdapter.getSelectedItemCount();
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
+    }
+
+    @Override protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
+        //ErrorMessageDeterminer.getErrorMessage(e, pullToRefresh);
+        return null;
+    }
+
+    @Override public WishlistListPresenter createPresenter() {
+        return this.getComponent(WishlistListComponent.class).providePresenter();
+    }
+
+    @DebugLog
+    @Override
+    public void setData(List<Wishlist> data) {
+        wishlistListAdapter.setWishlistList(data);
+    }
+
+    @Override
+    @DebugLog
+    public void loadData(boolean pullToRefresh) {
+        presenter.subscribe(pullToRefresh);
     }
 
     @Override
@@ -388,10 +387,6 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
             wishlistListAdapter.clearSelection();
             actionMode = null;
         }
-    }
-
-    private boolean supportsViewElevation() {
-        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
     }
 
     /**

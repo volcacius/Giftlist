@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.v4.view.ViewCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -34,6 +35,10 @@ public final class ViewUtil {
         final int bottom = v.getBottom() + ty;
 
         return (x >= left) && (x <= right) && (y >= top) && (y <= bottom);
+    }
+
+    public static boolean supportsViewElevation() {
+        return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP);
     }
 
 }
