@@ -1,5 +1,7 @@
 package it.polimi.dima.giftlist.data.db.table;
 
+import it.polimi.dima.giftlist.data.model.Product;
+
 /**
  * Created by Alessandro on 29/03/16.
  */
@@ -15,6 +17,7 @@ public class EtsyProductTable {
     public static final String COLUMN_IMAGE_URI = "image_uri";
     public static final String COLUMN_PRODUCT_PAGE = "product_page";
     public static final String COLUMN_WISHLIST_ID = "wishlist_id";
+    public static final String COLUMN_DISPLAY_ORDER = "display_order";
     public static final String COLUMN_NAME_WITH_TABLE_PREFIX = TABLE + "." + COLUMN_NAME;
     public static final String COLUMN_DESCRIPTION_WITH_TABLE_PREFIX = TABLE + "." + COLUMN_DESCRIPTION;
     public static final String COLUMN_ID_TABLE_PREFIX = TABLE + "." + COLUMN_ID;
@@ -42,9 +45,30 @@ public class EtsyProductTable {
                 + COLUMN_IMAGE_URL + " TEXT NOT NULL, "
                 + COLUMN_IMAGE_URI + " TEXT NOT NULL, "
                 + COLUMN_PRODUCT_PAGE + " TEXT NOT NULL, "
+                + COLUMN_DISPLAY_ORDER + " INTEGER NOT NULL, "
                 + COLUMN_WISHLIST_ID + " INTEGER NOT NULL, "
                 + "FOREIGN KEY" + "(" + COLUMN_WISHLIST_ID + ") "
                 + "REFERENCES " + WishlistTable.TABLE + "(" + WishlistTable.COLUMN_ID + ") "
                 + ");";
+    }
+
+    public static String getDisplayOrderUpdateQuery(long productId, int displayOrder) {
+        return "UPDATE " + TABLE + " "
+                + "SET "
+                + COLUMN_DISPLAY_ORDER + "='" + displayOrder + "' "
+                + "WHERE "
+                + COLUMN_ID + "='" + productId +"';";
+    }
+
+    public static String getCustomDeleteQuery(long productId) {
+        return "DELETE FROM " + TABLE + " "
+                + "WHERE "
+                + COLUMN_ID + "='" + productId +"';";
+    }
+
+    public static String getMaxProductDisplayOrderQuery(long wishlistId) {
+        return "SELECT MAX(" + COLUMN_DISPLAY_ORDER + ") FROM " + TABLE
+                + " WHERE " + COLUMN_WISHLIST_ID + " = " + wishlistId + ";";
+
     }
 }

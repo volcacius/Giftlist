@@ -18,6 +18,7 @@ import clojure.lang.Compiler;
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
@@ -38,12 +39,14 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     private static final String EXTRA_MAXPRICE = "maxprice";
     private static final String EXTRA_MINPRICE = "minprice";
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
+    private static final String EXTRA_STARTING_DISPLAY_ORDER = "starting_display_order";
     private long wishlistId;
     private HashMap<Class, Boolean> enabledRepositoryMap;
     private ArrayList<CategoryType> chosenCategoriesList;
     private String keywords;
     private Float maxprice;
     private Float minprice;
+    private int startingDisplayOrder;
 
     @Bind(R.id.toolbar)
     Toolbar toolbar;
@@ -66,10 +69,11 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
             maxprice = getIntent().getFloatExtra(EXTRA_MAXPRICE, (float) 1000.00);
             minprice = getIntent().getFloatExtra(EXTRA_MINPRICE, (float) 0.00);
             wishlistId = getIntent().getLongExtra(EXTRA_WISHLIST_ID, Wishlist.DEFAULT_ID);
+            startingDisplayOrder = getIntent().getIntExtra(EXTRA_STARTING_DISPLAY_ORDER, Product.DEFAULT_DISPLAY_ORDER);
         }
         createComponent();
         if (savedInstanceState == null) {
-            addFragment(R.id.product_picker_activity_content, new ProductPickerFragmentBuilder(chosenCategoriesList, enabledRepositoryMap, keywords, wishlistId).build());
+            addFragment(R.id.product_picker_activity_content, new ProductPickerFragmentBuilder(chosenCategoriesList, enabledRepositoryMap, keywords, startingDisplayOrder, wishlistId).build());
         }
 
     }
@@ -106,7 +110,7 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
     }
 
     @DebugLog
-    public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, Long wishlistId) {
+    public static Intent getCallingIntent(Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, Long wishlistId, int startingDisplayOrder) {
         Intent callingIntent = new Intent(context, ProductPickerActivity.class);
         callingIntent.putExtra(EXTRA_REPOSITORIES_SELECTED, enabledRepositoryMap);
         callingIntent.putExtra(EXTRA_CHOSEN_CATEGORIES_SELECTED, chosenCategoriesList);
@@ -117,6 +121,7 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
         callingIntent.putExtra(EXTRA_MAXPRICE, maxprice);
         callingIntent.putExtra(EXTRA_MINPRICE, minprice);
         callingIntent.putExtra(EXTRA_WISHLIST_ID, wishlistId);
+        callingIntent.putExtra(EXTRA_STARTING_DISPLAY_ORDER, startingDisplayOrder);
         return callingIntent;
     }
 

@@ -17,4 +17,8 @@ public interface ProductPickerView extends MvpLceView<List<Product>> {
     void showProductAddedError();
 
     void showProductAddedSuccess();
+
+    int getProductDisplayOrder();
+
+    void setNextProductDisplayOrder();
 }

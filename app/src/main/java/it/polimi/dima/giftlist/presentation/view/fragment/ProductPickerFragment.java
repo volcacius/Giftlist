@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.OnClick;
 import hugo.weaving.DebugLog;
+import icepick.State;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
@@ -66,6 +67,9 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlin
     ArrayList<CategoryType> chosenCategoriesList;
     @Arg
     String keywords;
+    @Arg
+    @State
+    int nextDisplayOrder;
 
     @Inject
     ProductPickerAdapter productPickerAdapter;
@@ -159,7 +163,7 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlin
     @NonNull
     @Override
     public ProductPickerPresenter createPresenter() {
-        return this.getComponent(ProductPickerComponent.class).provideProductListPresenter();
+        return this.getComponent(ProductPickerComponent.class).provideProductPickerPresenter();
     }
 
 
@@ -231,12 +235,22 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlin
 
     @Override
     public void showProductAddedError() {
-        ToastFactory.showShortToast(getContext(), R.string.product_added);
+        ToastFactory.showShortToast(getContext(), R.string.product_added_error);
     }
 
     @Override
     public void showProductAddedSuccess() {
-        ToastFactory.showShortToast(getContext(), R.string.product_added_error);
+        ToastFactory.showShortToast(getContext(), R.string.product_added);
+    }
+
+    @Override
+    public int getProductDisplayOrder() {
+        return nextDisplayOrder;
+    }
+
+    @Override
+    public void setNextProductDisplayOrder() {
+        nextDisplayOrder++;
     }
 
     @Override

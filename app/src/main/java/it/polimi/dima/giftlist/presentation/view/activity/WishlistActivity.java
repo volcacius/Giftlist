@@ -24,15 +24,11 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     long wishlistId;
 
-    @Bind(R.id.toolbar)
-    Toolbar toolbar;
-
     WishlistComponent wishlistComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setSupportActionBar(toolbar);
         //I need the wishlist id to launch the fragment
         //If it's the first time creating the activity, I get it from the Intent.
         //If the activity is recreated e.g. after rotation, it is restored by IcePick in the super.onCreate call
@@ -49,28 +45,6 @@ public class WishlistActivity extends BaseActivity implements HasComponent<Wishl
     @Override
     protected int getLayoutRes() {
         return R.layout.activity_wishlist;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_wishlist, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_add:
-                //implemented in the fragment
-                return false;
-
-            default:
-                Timber.d("default option from activity");
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
     }
 
     //I need to expose the component so that I can perform injection from the fragment

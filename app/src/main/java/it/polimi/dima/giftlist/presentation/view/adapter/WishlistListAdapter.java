@@ -92,15 +92,15 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     public void removeSelectedFilteredWishlistsFromView(List<Long> selectedFilteredWishlistIds) {
         //Remove the wishlists from original and filtered list
         for (long i : selectedFilteredWishlistIds) {
-            for (Wishlist wf : filterableWishlistList) {
-                if (i == wf.getId()) {
-                    filterableWishlistList.remove(wf);
+            for (Wishlist fw : filterableWishlistList) {
+                if (i == fw.getId()) {
+                    filterableWishlistList.remove(fw);
                     break;
                 }
             }
-            for (Wishlist wf : wishlistList) {
-                if (i == wf.getId()) {
-                    wishlistList.remove(wf);
+            for (Wishlist w : wishlistList) {
+                if (i == w.getId()) {
+                    wishlistList.remove(w);
                     break;
                 }
             }
@@ -113,10 +113,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
 
     public List<Wishlist> getWishlistList() {
         return wishlistList;
-    }
-
-    public LinkedList<Wishlist> getFilterableWishlistList() {
-        return filterableWishlistList;
     }
 
     @DebugLog
@@ -149,7 +145,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         holder.wishlistNameTextView.setText(String.format("%d %s", order, wishlistName));
         holder.wishlistOccasionTextView.setText(occasion);
 
-        picasso.load(getWishlistThumbnail(occasion))
+        picasso.load(Wishlist.getWishlistThumbnail(context, occasion))
                 .fit()
                 .centerCrop()
                 .into(holder.thumbnail);
@@ -189,20 +185,6 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             });
         }
         holder.setSwipeItemHorizontalSlideAmount(0);
-    }
-
-    private int getWishlistThumbnail(String occasion) {
-        if (occasion.equals(context.getString(R.string.birthday))) {
-            return R.drawable.birthday;
-        } else if (occasion.equals(context.getString(R.string.anniversary))) {
-            return R.drawable.cake_anniversary;
-        } else if (occasion.equals(context.getString(R.string.graduation))) {
-            return R.drawable.beer;
-        } else if (occasion.equals(context.getString(R.string.wedding))) {
-            return R.drawable.wife;
-        } else {
-            return R.drawable.lights;
-        }
     }
 
     @Override
@@ -417,6 +399,10 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
     public interface OnWishlistClickListener {
         public void onItemClick(View view , int position);
         public boolean onItemLongClick(View view, int position);
+    }
+
+    public LinkedList<Wishlist> getFilterableWishlistList() {
+        return filterableWishlistList;
     }
 
     /**

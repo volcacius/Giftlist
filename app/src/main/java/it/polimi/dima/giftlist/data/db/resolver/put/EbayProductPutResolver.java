@@ -38,7 +38,8 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
                               object.getImageUrl(),
                               object.getImageUri(),
                               object.getProductPage(),
-                              object.getWishlistId()};
+                              object.getWishlistId(),
+                              object.getDisplayOrder()};
 
         return UpdateQuery.builder()
                 .table(EbayProductTable.TABLE)
@@ -52,6 +53,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
                 .where(EbayProductTable.COLUMN_IMAGE_URI + " = ?")
                 .where(EbayProductTable.COLUMN_PRODUCT_PAGE + " = ?")
                 .where(EbayProductTable.COLUMN_WISHLIST_ID + " = ?")
+                .where(EbayProductTable.COLUMN_DISPLAY_ORDER + " = ?")
                 .whereArgs(Arrays.asList(argsArray))
                 .build();
     }
@@ -70,6 +72,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
         values.put(EbayProductTable.COLUMN_IMAGE_URI, object.getImageUri());
         values.put(EbayProductTable.COLUMN_PRODUCT_PAGE, object.getProductPage());
         values.put(EbayProductTable.COLUMN_WISHLIST_ID, object.getWishlistId());
+        values.put(EbayProductTable.COLUMN_DISPLAY_ORDER, object.getDisplayOrder());
         return values;
     }
 }

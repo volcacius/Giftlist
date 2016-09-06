@@ -20,7 +20,7 @@ public class EbayProduct extends Product {
 
     }
 
-    public EbayProduct(String name, String description, long id, float price, float convertedPrice, CurrencyType currencyType, String imageUrl, String imageUri, String productPage, long wishlistId) {
+    public EbayProduct(String name, String description, long id, float price, float convertedPrice, CurrencyType currencyType, String imageUrl, String imageUri, String productPage, long wishlistId, int displayOrder) {
         this.name = name;
         this.description = description;
         this.id = id;
@@ -31,6 +31,7 @@ public class EbayProduct extends Product {
         this.wishlistId = wishlistId;
         this.imageUri = imageUri;
         this.productPage = productPage;
+        this.displayOrder = displayOrder;
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {

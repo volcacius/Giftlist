@@ -1,8 +1,12 @@
 package it.polimi.dima.giftlist.data.model;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import it.polimi.dima.giftlist.R;
 
 /**
  * Created by Alessandro on 08/01/16.
@@ -73,6 +77,20 @@ public class Wishlist implements Comparable<Wishlist> {
             }
         }
         return filteredModelList;
+    }
+
+    public static int getWishlistThumbnail(Context context, String occasion) {
+        if (occasion.equals(context.getString(R.string.birthday))) {
+            return R.drawable.birthday;
+        } else if (occasion.equals(context.getString(R.string.anniversary))) {
+            return R.drawable.cake_anniversary;
+        } else if (occasion.equals(context.getString(R.string.graduation))) {
+            return R.drawable.beer;
+        } else if (occasion.equals(context.getString(R.string.wedding))) {
+            return R.drawable.wife;
+        } else {
+            return R.drawable.lights;
+        }
     }
 
     @Override

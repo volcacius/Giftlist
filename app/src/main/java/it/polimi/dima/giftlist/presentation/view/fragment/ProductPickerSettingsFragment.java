@@ -20,8 +20,10 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
+import icepick.State;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
@@ -43,57 +45,45 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     @Arg
     long wishlistId;
 
+    @State
+    int startingDisplayOrder;
+
     @Bind(R.id.button_start_product_activity)
     Button startProductActivityButton;
-
     @Bind(R.id.text_maxprice)
     EditText maxpriceEditText;
-
     @Bind(R.id.text_minprice)
     EditText minpriceEditText;
-
     @Bind(R.id.select_age)
     Spinner ageSpinner;
-    String ageSelected;
-
     @Bind(R.id.text_keywords)
     EditText keywordsEditText;
-
     @Bind(R.id.button_more_options)
     Button moreButton;
-
     @Bind(R.id.checkbox_art)
     CheckBox artCheckbox;
-
     @Bind(R.id.checkbox_games)
     CheckBox gamesCheckbox;
-
     @Bind(R.id.checkbox_sports)
     CheckBox sportsCheckbox;
-
     @Bind(R.id.checkbox_technology)
     CheckBox techCheckbox;
-
     @Bind(R.id.checkbox_travelling)
     CheckBox travelCheckbox;
-
     @Bind(R.id.checkbox_handcraft)
     CheckBox handcraftCheckbox;
-
     @Bind(R.id.checkbox_nerd)
     CheckBox nerdCheckbox;
-
     @Bind(R.id.checkbox_books)
     CheckBox bookCheckbox;
-
     @Bind(R.id.checkbox_music)
     CheckBox musicCheckbox;
-
     @Bind(R.id.category_checkboxes)
     LinearLayout categoryCheckboxes;
 
     HashMap<Class,Boolean> enabledRepositoryMap;
     ArrayList<CategoryType> chosenCategoriesList;
+    String ageSelected;
 
     @OnItemSelected(R.id.select_age)
     public void onItemSelected(int position) {
@@ -113,35 +103,27 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     }
 
     @OnClick(R.id.button_start_product_activity)
-    public void startProductActivity(){
+    public void startProductActivity() {
         chosenCategoriesList = getChosenCategoriesFromUI();
         Float minprice;
         Float maxprice;
-        try
-        {
+        try {
             minprice =  Float.parseFloat(minpriceEditText.getText().toString());
-        }
-        catch(NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             minprice = DEFAULT_MIN;
-        }
-
-        try
-        {
+        } try {
             maxprice  = Float.parseFloat(maxpriceEditText.getText().toString());
-        }
-        catch(NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             maxprice = DEFAULT_MAX;
         }
-
         IntentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 chosenCategoriesList,
                                                 keywordsEditText.getText().toString(),
                                                 maxprice,
                                                 minprice,
-                                                wishlistId);
+                                                wishlistId,
+                                                startingDisplayOrder);
     }
 
     private ArrayList<CategoryType> getChosenCategoriesFromUI() {
@@ -223,6 +205,8 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         enabledRepositoryMap.put(EbayProductDataSource.class, Boolean.TRUE);
         enabledRepositoryMap.put(EtsyProductDataSource.class, Boolean.TRUE);
 
+        startingDisplayOrder = presenter.getStartingProductDisplayOrder(wishlistId);
+        Timber.d("Starting product display order is %d", startingDisplayOrder);
     }
 
 

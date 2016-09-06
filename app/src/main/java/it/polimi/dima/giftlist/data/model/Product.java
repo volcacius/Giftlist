@@ -6,13 +6,17 @@ import android.os.Parcelable;
 import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * Created by Alessandro on 08/01/16.
  */
 @ParcelablePlease
-public class Product implements Parcelable {
+public class Product implements Parcelable, Comparable<Product> {
 
     public static final long DEFAULT_ID = 0L;
+    public static final int DEFAULT_DISPLAY_ORDER = 0;
     String name;
     float price;
     float convertedPrice;
@@ -23,6 +27,7 @@ public class Product implements Parcelable {
     String imageUri;
     String productPage;
     long wishlistId;
+    int displayOrder;
 
     public String getName() {
         return name;
@@ -108,4 +113,30 @@ public class Product implements Parcelable {
             return new Product[size];
         }
     };
+
+    @Override
+    public int compareTo(Product another) {
+        return another.getDisplayOrder() - getDisplayOrder();
+    }
+
+    public void setDisplayOrder(int displayOrder) {
+        this.displayOrder = displayOrder;
+    }
+
+    public int getDisplayOrder() {
+        return displayOrder;
+    }
+
+    public static LinkedList<Product> filter(List<Product> productList, String newText) {
+        final String lowerCaseQuery = newText.toLowerCase();
+        final LinkedList<Product> filteredModelList = new LinkedList<>();
+        for (Product p : productList) {
+            final String name = p.getName().toLowerCase();
+            final String description = p.getDescription().toLowerCase();
+            if (name.contains(lowerCaseQuery) || description.contains(lowerCaseQuery)) {
+                filteredModelList.add(p);
+            }
+        }
+        return filteredModelList;
+    }
 }

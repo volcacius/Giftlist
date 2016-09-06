@@ -46,12 +46,6 @@ public class ProductPickerModule {
     private Context context;
     private long wishlistId;
 
-    public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, long wishlistId) {
-        this.context = context;
-        this.enabledRepositoryMap = enabledRepositoryMap;
-        this.wishlistId = wishlistId;
-    }
-
     public ProductPickerModule(Context context, Map<Class, Boolean> enabledRepositoryMap, List<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId) {
         this.context = context;
         this.enabledRepositoryMap = enabledRepositoryMap;

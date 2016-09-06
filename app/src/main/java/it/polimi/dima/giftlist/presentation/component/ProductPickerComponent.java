@@ -21,6 +21,6 @@ public interface ProductPickerComponent {
     void inject(ProductPickerAdapter adapter);
 
     //returned object is an instance created by Dagger2 and all dependencies are provided by constructor injection.
-    ProductPickerPresenter provideProductListPresenter();
+    ProductPickerPresenter provideProductPickerPresenter();
 
 }
