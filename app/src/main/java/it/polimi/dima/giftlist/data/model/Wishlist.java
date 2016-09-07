@@ -2,6 +2,8 @@ package it.polimi.dima.giftlist.data.model;
 
 import android.content.Context;
 
+import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,16 +20,25 @@ public class Wishlist implements Comparable<Wishlist> {
 
     private String name;
     private String occasion;
+    private String keyword;
+    private String age;
+    private Float minPrice;
+    private Float maxPrice;
     private List<Product> productList;
     private long id;
     private int displayOrder;
 
     //Used by the DB when I'm retrieving an instance from it
-    public Wishlist(long id, String name, String occasion, int displayOrder) {
+    public Wishlist(long id, String name, String occasion, int displayOrder, String keyword, String age, Float minPrice, Float maxPrice) {
         this.id = id;
         this.name = name;
         this.occasion = occasion;
         this.displayOrder = displayOrder;
+        this.keyword = keyword;
+        this.age = age;
+        this.minPrice = minPrice;
+        this.maxPrice = maxPrice;
+
     }
 
     public String getName() {
@@ -40,6 +51,22 @@ public class Wishlist implements Comparable<Wishlist> {
 
     public String getOccasion() {
         return occasion;
+    }
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public Float getMinPrice() {
+        return minPrice;
+    }
+
+    public Float getMaxPrice() {
+        return maxPrice;
     }
 
     public List<Product> getProductList() {

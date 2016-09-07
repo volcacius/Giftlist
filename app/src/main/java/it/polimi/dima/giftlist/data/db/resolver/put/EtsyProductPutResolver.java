@@ -40,7 +40,7 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
                               object.getImageUri(),
                               object.getProductPage(),
                               object.getWishlistId(),
-                              object.getDisplayOrder()};
+                              object.getDisplayOrder(),
                               object.getPrimaryKeyId()};
 
         return UpdateQuery.builder()

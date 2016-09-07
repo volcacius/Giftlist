@@ -39,7 +39,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
                               object.getImageUri(),
                               object.getProductPage(),
                               object.getWishlistId(),
-                              object.getPrimaryKeyId()};
+                              object.getPrimaryKeyId(),
                               object.getDisplayOrder()};
 
         return UpdateQuery.builder()

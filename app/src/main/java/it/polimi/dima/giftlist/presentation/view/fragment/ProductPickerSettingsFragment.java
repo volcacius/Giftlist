@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
+import butterknife.OnClick;
 import icepick.State;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
@@ -80,6 +82,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     @Bind(R.id.checkbox_music)
     CheckBox musicCheckbox;
 
+    @Bind(R.id.skip)
+    Button skipButton;
+
     @Bind(R.id.rangebar)
     RangeBar rangeBar;
     @Bind(R.id.ticker_min)
@@ -92,6 +97,10 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
 
     HashMap<Class,Boolean> enabledRepositoryMap;
     ArrayList<CategoryType> chosenCategoriesList;
+
+    @OnClick(R.id.skip)
+    void skip() {
+        startProductActivity();}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -170,6 +179,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         } catch (NumberFormatException e) {
             maxprice = DEFAULT_MAX;
         }
+
+        getPresenter().updateWishlist(wishlistId, keywordsEditText.getText().toString(), String.valueOf(ageSpinner.getText()), minprice,maxprice);
+        Timber.d("minPrice: " + minprice);
         IntentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 chosenCategoriesList,

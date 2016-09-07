@@ -23,7 +23,11 @@ public class WishlistGetResolver extends DefaultGetResolver<Wishlist> {
                 cursor.getLong(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_ID)),
                 cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_NAME)),
                 cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_OCCASION)),
-                cursor.getInt(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_DISPLAY_ORDER))
+                cursor.getInt(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_DISPLAY_ORDER)),
+                cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_KEYWORD)),
+                cursor.getString(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_AGE)),
+                cursor.getFloat(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_MINPRICE)),
+                cursor.getFloat(cursor.getColumnIndexOrThrow(WishlistTable.COLUMN_MAXPRICE))
         );
     }
 }
