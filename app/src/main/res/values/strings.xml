@@ -46,6 +46,8 @@
     <string name="engagement">Engagement</string>
     <string name="other">Other</string>
     <string name="snack_bar_action_undo">Undo</string>
+    <string name="select_a_price_range">Select a price range</string>
+    <string name="for_your_gifts">for your gifts</string>
 
     <string-array name="ages">
         <item>baby</item>

@@ -141,6 +141,9 @@ dependencies {
     final MATERIAL_ICON_LIB_VERSION = '1.1.1'
     final ADV_RECYCLER_VIEW_VERSION = '0.9.3@aar'
     final SUPER_SLIM_VERSION = '0.4.13'
+    final LIKE_BUTTON_VERSION = '0.2.0'
+    final MATERIAL_RANGEBAR_VERSION = '1.3'
+    final TICKER_VERSION = '1.1.0'
 
     // "compile" refers to the dependencies required to compile the production source of the project.
     //The .jar in the libs folder are included as dependencies
@@ -196,7 +199,9 @@ dependencies {
         transitive=true
     }
     compile "com.tonicartos:superslim:$SUPER_SLIM_VERSION"
-    compile "com.github.jd-alexander:LikeButton:0.2.0"
+    compile "com.github.jd-alexander:LikeButton:$LIKE_BUTTON_VERSION"
+    compile "com.appyvet:materialrangebar:$MATERIAL_RANGEBAR_VERSION"
+    compile "com.robinhood.ticker:ticker:$TICKER_VERSION"
 
     //dependencies provided on compile only on debug builds
     debugCompile "com.jakewharton.timber:timber:$TIMBER_VERSION"

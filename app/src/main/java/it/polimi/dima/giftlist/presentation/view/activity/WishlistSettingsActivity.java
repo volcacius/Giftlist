@@ -34,9 +34,7 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_wishlist_settings);
         ButterKnife.bind(this);
-
         //I need the wishlist id to launch the fragment
         //If it's the first time creating the activity, I get it from the Intent.
         //If the activity is recreated e.g. after rotation, it is restored by IcePick in the super.onCreate call
