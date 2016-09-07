@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.pushtorefresh.storio.sqlite.operations.get.DefaultGetResolver;
 
+import it.polimi.dima.giftlist.data.db.table.EbayProductTable;
 import it.polimi.dima.giftlist.data.db.table.EtsyProductTable;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
@@ -28,7 +29,8 @@ public class EtsyProductGetResolver extends DefaultGetResolver<EtsyProduct> {
                 cursor.getString(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_IMAGE_URL)),
                 cursor.getString(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_IMAGE_URI)),
                 cursor.getString(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_PRODUCT_PAGE)),
-                cursor.getLong(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_WISHLIST_ID))
+                cursor.getLong(cursor.getColumnIndexOrThrow(EtsyProductTable.COLUMN_WISHLIST_ID)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_DISPLAY_ORDER))
         );
     }
 }

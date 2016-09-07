@@ -33,10 +33,6 @@ public class WishlistTable {
                 + ");";
     }
 
-    public static String getMaxDisplayOrderQuery() {
-        return "SELECT MAX(" + COLUMN_DISPLAY_ORDER + ") + 1 FROM " + TABLE;
-    }
-
     public static String getCustomPutQuery(long id, String wishlistName, String wishlistOccasion, int displayOrder) {
         return "INSERT INTO " + TABLE + " ("
                 + COLUMN_ID + ", "

@@ -87,7 +87,7 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     }
 
     //I do not want the observer to emit an unnecessary onNext
-    //So I manually run a delete query without adding the affected table
+    //So I manually run an update query without adding the affected table
     public void updateWishlistListOrder(List<Wishlist> wishlistList) {
         for (Wishlist w : wishlistList) {
             db.executeSQL()
@@ -112,7 +112,6 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
     }
 
     public void removeWishlist(long wishlistId) {
-
         Timber.d("deleting wishlist %d", wishlistId);
         deleteImages(wishlistId);
         //I do not want the observer to emit an onNext since it would mess up the deletion
@@ -196,9 +195,9 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                             File fdelete = new File(p.getImageUri());
                             if (fdelete.exists()) {
                                 if (fdelete.delete()) {
-                                    Timber.d("file Deleted :" + p.getImageUri());
+                                    Timber.d("file Deleted: %s", p.getImageUri());
                                 } else {
-                                    Timber.d("file not Deleted :" + p.getImageUri());
+                                    Timber.d("file not Deleted: %s", p.getImageUri());
                                 }
                             }
                         }
@@ -226,9 +225,9 @@ public class WishlistListPresenter extends BaseRxLcePresenter<WishlistListView, 
                             File fdelete = new File(p.getImageUri());
                             if (fdelete.exists()) {
                                 if (fdelete.delete()) {
-                                    Timber.d("file Deleted :" + p.getImageUri());
+                                    Timber.d("file Deleted: %s", p.getImageUri());
                                 } else {
-                                    Timber.d("file not Deleted :" + p.getImageUri());
+                                    Timber.d("file not Deleted: %s", p.getImageUri());
                                 }
                             }
                         }

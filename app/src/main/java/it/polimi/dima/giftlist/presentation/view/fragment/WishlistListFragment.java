@@ -212,6 +212,9 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
         super.onPause();
         backlogDeletionDBCleanup();
         clearSearchView();
+        if (undoDeleteSnackBar.isShownOrQueued()) {
+            undoDeleteSnackBar.dismiss();
+        }
     }
 
     @Override
@@ -238,7 +241,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         getActivity().getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
-        final MenuItem searchItem = menu.findItem(R.id.action_add);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -412,7 +415,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                     scrollRange = appBarLayout.getTotalScrollRange();
                 }
                 if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
+                    collapsingToolbar.setTitle(getString(R.string.your_wishlists));
                     isShow = true;
                 } else if (isShow) {
                     collapsingToolbar.setTitle(" ");

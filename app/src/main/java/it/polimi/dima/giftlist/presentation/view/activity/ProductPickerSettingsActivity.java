@@ -19,8 +19,10 @@ import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsF
 public class ProductPickerSettingsActivity extends BaseActivity implements HasComponent<ProductPickerSettingsComponent> {
 
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
-    long wishlistId;
+
     ProductPickerSettingsComponent productPickerSettingsComponent;
+
+    long wishlistId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

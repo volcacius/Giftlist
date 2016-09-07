@@ -30,8 +30,8 @@ public class EbayProductGetResolver extends DefaultGetResolver<EbayProduct> {
                 cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_IMAGE_URL)),
                 cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_IMAGE_URI)),
                 cursor.getString(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_PRODUCT_PAGE)),
-                cursor.getLong(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_WISHLIST_ID))
-
+                cursor.getLong(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_WISHLIST_ID)),
+                cursor.getInt(cursor.getColumnIndexOrThrow(EbayProductTable.COLUMN_DISPLAY_ORDER))
         );
     }
 }

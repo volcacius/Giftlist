@@ -1,26 +1,15 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
-import android.content.Context;
-import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.os.Environment;
-import android.provider.SyncStateContract;
 
 import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,13 +141,10 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
     public void onProductAddedEvent(ProductAddedEvent event) throws UnknownProductException {
         Product product = event.getProduct();
         saveProductImage(product);
-
-
     }
 
     @Subscribe
     public void onProductImageSaved(ProductImageSavedEvent event) throws UnknownProductException {
-
         Observer observer;
         Product product = event.getProduct();
         if (product instanceof EbayProduct) {
@@ -168,14 +154,15 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
         } else {
             throw new UnknownProductException();
         }
-
         Timber.d("converted price :" + product.getConvertedPrice());
+        product.setDisplayOrder(getView().getProductDisplayOrder());
         db.put()
                 .object(product)
                 .prepare()
                 .asRxObservable()
                 .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
                 .subscribe(observer);
+        getView().setNextProductDisplayOrder();
     }
 
     //Check if there is a pending subscription to register
@@ -255,7 +242,6 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
                 .centerInside()
                 .onlyScaleDown()
                 .into(myTarget);
-
     }
 
 

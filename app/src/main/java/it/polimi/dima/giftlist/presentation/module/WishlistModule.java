@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist.presentation.module;
 import android.content.Context;
 
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.squareup.picasso.Picasso;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -43,7 +44,7 @@ public class WishlistModule {
 
     @Provides
     @PerActivity
-    WishlistAdapter providesWishlistAdapter() {
-        return new WishlistAdapter(context);
+    WishlistAdapter providesWishlistAdapter(Picasso picasso) {
+        return new WishlistAdapter(context, picasso);
     }
 }
