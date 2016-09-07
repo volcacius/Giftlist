@@ -8,7 +8,6 @@
     <string name="dialog_error_title">Sorry</string>
 
     <string name="keyword_hint">Enter keywords separed by a comma</string>
-    <string name="price_hint">Use dot (.) to separate decimals</string>
     <string name="wl_name_hint">Who is the lucky pal?</string>
     <string name="wl_occasion_hint">Why are you buying presents?</string>
 
@@ -27,11 +26,11 @@
     <string name="checkbox_technology">Technology</string>
     <string name="checkbox_travelling">Travelling</string>
     <string name="checkbox_handcraft">Handcraft</string>
-    <string name="checkbox_books">books</string>
-    <string name="checkbox_nerd">Geek stuff</string>
-    <string name="checkbox_music">music</string>
-    <string name="reload">reload</string>
-    <string name="try_reloading">try reloading</string>
+    <string name="checkbox_books">Books</string>
+    <string name="checkbox_nerd">Geekery</string>
+    <string name="checkbox_music">Music</string>
+    <string name="reload">Reload</string>
+    <string name="try_reloading">Try reloading</string>
     <string name="back_to_wl">See your products</string>
     <string name="go_buy_it">Go buy it!</string>
     <string name="your_wishlists">Your Wishlists</string>
@@ -48,6 +47,10 @@
     <string name="snack_bar_action_undo">Undo</string>
     <string name="select_a_price_range">Select a price range</string>
     <string name="for_your_gifts">for your gifts</string>
+    <string name="tell_us_something_about_your_gift_recipient">Tell us something about your gift recipient</string>
+    <string name="so_that_we_can_improve_our_suggestions">So that we can improve our suggestions</string>
+    <string name="how_old_is_he_or_she">How old is he or she?</string>
+    <string name="what_does_he_or_she_likes">What does he or she likes?</string>
 
     <string-array name="ages">
         <item>baby</item>

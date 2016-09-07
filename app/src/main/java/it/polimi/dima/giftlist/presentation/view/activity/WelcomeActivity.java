@@ -31,6 +31,8 @@ import timber.log.Timber;
  */
 public class WelcomeActivity extends BaseActivity {
 
+    private static final int MAX_PAGE = 3;
+
     @Bind(R.id.coordinator)
     WelcomeCoordinatorLayout coordinatorLayout;
     @Bind(R.id.skip)
@@ -94,7 +96,7 @@ public class WelcomeActivity extends BaseActivity {
             }
             @Override
             public void onPageSelected(View v, int pageSelected) {
-                if (pageSelected == 3) {
+                if (pageSelected == MAX_PAGE) {
                     skipButton.setVisibility(View.INVISIBLE);
                     nextButton.setVisibility(View.INVISIBLE);
                     finishButton.setVisibility(View.VISIBLE);

@@ -87,23 +87,17 @@ android:fitsSystemWindows="true">
 
 
 
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:background="@color/viewBg"
+        android:id="@+id/contentView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/viewBg"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:clipToPadding="false"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/contentView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            android:scrollbars="vertical" />
-
-        <include layout="@layout/view_loading" />
-        <include layout="@layout/view_error" />
-
-    </RelativeLayout>
+    <include layout="@layout/view_loading" />
+    <include layout="@layout/view_error" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -112,7 +106,7 @@ android:fitsSystemWindows="true">
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/ic_add_white_24dp"
-        app:layout_anchor="@+id/contentView"
+        app:layout_anchor="@id/contentView"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior=".presentation.view.animation.FABScrollBehaviour"/>
 

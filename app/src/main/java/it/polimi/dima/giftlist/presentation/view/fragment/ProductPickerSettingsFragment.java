@@ -3,16 +3,14 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.appyvet.rangebar.RangeBar;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
@@ -20,6 +18,7 @@ import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.redbooth.WelcomeCoordinatorLayout;
 import com.robinhood.ticker.TickerUtils;
 import com.robinhood.ticker.TickerView;
+import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,19 +26,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.OnClick;
-import butterknife.OnItemSelected;
 import icepick.State;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CategoryType;
-import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.repository.datasource.EbayProductDataSource;
 import it.polimi.dima.giftlist.data.repository.datasource.EtsyProductDataSource;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerSettingsComponent;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.presenter.ProductPickerSettingsPresenter;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerSettingsView;
-import it.polimi.dima.giftlist.presentation.view.animation.GiftAnimator;
 import timber.log.Timber;
 
 /**
@@ -53,24 +48,19 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     private static final Float DEFAULT_MIN = (float) 0.0;
 
     @Arg
+    @State
     long wishlistId;
 
     @State
     int startingDisplayOrder;
 
     WelcomeCoordinatorLayout coordinatorLayout;
-    @Bind(R.id.button_start_product_activity)
-    Button startProductActivityButton;
-    @Bind(R.id.text_maxprice)
-    EditText maxpriceEditText;
-    @Bind(R.id.text_minprice)
-    EditText minpriceEditText;
+
     @Bind(R.id.select_age)
-    Spinner ageSpinner;
+    MaterialBetterSpinner ageSpinner;
     @Bind(R.id.text_keywords)
     EditText keywordsEditText;
-    @Bind(R.id.button_more_options)
-    Button moreButton;
+
     @Bind(R.id.checkbox_art)
     CheckBox artCheckbox;
     @Bind(R.id.checkbox_games)
@@ -89,8 +79,7 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     CheckBox bookCheckbox;
     @Bind(R.id.checkbox_music)
     CheckBox musicCheckbox;
-    @Bind(R.id.category_checkboxes)
-    LinearLayout categoryCheckboxes;
+
     @Bind(R.id.rangebar)
     RangeBar rangeBar;
     @Bind(R.id.ticker_min)
@@ -103,7 +92,6 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
 
     HashMap<Class,Boolean> enabledRepositoryMap;
     ArrayList<CategoryType> chosenCategoriesList;
-    String ageSelected;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,11 +110,14 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         super.onViewCreated(view, savedInstanceState);
         initListeners();
         initBackgroundTransitions();
+
         keywordsEditText.setText(EMPTY_STRING);
+
         //for now set them true by default
         enabledRepositoryMap = new HashMap<>();
         enabledRepositoryMap.put(EbayProductDataSource.class, Boolean.TRUE);
         enabledRepositoryMap.put(EtsyProductDataSource.class, Boolean.TRUE);
+
         startingDisplayOrder = presenter.getStartingProductDisplayOrder(wishlistId);
 
         tickerMinView.setCharacterList(TickerUtils.getDefaultListForUSCurrency());
@@ -143,6 +134,11 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
                 tickerMaxView.setText(String.format("%s.0$", rightPinValue));
             }
         });
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+                R.layout.spinner_dropdown_color,
+                getContext().getResources().getStringArray(R.array.ages));
+        ageSpinner.setAdapter(adapter);
+        ageSpinner.setTextColor(Color.WHITE);
     }
 
     @Override
@@ -160,34 +156,17 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         this.getComponent(ProductPickerSettingsComponent.class).inject(this);
     }
 
-    @OnItemSelected(R.id.select_age)
-    public void onItemSelected(int position) {
-        ageSelected = String.valueOf(ageSpinner.getSelectedItem());
-    }
-
-    @OnClick(R.id.button_more_options)
-    public void revealMoreOptions() {
-        if ((ageSpinner.getVisibility() == View.GONE) && (checkOccasionForAge())) {
-            ageSpinner.setVisibility(View.VISIBLE);
-        } else if (keywordsEditText.getVisibility() == View.GONE) {
-            keywordsEditText.setVisibility(View.VISIBLE);
-        } else {
-            categoryCheckboxes.setVisibility(View.VISIBLE);
-            moreButton.setVisibility(View.GONE);
-        }
-    }
-
-    @OnClick(R.id.button_start_product_activity)
     public void startProductActivity() {
-        chosenCategoriesList = getChosenCategoriesFromUI();
+        chosenCategoriesList = getChosenCategoriesFromUI(String.valueOf(ageSpinner.getText()));
+        Timber.d("Age selected is %s", String.valueOf(ageSpinner.getText()));
         Float minprice;
         Float maxprice;
         try {
-            minprice =  Float.parseFloat(minpriceEditText.getText().toString());
+            minprice =  Float.parseFloat(tickerMinView.toString());
         } catch (NumberFormatException e) {
             minprice = DEFAULT_MIN;
         } try {
-            maxprice  = Float.parseFloat(maxpriceEditText.getText().toString());
+            maxprice  = Float.parseFloat(tickerMaxView.toString());
         } catch (NumberFormatException e) {
             maxprice = DEFAULT_MAX;
         }
@@ -201,7 +180,7 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
                                                 startingDisplayOrder);
     }
 
-    private ArrayList<CategoryType> getChosenCategoriesFromUI() {
+    private ArrayList<CategoryType> getChosenCategoriesFromUI(String ageSelected) {
         chosenCategoriesList = new ArrayList<>();
         String occasion = getPresenter().getWishlist(wishlistId).getOccasion();
         chosenCategoriesList.add(CategoryType.getCategoryTypeFromString(occasion));
@@ -210,34 +189,32 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
             chosenCategoriesList.add(CategoryType.getCategoryTypeFromString(ageSelected));
         }
 
-        if (categoryCheckboxes.getVisibility() == View.VISIBLE) {
-            if (gamesCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.GAME);
-            }
-            if (handcraftCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.HANDCRAFT);
-            }
-            if (techCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.TECH);
-            }
-            if (sportsCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.SPORT);
-            }
-            if (travelCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.TRAVEL);
-            }
-            if (artCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.ART);
-            }
-            if (nerdCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.NERD);
-            }
-            if (bookCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.BOOK);
-            }
-            if (musicCheckbox.isChecked()) {
-                chosenCategoriesList.add(CategoryType.MUSIC);
-            }
+        if (gamesCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.GAME);
+        }
+        if (handcraftCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.HANDCRAFT);
+        }
+        if (techCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.TECH);
+        }
+        if (sportsCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.SPORT);
+        }
+        if (travelCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.TRAVEL);
+        }
+        if (artCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.ART);
+        }
+        if (nerdCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.NERD);
+        }
+        if (bookCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.BOOK);
+        }
+        if (musicCheckbox.isChecked()) {
+            chosenCategoriesList.add(CategoryType.MUSIC);
         }
 
         return chosenCategoriesList;
@@ -270,7 +247,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
 
     private void initPages() {
         coordinatorLayout.addPage(R.layout.page_product_picker_settings_first,
-                R.layout.page_product_picker_settings_second);
+                R.layout.page_product_picker_settings_second,
+                R.layout.page_product_picker_settings_third,
+                R.layout.page_product_picker_settings_fourth);
     }
 
     private void initListeners() {
