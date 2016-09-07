@@ -2,10 +2,15 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.redbooth.WelcomeCoordinatorLayout;
 
@@ -19,6 +24,7 @@ import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.presentation.navigation.IntentStarter;
 import it.polimi.dima.giftlist.presentation.view.animation.GiftAnimator;
+import timber.log.Timber;
 
 /**
  * Created by Alessandro on 29/08/16.
@@ -27,6 +33,12 @@ public class WelcomeActivity extends BaseActivity {
 
     @Bind(R.id.coordinator)
     WelcomeCoordinatorLayout coordinatorLayout;
+    @Bind(R.id.skip)
+    Button skipButton;
+    @Bind(R.id.next)
+    Button nextButton;
+    @Bind(R.id.finish)
+    Button finishButton;
 
     MaterialIconView giftIcon;
     MaterialIconView personIcon;
@@ -82,6 +94,15 @@ public class WelcomeActivity extends BaseActivity {
             }
             @Override
             public void onPageSelected(View v, int pageSelected) {
+                if (pageSelected == 3) {
+                    skipButton.setVisibility(View.INVISIBLE);
+                    nextButton.setVisibility(View.INVISIBLE);
+                    finishButton.setVisibility(View.VISIBLE);
+                } else {
+                    skipButton.setVisibility(View.VISIBLE);
+                    nextButton.setVisibility(View.VISIBLE);
+                    finishButton.setVisibility(View.INVISIBLE);
+                }
                 switch (pageSelected) {
                     case 0:
                         if (giftAnimator == null) {
@@ -134,6 +155,16 @@ public class WelcomeActivity extends BaseActivity {
 
     @OnClick(R.id.skip)
     void skip() {
+        IntentStarter.startWishlistListActivity(this);
+    }
+
+    @OnClick(R.id.next)
+    void next() {
+        coordinatorLayout.setCurrentPage(coordinatorLayout.getPageSelected() + 1, true);
+    }
+
+    @OnClick(R.id.finish)
+    void end() {
         IntentStarter.startWishlistListActivity(this);
     }
 }
