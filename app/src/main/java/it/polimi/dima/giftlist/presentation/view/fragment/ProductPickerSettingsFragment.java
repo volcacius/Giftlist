@@ -103,8 +103,8 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     @Bind(R.id.finish)
     Button finishButton;
 
-    private String maxPrice;
-    private String minPrice;
+    private String maxPrice = DEFAULT_MAX.toString();
+    private String minPrice = DEFAULT_MIN.toString();
 
     private boolean animationReady = false;
     private ValueAnimator backgroundAnimator;
