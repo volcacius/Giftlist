@@ -13,37 +13,36 @@
         android:layout_gravity="center"
         android:padding="15dp">
 
+        <ImageView
+            android:id="@+id/product_thumb"
+            android:layout_width="160dp"
+            android:layout_height="220dp"/>
+
         <TextView
             android:id="@+id/product_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:maxLines="2"
             android:ellipsize="end"
+            android:layout_toRightOf="@id/product_thumb"
+            android:layout_alignTop="@id/product_thumb"
+            android:layout_centerHorizontal="true"
             style="@style/text_subtitle_dark"
             />
-
-        <ImageView
-            android:id="@+id/product_thumb"
-            android:layout_width="160dp"
-            android:layout_height="220dp"
-
-            android:layout_below="@+id/product_name"
-            android:layout_alignLeft="@+id/product_name"
-            android:layout_alignStart="@+id/product_name"/>
 
         <LinearLayout
             android:id="@+id/prices"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_centerVertical="true"
-            android:layout_alignRight="@+id/product_name"
-            android:layout_alignEnd="@+id/product_name">
+            android:layout_toRightOf="@id/product_thumb"
+            android:layout_below="@id/product_name"
+            android:layout_alignBottom="@id/product_thumb"
+            android:layout_centerHorizontal="true"
+            >
 
             <org.fabiomsr.moneytextview.MoneyTextView
                 android:id="@+id/product_price"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:symbolGravity="start|top"

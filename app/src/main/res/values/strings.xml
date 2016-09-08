@@ -54,6 +54,7 @@
     <string name="ready_to_go">and we are ready to go</string>
     <string name="snack_bar_action_dismiss">dismiss</string>
     <string name="pick_source_error">Pick at least one source</string>
+    <string name="action_welcome_wizard">Welcome Wizard</string>
 
     <string-array name="ages">
         <item>baby</item>

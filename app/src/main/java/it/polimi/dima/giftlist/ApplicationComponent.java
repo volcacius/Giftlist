@@ -14,6 +14,7 @@ import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistListModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
 import it.polimi.dima.giftlist.presentation.module.WishlistSettingsModule;
+import it.polimi.dima.giftlist.presentation.view.activity.MainActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WelcomeActivity;
 import it.polimi.dima.giftlist.presentation.view.fragment.BaseFragment;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductDetailsFragment;
@@ -25,6 +26,7 @@ import it.polimi.dima.giftlist.presentation.view.fragment.ProductDetailsFragment
  */
 public interface ApplicationComponent {
 
+    void inject(MainActivity mainActivity);
     void inject(WelcomeActivity welcomeActivity);
     void inject(BaseFragment baseFragment);
     void inject(ProductDetailsFragment productDetailsFragment);
@@ -38,4 +40,5 @@ public interface ApplicationComponent {
     WishlistListComponent plus(WishlistListModule module);
     ProductDetailsPagerComponent plus(ProductDetailsPagerModule module);
     WishlistSettingsComponent plus(WishlistSettingsModule module);
+
 }

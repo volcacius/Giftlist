@@ -13,8 +13,10 @@ import javax.inject.Inject;
 import hugo.weaving.DebugLog;
 import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.presentation.view.activity.MainActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductDetailsPagerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerActivity;
+import it.polimi.dima.giftlist.presentation.view.activity.WelcomeActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistListActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistSettingsActivity;
@@ -51,6 +53,11 @@ public class IntentStarter {
     public static void startProductDetailsPagerActivity(@NonNull Context context, List<Product> productList, long selectedProductId) {
         ArrayList<Product> productArrayList = new ArrayList<>(productList);
         Intent intentToLaunch = ProductDetailsPagerActivity.getCallingIntent(context, productArrayList, selectedProductId);
+        context.startActivity(intentToLaunch);
+    }
+
+    public static void startWelcomeActivity(Context context) {
+        Intent intentToLaunch = WelcomeActivity.getCallingIntent(context);
         context.startActivity(intentToLaunch);
     }
 }

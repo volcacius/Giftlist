@@ -44,11 +44,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:symbolGravity="start|top"
-                app:symbolTextSize="30sp"
-                app:symbolMargin="6dp"
-                app:baseTextSize="54sp"
+                app:symbolTextSize="20sp"
+                app:symbolMargin="4dp"
+                app:baseTextSize="40sp"
                 app:decimalDigitsTextSize="20sp"
-                app:decimalMargin="3dp"
+                app:decimalMargin="4dp"
                 app:includeDecimalSeparator="false"
                 app:baseTextColor="@color/colorPrimary"/>
 
@@ -57,11 +57,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:symbolGravity="start|top"
-                app:symbolTextSize="30sp"
-                app:symbolMargin="6dp"
-                app:baseTextSize="54sp"
+                app:symbolTextSize="20sp"
+                app:symbolMargin="4dp"
+                app:baseTextSize="40sp"
                 app:decimalDigitsTextSize="20sp"
-                app:decimalMargin="3dp"
+                app:decimalMargin="4dp"
                 app:includeDecimalSeparator="false"
                 app:baseTextColor="@color/colorPrimaryLight"/>
 

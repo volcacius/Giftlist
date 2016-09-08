@@ -267,6 +267,16 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_welcome_wizard:
+                IntentStarter.startWelcomeActivity(getContext());
+                return true;
+        }
+        return false;
+    }
+
+    @Override
     public void backlogDeletionDBCleanup() {
         //Perform any backlog deletion
         removeWishlistsFromDBByIds(wishlistListAdapter.getWishlistsIdsToDelete());

@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -168,5 +169,9 @@ public class WelcomeActivity extends BaseActivity {
     @OnClick(R.id.finish)
     void end() {
         IntentStarter.startWishlistListActivity(this);
+    }
+
+    public static Intent getCallingIntent(Context context) {
+        return new Intent(context, WelcomeActivity.class);
     }
 }

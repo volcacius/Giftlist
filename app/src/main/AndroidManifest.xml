@@ -18,13 +18,17 @@
         android:label="@string/app_name"
         android:theme="@style/AppThemeNoActionBar" >
         <activity
-            android:name=".presentation.view.activity.WelcomeActivity"
+            android:name=".presentation.view.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.view.activity.WelcomeActivity"
+            android:parentActivityName=".presentation.view.activity.MainActivity"
+            />
         <activity
             android:name=".presentation.view.activity.WishlistListActivity"
             android:parentActivityName=".presentation.view.activity.WelcomeActivity"
@@ -36,10 +40,6 @@
         <activity
             android:name=".presentation.view.activity.ProductPickerActivity"
             android:parentActivityName=".presentation.view.activity.WishlistListActivity"
-            />
-        <activity
-            android:name=".presentation.view.activity.ProductPickerSettingsActivity"
-            android:parentActivityName=".presentation.view.activity.WelcomeActivity"
             />
         <activity
             android:name=".presentation.view.activity.WishlistSettingsActivity"

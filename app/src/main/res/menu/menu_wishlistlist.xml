@@ -10,9 +10,8 @@
         app:showAsAction="always|collapseActionView"/>
 
     <!-- Settings, should always be in the overflow -->
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
+    <item android:id="@+id/action_welcome_wizard"
+        android:title="@string/action_welcome_wizard"
         app:showAsAction="never"/>
-
 
 </menu>
