@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
 import com.squareup.picasso.Picasso;
+
+import org.fabiomsr.moneytextview.MoneyTextView;
 
 import java.io.File;
 
@@ -27,6 +30,7 @@ import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
 import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
+import it.polimi.dima.giftlist.presentation.view.adapter.ProductDetailsPagerAdapter;
 import it.polimi.dima.giftlist.util.ImageConstants;
 import timber.log.Timber;
 
@@ -44,30 +48,16 @@ public class ProductDetailsFragment extends BaseFragment {
 
     @Bind(R.id.product_name)
     TextView nameTextView;
-    
     @Bind(R.id.product_thumb)
     ImageView productThumb;
-    
     @Bind(R.id.product_price)
-    TextView priceTextView;
-    
+    MoneyTextView priceTextView;
     @Bind(R.id.product_price_converted)
-    TextView convertedPriceTextView;
-    
-    @Bind(R.id.text_repository)
-    TextView repositoryTextView;
-
-    @Bind(R.id.open_website)
-    Button openWebsiteButton;
-    
+    MoneyTextView convertedPriceTextView;
     @BindColor(R.color.colorPrimary)
     int colorPrimary;
-
-    @OnClick(R.id.open_website)
-    public void openWebsite(){
-        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(product.getProductPage()));
-        startActivity(browserIntent);
-    }
+    @Bind(R.id.product_card)
+    CardView cardView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,17 +71,15 @@ public class ProductDetailsFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Timber.d("Product details fragment view created!");
+        cardView.setMaxCardElevation(cardView.getCardElevation()
+                * ProductDetailsPagerAdapter.MAX_ELEVATION_FACTOR);
         nameTextView.setText(product.getName());
-        priceTextView.setText(product.getPrice() + " " + product.getCurrencyType().toString());
+        priceTextView.setAmount(product.getPrice(), product.getCurrencyType().getSymbol());
 
         if (product.getConvertedPrice() != 0 && !product.getCurrencyType().equals(CurrencyType.EUR)) {
-            convertedPriceTextView.setText("(approx. " + product.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
+            convertedPriceTextView.setAmount(product.getConvertedPrice(), CurrencyType.EUR.getSymbol());
         }
-        if (product instanceof EbayProduct) {
-            repositoryTextView.setText(R.string.checkbox_ebay);
-        } else if (product instanceof EtsyProduct) {
-            repositoryTextView.setText(R.string.checkbox_etsy);
-        }
+
         if (product.getImageUrl() == null) {
             ColorDrawable colorDrawable = new ColorDrawable(colorPrimary);
             productThumb.setDrawingCacheEnabled(true);
@@ -117,20 +105,12 @@ public class ProductDetailsFragment extends BaseFragment {
     protected int getLayoutRes() {
         return R.layout.fragment_product_details;
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
 
-            case R.id.action_settings:
-                //TODO
-                Timber.d("button settings pressed: to implement");
-                return true;
-
-            default:
-                break;
-
-        }
-        return false;
+    public CardView getCardView() {
+        return cardView;
     }
 
+    public Product getProduct() {
+        return product;
+    }
 }

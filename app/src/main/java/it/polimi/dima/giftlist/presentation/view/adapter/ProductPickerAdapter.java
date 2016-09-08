@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import org.fabiomsr.moneytextview.MoneyTextView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,17 +77,12 @@ public class ProductPickerAdapter extends BaseAdapter {
         }
 
         Product currentProduct = getItem(position);
-        productPickerViewHolder.openWebsiteButton.setVisibility(View.GONE);
         productPickerViewHolder.nameTextView.setText(currentProduct.getName());
-        productPickerViewHolder.priceTextView.setText(currentProduct.getPrice() + " " + currentProduct.getCurrencyType().toString());
+        productPickerViewHolder.priceTextView.setAmount(currentProduct.getPrice(), currentProduct.getCurrencyType().getSymbol());
         if (currentProduct.getConvertedPrice() != 0 && !currentProduct.getCurrencyType().equals(CurrencyType.EUR)) {
-            productPickerViewHolder.convertedPriceTextView.setText("(" + currentProduct.getConvertedPrice() + " " + CurrencyType.EUR.toString() + ")");
+            productPickerViewHolder.convertedPriceTextView.setAmount(currentProduct.getConvertedPrice(), CurrencyType.EUR.getSymbol());
         }
-        if (currentProduct instanceof EbayProduct) {
-            productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_ebay);
-        } else if (currentProduct instanceof EtsyProduct) {
-            productPickerViewHolder.repositoryTextView.setText(R.string.checkbox_etsy);
-        }
+
         if (currentProduct.getImageUrl() == null) {
             Timber.d("no image available");
             ColorDrawable colorDrawable = new ColorDrawable(productPickerViewHolder.colorPrimary);
@@ -125,13 +122,9 @@ public class ProductPickerAdapter extends BaseAdapter {
         @Bind(R.id.product_thumb)
         ImageView productThumb;
         @Bind(R.id.product_price)
-        TextView priceTextView;
+        MoneyTextView priceTextView;
         @Bind(R.id.product_price_converted)
-        TextView convertedPriceTextView;
-        @Bind(R.id.text_repository)
-        TextView repositoryTextView;
-        @Bind(R.id.open_website)
-        Button openWebsiteButton;
+        MoneyTextView convertedPriceTextView;
         @BindColor(R.color.colorPrimary)
         int colorPrimary;
 

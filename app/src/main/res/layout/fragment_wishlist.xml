@@ -76,33 +76,26 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/AppThemeDarkActionBar"
                 app:layout_collapseMode="pin"
+                android:elevation="4dp"
+                android:theme="@style/AppThemeDarkActionBar"
                 app:popupTheme="@style/AppThemeDarkActionBar"/>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
 
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/viewBg"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/contentView"
+            android:background="@color/viewBg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:scrollbars="vertical" />
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
         <include layout="@layout/view_loading" />
         <include layout="@layout/view_error" />
-
-    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -111,7 +104,7 @@
         android:layout_margin="16dp"
         android:clickable="true"
         android:src="@drawable/ic_add_white_24dp"
-        app:layout_anchor="@+id/contentView"
+        app:layout_anchor="@id/contentView"
         app:layout_anchorGravity="bottom|end"
         app:layout_behavior=".presentation.view.animation.FABScrollBehaviour"/>
 

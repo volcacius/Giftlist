@@ -88,9 +88,9 @@ public class WishlistAdapter extends SelectableAdapter<WishlistAdapter.ViewHolde
         CurrencyType currencyType = currentProduct.getCurrencyType();
 
         holder.productNameTextView.setText(productName);
-        holder.priceTextView.setText(String.format("%.2f %s", price, currencyType.toString()));
+        holder.priceTextView.setText(String.format("%.2f %s", price, currencyType.getSymbol()));
         if (convertedPrice != 0 && !currencyType.equals(CurrencyType.EUR)) {
-            holder.convertedPriceTextView.setText(String.format("(%.2f %s)", convertedPrice, CurrencyType.EUR.toString()));
+            holder.convertedPriceTextView.setText(String.format("(%.2f %s)", convertedPrice, CurrencyType.EUR.getSymbol()));
         }
 
         if (imageUri == null) {

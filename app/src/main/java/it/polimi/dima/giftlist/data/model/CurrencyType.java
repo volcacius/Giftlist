@@ -5,10 +5,10 @@ package it.polimi.dima.giftlist.data.model;
  */
 public enum CurrencyType {
 
-     EUR("EUR"),
-     USD("USD"),
-     BGN("BGN"),
-     JPY("JPY"),
+     EUR("EUR","€"),
+     USD("USD","$"),
+     BGN("BGN","£"),
+     JPY("JPY","¥"),
      CZK("CZK"),
      DKK("DKK"),
      GBP("GBP"),
@@ -39,13 +39,27 @@ public enum CurrencyType {
      ILS("ILS");
 
     private final String text;
+    private String symbol;
 
     CurrencyType(final String text) {
         this.text = text;
     }
 
+    CurrencyType(final String text, final String symbol) {
+        this.text = text;
+        this.symbol = symbol;
+    }
+
     @Override
     public String toString() {
         return text;
+    }
+
+    public String getSymbol() {
+        if (symbol != null) {
+            return symbol;
+        } else {
+            return text;
+        }
     }
 }

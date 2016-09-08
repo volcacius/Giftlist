@@ -32,5 +32,6 @@
     <dimen name="wishlist_setting_bottom_margin">5dp</dimen>
     <dimen name="card_thumbnail_side_size">100dp</dimen>
     <dimen name="detail_backdrop_small_height">150dp</dimen>
+    <dimen name="card_padding">30dp</dimen>
 
 </resources>

@@ -2,11 +2,13 @@ package it.polimi.dima.giftlist.presentation.view.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
 import it.polimi.dima.giftlist.data.model.EbayProduct;
@@ -23,6 +26,8 @@ import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductDetailsPagerComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductDetailsPagerModule;
 import it.polimi.dima.giftlist.presentation.view.adapter.ProductDetailsPagerAdapter;
+import it.polimi.dima.giftlist.presentation.view.animation.ShadowTransformer;
+import it.polimi.dima.giftlist.util.ViewUtil;
 import timber.log.Timber;
 
 /**
@@ -32,6 +37,7 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
 
     private static final String EXTRA_PRODUCT_LIST = "product_list";
     private static final String EXTRA_SELECTED_PRODUCT_ID = "selected_product_id";
+    public static final int DP = 2;
 
     private ProductDetailsPagerComponent productDetailsPagerComponent;
 
@@ -40,11 +46,20 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
+    private ShadowTransformer fragmentCardShadowTransformer;
+
     @Inject
     ProductDetailsPagerAdapter productDetailsPagerAdapter;
 
     private ArrayList<Product> productList;
     private long selectedProductId;
+
+    @OnClick(R.id.open_website)
+    public void openWebsite() {
+        String url = productDetailsPagerAdapter.getItem(productDetailsPagerAdapter.getCurrentPosition()).getProduct().getProductPage();
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(browserIntent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +71,13 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
             productList = getIntent().getParcelableArrayListExtra(EXTRA_PRODUCT_LIST);
             selectedProductId = getIntent().getLongExtra(EXTRA_SELECTED_PRODUCT_ID, Product.DEFAULT_ID);
         } else {
-            productList = savedInstanceState.getParcelableArrayList("products");
+            productList = savedInstanceState.getParcelableArrayList(EXTRA_PRODUCT_LIST);
         }
         createComponent();
         injectDependencies();
-        viewPager.setAdapter(new ProductDetailsPagerAdapter(getSupportFragmentManager(), productList));
+        viewPager.setAdapter(productDetailsPagerAdapter);
+        viewPager.setPageTransformer(false, fragmentCardShadowTransformer);
+        viewPager.setOffscreenPageLimit(3);
         for (Product p: productList) {
             if (p.getId() == selectedProductId) {
                 Timber.d("Selected product is id " + p.getId());
@@ -68,38 +85,16 @@ public class ProductDetailsPagerActivity extends BaseActivity implements HasComp
                 break;
             }
         }
+        fragmentCardShadowTransformer = new ShadowTransformer(viewPager, productDetailsPagerAdapter);
+        fragmentCardShadowTransformer.enableScaling(true);
     }
 
-        //Don't know why icePick doesn't work. Maybe because is a list. Anyway, leave this here and everything will be fine
+    //Don't know why icePick doesn't work. Maybe because is a list. Anyway, leave this here and everything will be fine
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList("products", productList);
+        outState.putParcelableArrayList(EXTRA_PRODUCT_LIST, productList);
         super.onSaveInstanceState(outState);
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_product_details, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                //implemented in the fragment
-                return false;
-
-            default:
-                Timber.d("default option from activity");
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-
 
     @Override
     protected int getLayoutRes() {

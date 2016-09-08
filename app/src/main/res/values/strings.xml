@@ -32,7 +32,7 @@
     <string name="reload">Reload</string>
     <string name="try_reloading">Try reloading</string>
     <string name="back_to_wl">See your products</string>
-    <string name="go_buy_it">Go buy it!</string>
+    <string name="go_buy_it">Get Product</string>
     <string name="your_wishlists">Your Wishlists</string>
 
     <string name="birthday">Birthday</string>
@@ -51,6 +51,10 @@
     <string name="so_that_we_can_improve_our_suggestions">So that we can improve our suggestions</string>
     <string name="how_old_is_he_or_she">How old is he or she?</string>
     <string name="what_does_he_or_she_likes">What does he or she likes?</string>
+    <string name="some_final_details">Some final details</string>
+    <string name="ready_to_go">and we are ready to go</string>
+    <string name="snack_bar_action_dismiss">dismiss</string>
+    <string name="pick_source_error">Pick at least one source</string>
 
     <string-array name="ages">
         <item>baby</item>

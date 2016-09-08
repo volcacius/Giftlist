@@ -15,17 +15,17 @@ repositories {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.1'
+    compileSdkVersion 23
+    buildToolsVersion '23.0.3'
 
     dexOptions {
-        javaMaxHeapSize "3g"
+        javaMaxHeapSize "4g"
     }
 
     defaultConfig {
         applicationId 'it.polimi.dima.giftlist'
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 23
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
         versionCode 1000
         // Major -> Millions, Minor -> Thousands, Bugfix -> Hundreds. E.g 1.3.72 == 1,003,072
@@ -102,8 +102,7 @@ play {
 
 dependencies {
     final PLAY_SERVICES_VERSION = '8.4.0'
-    final SUPPORT_LIBRARY_VERSION = '24.2.0'
-    final GRID_LAYOUT_VERSION = '24.2.0'
+    final SUPPORT_LIBRARY_VERSION = '23.4.0'
     final RETROFIT_VERSION = '2.0.0-beta4'
     final DAGGER_VERSION = '2.0.2'
     final DEXMAKER_VERSION = '1.4'
@@ -146,6 +145,8 @@ dependencies {
     final MATERIAL_RANGEBAR_VERSION = '1.3'
     final TICKER_VERSION = '1.1.0'
     final BETTER_SPINNER_VERSION = '1.1.0'
+    final TAGS_EDIT_VERSION = 'v1.0'
+    final MONEY_TEXT_VIEW_VERSION = '1.0.3'
 
     // "compile" refers to the dependencies required to compile the production source of the project.
     //The .jar in the libs folder are included as dependencies
@@ -153,10 +154,10 @@ dependencies {
     //Backend
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.google.android.gms:play-services-gcm:$PLAY_SERVICES_VERSION"
-    compile "com.android.support:gridlayout-v7:$GRID_LAYOUT_VERSION"
-    compile "com.android.support:appcompat-v7:$GRID_LAYOUT_VERSION"
+    compile "com.android.support:gridlayout-v7:$SUPPORT_LIBRARY_VERSION"
+    compile "com.android.support:appcompat-v7:$SUPPORT_LIBRARY_VERSION"
     compile "com.android.support:design:$SUPPORT_LIBRARY_VERSION"
-    compile "com.android.support:support-annotations:$GRID_LAYOUT_VERSION"
+    compile "com.android.support:support-annotations:$SUPPORT_LIBRARY_VERSION"
     compile "org.greenrobot:eventbus:$EVENTBUS_VERSION"
     compile "com.squareup.retrofit2:retrofit:$RETROFIT_VERSION"
     compile "com.squareup.retrofit2:converter-gson:$RETROFIT_VERSION"
@@ -208,6 +209,9 @@ dependencies {
         exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.rengwuxian.materialedittext', module: 'library'
     }
+    compile "com.github.mabbas007:TagsEditText:$TAGS_EDIT_VERSION"
+    compile "org.fabiomsr:moneytextview:$MONEY_TEXT_VIEW_VERSION"
+
 
     //dependencies provided on compile only on debug builds
     debugCompile "com.jakewharton.timber:timber:$TIMBER_VERSION"

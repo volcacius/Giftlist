@@ -246,6 +246,12 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
             WrapperAdapterUtils.releaseAll(wrappedAdapter);
             wrappedAdapter = null;
         }
+        if (wishlistAdapter != null) {
+            wishlistAdapter = null;
+        }
+        if (recyclerView != null) {
+            recyclerView = null;
+        }
         super.onDestroyView();
     }
 

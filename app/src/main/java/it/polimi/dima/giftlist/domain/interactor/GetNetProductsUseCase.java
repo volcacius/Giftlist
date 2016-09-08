@@ -37,6 +37,8 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
+    public static final String SPACE = " ";
+    public static final String COMMA = ",";
     private List<ProductRepository> productRepositoryList;
     private List<CategoryType> chosenCategoriesList;
     private CurrencyRepository currencyRepository;
@@ -72,6 +74,13 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     //At the end of the chain I need to wrap the product as a single valued list, since list<product> is the type accepted as model across the whole use case
     protected Observable<List<Product>> buildUseCaseObservable() {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
+
+        //Place commas between keywoards instead of spaces
+        if (keywords.endsWith(SPACE)) {
+            keywords = keywords.substring(0, keywords.length() - 1);
+        }
+        keywords = keywords.replace(SPACE, COMMA);
+        Timber.d("Keywords with commas are: %s", keywords);
 
         for (ProductRepository pr : productRepositoryList) {
             List<String> repoCategories = pr.getProperCategory(chosenCategoriesList);

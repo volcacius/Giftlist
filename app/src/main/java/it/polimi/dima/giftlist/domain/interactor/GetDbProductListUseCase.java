@@ -1,5 +1,6 @@
 package it.polimi.dima.giftlist.domain.interactor;
 
+import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 import com.pushtorefresh.storio.sqlite.queries.RawQuery;
@@ -36,6 +37,7 @@ public class GetDbProductListUseCase extends UseCase<List<Product>> {
         this.wishlistId = wishlistId;
     }
 
+    @RxLogObservable
     @Override
     protected Observable<List<Product>> buildUseCaseObservable() {
         return getWishlistEbayEtsyProductList(db, wishlistId);

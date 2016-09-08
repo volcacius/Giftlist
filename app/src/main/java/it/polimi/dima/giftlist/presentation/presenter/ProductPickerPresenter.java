@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 
 import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -30,6 +31,7 @@ import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
 import it.polimi.dima.giftlist.util.ImageConstants;
 import rx.Observer;
+import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
@@ -145,24 +147,47 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
 
     @Subscribe
     public void onProductImageSaved(ProductImageSavedEvent event) throws UnknownProductException {
-        Observer observer;
         Product product = event.getProduct();
-        if (product instanceof EbayProduct) {
-            observer = new EbayProductPutObserver();
-        } else if (product instanceof EtsyProduct) {
-            observer = new EtsyProductPutObserver();
-        } else {
-            throw new UnknownProductException();
-        }
         Timber.d("converted price :" + product.getConvertedPrice());
         product.setDisplayOrder(getView().getProductDisplayOrder());
-        db.put()
-                .object(product)
-                .prepare()
-                .asRxObservable()
-                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(observer);
+        if (product instanceof EbayProduct) {
+            db.put()
+                    .object((EbayProduct) product)
+                    .prepare()
+                    .asRxSingle()
+                    .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                    .subscribe(new SingleSubscriber<PutResult>() {
+                        @Override
+                        public void onSuccess(PutResult value) {
+                            getView().showProductAddedSuccess();
+                        }
+
+                        @Override
+                        public void onError(Throwable error) {
+                            getView().showProductAddedError();
+                        }
+                    });
+        } else if (product instanceof EtsyProduct) {
+            db.put()
+                    .object((EtsyProduct) product)
+                    .prepare()
+                    .asRxSingle()
+                    .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                    .subscribe(new SingleSubscriber<PutResult>() {
+                        @Override
+                        public void onSuccess(PutResult value) {
+                            getView().showProductAddedSuccess();
+                        }
+
+                        @Override
+                        public void onError(Throwable error) {
+                            getView().showProductAddedError();
+                        }
+                    });
+        }
+
         getView().setNextProductDisplayOrder();
+        Timber.d("New order is %d", getView().getProductDisplayOrder());
     }
 
     //Check if there is a pending subscription to register
@@ -172,35 +197,6 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
             isSubscriptionPending = false;
         }
     }
-
-    private class EbayProductPutObserver implements Observer<PutResults<EbayProduct>> {
-        @Override
-        public void onCompleted() {
-        }
-        @Override
-        public void onError(Throwable e) {
-            getView().showProductAddedError();
-        }
-        @Override
-        public void onNext(PutResults<EbayProduct> ebayProductPutResults) {
-            getView().showProductAddedSuccess();
-        }
-    }
-
-    private class EtsyProductPutObserver implements Observer<PutResults<EtsyProduct>> {
-        @Override
-        public void onCompleted() {
-        }
-        @Override
-        public void onError(Throwable e) {
-            getView().showProductAddedError();
-        }
-        @Override
-        public void onNext(PutResults<EtsyProduct> etsyProductPutResults) {
-            getView().showProductAddedSuccess();
-        }
-    }
-
 
     public void saveProductImage(Product product) throws UnknownProductException {
 
