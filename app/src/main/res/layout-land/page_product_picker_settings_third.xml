@@ -11,33 +11,34 @@
         style="@style/text_title"
         android:id="@+id/gift_recipient_second"
         android:text="@string/tell_us_something_about_your_gift_recipient"
-        android:layout_above="@+id/improve_suggestions_second"
-        app:view_behavior=".presentation.view.animation.ParallaxTitleBehaviour" />
+        app:view_behavior=".presentation.view.animation.ParallaxTitleBehaviour"
+        android:layout_above="@+id/improve_suggestions_second"/>
 
     <TextView
         style="@style/text_subtitle"
         android:id="@+id/improve_suggestions_second"
+        android:layout_above="@+id/grid"
         android:text="@string/what_does_he_or_she_likes"
         app:view_behavior=".presentation.view.animation.ParallaxTitleBehaviour" />
 
     <RelativeLayout
-        android:layout_below="@id/improve_suggestions_second"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true">
-
         <android.support.v7.widget.GridLayout
 
             android:id="@+id/grid"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:padding="4dp"
 
             grid:alignmentMode="alignBounds"
             grid:columnCount="3"
             grid:rowOrderPreserved="false"
-            grid:useDefaultMargins="true">
+            grid:useDefaultMargins="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <CheckBox
                 grid:layout_columnWeight="1"
