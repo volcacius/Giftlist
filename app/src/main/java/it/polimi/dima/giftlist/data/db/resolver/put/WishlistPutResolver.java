@@ -40,6 +40,10 @@ public class WishlistPutResolver extends DefaultPutResolver<Wishlist> {
         values.put(WishlistTable.COLUMN_ID, object.getId());
         values.put(WishlistTable.COLUMN_NAME, object.getName());
         values.put(WishlistTable.COLUMN_OCCASION, object.getOccasion());
+        values.put(WishlistTable.COLUMN_AGE, object.getAge());
+        values.put(WishlistTable.COLUMN_KEYWORD, object.getKeyword());
+        values.put(WishlistTable.COLUMN_MAXPRICE, object.getMaxPrice());
+        values.put(WishlistTable.COLUMN_MINPRICE, object.getMinPrice());
         values.put(WishlistTable.COLUMN_DISPLAY_ORDER, object.getDisplayOrder());
         return values;
     }

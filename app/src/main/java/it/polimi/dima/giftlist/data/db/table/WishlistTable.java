@@ -14,6 +14,10 @@ public class WishlistTable {
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_OCCASION = "occasion";
+    public static final String COLUMN_KEYWORD = "keyword";
+    public static final String COLUMN_AGE = "age";
+    public static final String COLUMN_MINPRICE = "minPrice";
+    public static final String COLUMN_MAXPRICE = "maxPrice";
     public static final String COLUMN_DISPLAY_ORDER = "display_order";
     public static final String COLUMN_ID_TABLE_PREFIX = TABLE + "." + COLUMN_ID;
     public static final String COLUMN_NAME_WITH_TABLE_PREFIX = TABLE + "." + COLUMN_NAME;
@@ -29,6 +33,10 @@ public class WishlistTable {
                 + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY, "
                 + COLUMN_NAME + " TEXT NOT NULL, "
                 + COLUMN_OCCASION + " TEXT NOT NULL, "
+                + COLUMN_KEYWORD + " TEXT, "
+                + COLUMN_AGE + " TEXT, "
+                + COLUMN_MINPRICE + " FLOAT, "
+                + COLUMN_MAXPRICE + " FLOAT, "
                 + COLUMN_DISPLAY_ORDER + " INTEGER NOT NULL "
                 + ");";
     }
@@ -55,6 +63,17 @@ public class WishlistTable {
         + COLUMN_OCCASION + "='" + occasion + "' "
         + "WHERE "
         + COLUMN_ID + "='" + wishlistId +"';";
+    }
+
+    public static String getAgeKeywordUpdateQuery(long wishlistId, String keyword, String age, Float minPrice, Float maxPrice) {
+        return "UPDATE " + TABLE + " "
+                + "SET "
+                + COLUMN_KEYWORD + "='" + keyword + "',"
+                + COLUMN_AGE + "='" + age + "',"
+                + COLUMN_MINPRICE + "=" + minPrice + ","
+                + COLUMN_MAXPRICE + "=" + maxPrice + " "
+                + "WHERE "
+                + COLUMN_ID + "='" + wishlistId +"';";
     }
 
     public static String getCustomDeleteQuery(long wishlistId) {

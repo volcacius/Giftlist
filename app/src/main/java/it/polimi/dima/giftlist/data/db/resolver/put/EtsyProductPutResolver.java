@@ -40,7 +40,8 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
                               object.getImageUri(),
                               object.getProductPage(),
                               object.getWishlistId(),
-                              object.getDisplayOrder()};
+                              object.getDisplayOrder(),
+                              object.getPrimaryKeyId()};
 
         return UpdateQuery.builder()
                 .table(EtsyProductTable.TABLE)
@@ -54,6 +55,7 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
                 .where(EtsyProductTable.COLUMN_IMAGE_URI + " = ?")
                 .where(EtsyProductTable.COLUMN_PRODUCT_PAGE + " = ?")
                 .where(EtsyProductTable.COLUMN_WISHLIST_ID + " = ?")
+                .where(EtsyProductTable.COLUMN_PRIMARY_ID + " = ?")
                 .where(EtsyProductTable.COLUMN_DISPLAY_ORDER + " = ?")
                 .whereArgs(Arrays.asList(argsArray))
                 .build();
@@ -64,6 +66,7 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
     protected ContentValues mapToContentValues(@NonNull EtsyProduct object) {
         ContentValues values = new ContentValues();
         values.put(EtsyProductTable.COLUMN_ID, object.getId());
+        values.put(EtsyProductTable.COLUMN_PRIMARY_ID, object.getPrimaryKeyId());
         values.put(EtsyProductTable.COLUMN_NAME, object.getName());
         values.put(EtsyProductTable.COLUMN_DESCRIPTION, object.getDescription());
         values.put(EtsyProductTable.COLUMN_PRICE, object.getPrice());

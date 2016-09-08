@@ -27,7 +27,7 @@ public class EtsyProductDeleteResolver extends DefaultDeleteResolver<EtsyProduct
     protected DeleteQuery mapToDeleteQuery(@NonNull EtsyProduct object) {
         return DeleteQuery.builder()
                 .table(EtsyProductTable.TABLE)
-                .where(EtsyProductTable.COLUMN_ID + "= ?")
+                .where(EtsyProductTable.COLUMN_PRIMARY_ID + "= ?")
                 .whereArgs(object.getId())
                 .build();
     }

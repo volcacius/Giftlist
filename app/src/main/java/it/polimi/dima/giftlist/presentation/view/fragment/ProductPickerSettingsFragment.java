@@ -202,6 +202,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         } catch (NumberFormatException e) {
             maxprice = DEFAULT_MAX;
         }
+
+        getPresenter().updateWishlist(wishlistId, keywordsEditText.getText().toString(), String.valueOf(ageSpinner.getText()), minprice,maxprice);
+        Timber.d("minPrice: " + minprice);
         IntentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 chosenCategoriesList,
@@ -245,6 +248,15 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
             chosenCategoriesList.add(CategoryType.MUSIC);
         }
         return chosenCategoriesList;
+    }
+
+    private boolean checkOccasionForAge(){
+        List<String> ageOccasions = new ArrayList<>();
+        ageOccasions.addAll(Arrays.asList("wedding","christening","graduation","engagement","anniversary"));
+        if (ageOccasions.contains(getPresenter().getWishlist(wishlistId).getOccasion())) {
+            return false;
+        }
+        return true;
     }
 
     private void initBackgroundTransitions() {

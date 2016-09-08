@@ -19,7 +19,7 @@ public class EbayProductDeleteResolver extends DefaultDeleteResolver<EbayProduct
     protected DeleteQuery mapToDeleteQuery(@NonNull EbayProduct object) {
         return DeleteQuery.builder()
                 .table(EbayProductTable.TABLE)
-                .where(EtsyProductTable.COLUMN_ID + "= ?")
+                .where(EtsyProductTable.COLUMN_PRIMARY_ID + "= ?")
                 .whereArgs(object.getId())
                 .build();
     }

@@ -31,6 +31,7 @@ public class EbayProduct extends Product {
         this.wishlistId = wishlistId;
         this.imageUri = imageUri;
         this.productPage = productPage;
+        this.primaryKeyId = id + "-" + wishlistId;
         this.displayOrder = displayOrder;
     }
 

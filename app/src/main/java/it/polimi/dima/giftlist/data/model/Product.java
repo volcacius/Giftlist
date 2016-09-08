@@ -20,6 +20,7 @@ public class Product implements Parcelable, Comparable<Product> {
     String name;
     float price;
     float convertedPrice;
+    String primaryKeyId;
     long id;
     CurrencyType currencyType;
     String description;
@@ -28,6 +29,16 @@ public class Product implements Parcelable, Comparable<Product> {
     String productPage;
     long wishlistId;
     int displayOrder;
+
+
+
+    public String getPrimaryKeyId() {
+        return primaryKeyId;
+    }
+
+    public void setPrimaryKeyId(String primaryKeyId) {
+        this.primaryKeyId = primaryKeyId;
+    }
 
     public String getName() {
         return name;

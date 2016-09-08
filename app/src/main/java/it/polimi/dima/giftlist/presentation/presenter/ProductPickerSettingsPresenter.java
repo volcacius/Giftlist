@@ -49,6 +49,30 @@ public class ProductPickerSettingsPresenter extends MvpBasePresenter<ProductPick
                 .executeAsBlocking();
     }
 
+    public void updateWishlist(long wishlistId, String keyword, String age, Float minPrice, Float maxPrice) {
+     //   Timber.d("Wishlist update query is: %s", WishlistTable.getNameOccasionUpdateQuery(wishlistId, wishlistName, occasion));
+        db.executeSQL()
+                .withQuery(RawQuery.builder()
+                        .query(WishlistTable.getAgeKeywordUpdateQuery(wishlistId, keyword, age, minPrice, maxPrice))
+                        .affectsTables(WishlistTable.TABLE)
+                        .build())
+                .prepare()
+                .asRxSingle()
+                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
+                .subscribe(new SingleSubscriber<Object>() {
+                    @Override
+                    public void onSuccess(Object value) {
+                        Timber.d("Success in updating the wishlist %d", wishlistId);
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+                        Timber.d("Error in updating the wishlist %d", wishlistId);
+
+                    }
+                });
+    }
+
     @DebugLog
     public int getStartingProductDisplayOrder(long wishlistId) {
         int ebayMax = Product.DEFAULT_DISPLAY_ORDER;

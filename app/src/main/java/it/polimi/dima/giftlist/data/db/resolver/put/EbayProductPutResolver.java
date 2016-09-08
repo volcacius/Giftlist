@@ -39,11 +39,13 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
                               object.getImageUri(),
                               object.getProductPage(),
                               object.getWishlistId(),
+                              object.getPrimaryKeyId(),
                               object.getDisplayOrder()};
 
         return UpdateQuery.builder()
                 .table(EbayProductTable.TABLE)
                 .where(EbayProductTable.COLUMN_ID + " = ?")
+                .where(EbayProductTable.COLUMN_PRIMARY_ID + " = ?")
                 .where(EbayProductTable.COLUMN_NAME + " = ?")
                 .where(EbayProductTable.COLUMN_DESCRIPTION + " = ?")
                 .where(EbayProductTable.COLUMN_PRICE + " = ?")
@@ -63,6 +65,7 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
     protected ContentValues mapToContentValues(@NonNull EbayProduct object) {
         ContentValues values = new ContentValues();
         values.put(EbayProductTable.COLUMN_ID, object.getId());
+        values.put(EbayProductTable.COLUMN_PRIMARY_ID, object.getPrimaryKeyId());
         values.put(EbayProductTable.COLUMN_NAME, object.getName());
         values.put(EbayProductTable.COLUMN_DESCRIPTION, object.getDescription());
         values.put(EbayProductTable.COLUMN_PRICE, object.getPrice());
