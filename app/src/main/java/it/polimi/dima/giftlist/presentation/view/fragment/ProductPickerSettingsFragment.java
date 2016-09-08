@@ -103,6 +103,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
     @Bind(R.id.finish)
     Button finishButton;
 
+    private String maxPrice;
+    private String minPrice;
+
     private boolean animationReady = false;
     private ValueAnimator backgroundAnimator;
 
@@ -156,7 +159,9 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
                 tickerMinView.setText(String.format("%s.0$", leftPinValue));
+                minPrice = leftPinValue;
                 tickerMaxView.setText(String.format("%s.0$", rightPinValue));
+                maxPrice = rightPinValue;
             }
         });
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
@@ -191,26 +196,14 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         ArrayList<CategoryType> chosenCategoriesList = getChosenCategoriesFromUI(String.valueOf(ageSpinner.getText()));
         Timber.d("Age selected is %s", String.valueOf(ageSpinner.getText()));
         Timber.d("Tags are: %s", tagsEditText.getText().toString());
-        Float minprice;
-        Float maxprice;
-        try {
-            minprice =  Float.parseFloat(tickerMinView.toString());
-        } catch (NumberFormatException e) {
-            minprice = DEFAULT_MIN;
-        } try {
-            maxprice  = Float.parseFloat(tickerMaxView.toString());
-        } catch (NumberFormatException e) {
-            maxprice = DEFAULT_MAX;
-        }
 
-        getPresenter().updateWishlist(wishlistId, keywordsEditText.getText().toString(), String.valueOf(ageSpinner.getText()), minprice,maxprice);
-        Timber.d("minPrice: " + minprice);
+        getPresenter().updateWishlist(wishlistId, tagsEditText.getText().toString(), String.valueOf(ageSpinner.getText()), Float.parseFloat(minPrice),Float.parseFloat(maxPrice));
         IntentStarter.startProductPickerActivity(this.getContext(),
                                                 enabledRepositoryMap,
                                                 chosenCategoriesList,
                                                 tagsEditText.getText().toString(),
-                                                maxprice,
-                                                minprice,
+                                                Float.parseFloat(maxPrice),
+                                                Float.parseFloat(minPrice),
                                                 wishlistId,
                                                 startingDisplayOrder);
     }
@@ -249,7 +242,7 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         }
         return chosenCategoriesList;
     }
-
+/*
     private boolean checkOccasionForAge(){
         List<String> ageOccasions = new ArrayList<>();
         ageOccasions.addAll(Arrays.asList("wedding","christening","graduation","engagement","anniversary"));
@@ -258,7 +251,7 @@ public class ProductPickerSettingsFragment extends BaseMvpFragment<ProductPicker
         }
         return true;
     }
-
+*/
     private void initBackgroundTransitions() {
         Resources resources = getResources();
         int firstBackgroundColor = ResourcesCompat.getColor(resources, R.color.material_purple_600, getContext().getTheme());
