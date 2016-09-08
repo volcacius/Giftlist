@@ -9,6 +9,8 @@ import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import java.util.LinkedList;
 import java.util.List;
 
+import hugo.weaving.DebugLog;
+
 /**
  * Created by Alessandro on 08/01/16.
  */
@@ -138,13 +140,13 @@ public class Product implements Parcelable, Comparable<Product> {
         return displayOrder;
     }
 
+    @DebugLog
     public static LinkedList<Product> filter(List<Product> productList, String newText) {
         final String lowerCaseQuery = newText.toLowerCase();
         final LinkedList<Product> filteredModelList = new LinkedList<>();
         for (Product p : productList) {
             final String name = p.getName().toLowerCase();
-            final String description = p.getDescription().toLowerCase();
-            if (name.contains(lowerCaseQuery) || description.contains(lowerCaseQuery)) {
+            if (name.contains(lowerCaseQuery)) {
                 filteredModelList.add(p);
             }
         }

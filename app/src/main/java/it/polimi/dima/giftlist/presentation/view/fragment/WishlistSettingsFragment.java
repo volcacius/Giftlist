@@ -230,12 +230,6 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
     }
 
     @Override
-    public void onPause() {
-        getPresenter().putWishlist(wishlist);
-        super.onPause();
-    }
-
-    @Override
     protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
         return null;
     }
@@ -243,6 +237,12 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
     @Override
     protected void injectDependencies() {
         //No field dependencies to inject
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getPresenter().putWishlist(wishlist);
     }
 
     public void startProductActivity() {
@@ -278,7 +278,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
         //Creating a new wishlist object, both whether it's a new one or it is an update
         //Since the DB only needs the id to be set correctly to update a current wishlist
 
-        Wishlist wishlist = new Wishlist(wishlistId,
+        wishlist = new Wishlist(wishlistId,
                 wishlistName,
                 occasionSelected,
                 wishlistDisplayOrder,

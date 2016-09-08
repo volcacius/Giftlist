@@ -99,7 +99,9 @@ public class ProductPickerAdapter extends BaseAdapter {
     }
 
     public void removeFirstProduct() {
-        productList.remove(FIRST_POSITION);
+        if (!productList.isEmpty()) {
+            productList.remove(FIRST_POSITION);
+        }
         this.notifyDataSetChanged();
     }
 
