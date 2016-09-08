@@ -20,19 +20,38 @@
         android:text="about your wishlist"
         app:view_behavior=".presentation.view.animation.ParallaxTitleBehaviour" />
 
-    <EditText
-        android:id="@+id/settings_wishlist_name"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/wl_name_hint"/>
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp">
 
-    <Spinner
-        android:id="@+id/settings_wishlist_occasion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:drawable/btn_dropdown"
-        android:entries="@array/occasions"
-        android:prompt="@string/wl_occasion_hint"
-        android:spinnerMode="dropdown" />
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/settings_wishlist_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Gift recipient's name"
+            android:layout_above="@+id/settings_wishlist_occasion"
+            app:met_textColor="@color/white"
+            app:met_floatingLabel="highlight"
+            app:met_textColorHint="@color/white"
+            app:met_primaryColor="@color/colorAccent"/>
+
+        <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/settings_wishlist_occasion"
+            android:hint="Select an occasion"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/white"
+            android:popupBackground="@color/colorPrimaryDark"
+            app:met_floatingLabel="highlight"
+            app:met_textColorHint="@color/white"
+            app:met_primaryColor="@color/colorAccent"/>
+
+    </RelativeLayout>
+
+
 
 </com.redbooth.WelcomePageLayout>

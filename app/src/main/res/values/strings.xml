@@ -8,7 +8,6 @@
     <string name="dialog_error_title">Sorry</string>
 
     <string name="keyword_hint">Enter keywords separed by a comma</string>
-    <string name="wl_name_hint">Who is the lucky pal?</string>
     <string name="wl_occasion_hint">Why are you buying presents?</string>
 
     <string name="etsy_prompt">Choose a category</string>

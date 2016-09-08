@@ -83,7 +83,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
     @Bind(R.id.settings_wishlist_name)
     EditText wishlistNameEditText;
     @Bind(R.id.settings_wishlist_occasion)
-    Spinner wishlistOccasionSpinner;
+    MaterialBetterSpinner wishlistOccasionSpinner;
 
     @Bind(R.id.select_age)
     MaterialBetterSpinner ageSpinner;
@@ -132,6 +132,9 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
     WelcomeCoordinatorLayout coordinatorLayout;
     Snackbar snackBar;
     private boolean animationReady;
+
+    private String maxPrice = DEFAULT_MAX.toString();
+    private String minPrice = DEFAULT_MIN.toString();
 
     @OnClick(R.id.skip)
     void skip() {
@@ -208,14 +211,22 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
                                               int rightPinIndex,
                                               String leftPinValue, String rightPinValue) {
                 tickerMinView.setText(String.format("%s.0$", leftPinValue));
+                minPrice = leftPinValue;
                 tickerMaxView.setText(String.format("%s.0$", rightPinValue));
+                maxPrice = rightPinValue;
             }
         });
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(),
+        ArrayAdapter<String> ageAdapter = new ArrayAdapter<>(getContext(),
                 R.layout.spinner_dropdown_color,
                 getContext().getResources().getStringArray(R.array.ages));
-        ageSpinner.setAdapter(adapter);
+        ageSpinner.setAdapter(ageAdapter);
         ageSpinner.setTextColor(Color.WHITE);
+
+        ArrayAdapter<String> occasionAdapter = new ArrayAdapter<>(getContext(),
+                R.layout.spinner_dropdown_color,
+                getContext().getResources().getStringArray(R.array.occasions));
+        wishlistOccasionSpinner.setAdapter(occasionAdapter);
+        wishlistOccasionSpinner.setTextColor(Color.WHITE);
     }
 
     @Override
@@ -254,25 +265,15 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
             wishlistName = DEFAULT_WISHLIST_NAME;
         }
 
-        String occasionSelected = String.valueOf(wishlistOccasionSpinner.getSelectedItem());
+        String occasionSelected = String.valueOf(wishlistOccasionSpinner.getText());
 
         ArrayList<CategoryType> chosenCategoriesList = getChosenCategoriesFromUI(String.valueOf(ageSpinner.getText()), occasionSelected);
 
         Timber.d("Age selected is %s", String.valueOf(ageSpinner.getText()));
         Timber.d("Tags are: %s", tagsEditText.getText().toString());
 
-        Float minprice;
-        Float maxprice;
-
-        try {
-            minprice =  Float.parseFloat(tickerMinView.toString());
-        } catch (NumberFormatException e) {
-            minprice = DEFAULT_MIN;
-        } try {
-            maxprice  = Float.parseFloat(tickerMaxView.toString());
-        } catch (NumberFormatException e) {
-            maxprice = DEFAULT_MAX;
-        }
+        Float minPriceFloat = Float.parseFloat(minPrice);
+        Float maxPriceFloat = Float.parseFloat(maxPrice);
 
         //Creating a new wishlist object, both whether it's a new one or it is an update
         //Since the DB only needs the id to be set correctly to update a current wishlist
@@ -283,16 +284,16 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
                 wishlistDisplayOrder,
                 tagsEditText.getText().toString(),
                 String.valueOf(ageSpinner.getText()),
-                minprice,
-                maxprice
+                minPriceFloat,
+                maxPriceFloat
                 );
 
         IntentStarter.startProductPickerActivity(this.getContext(),
                 enabledRepositoryMap,
                 chosenCategoriesList,
                 tagsEditText.getText().toString(),
-                maxprice,
-                minprice,
+                maxPriceFloat,
+                minPriceFloat,
                 wishlistId,
                 startingProductDisplayOrder);
     }
@@ -412,9 +413,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
             wishlistNameEditText.setText(data.getName());
             //wishlistOccasionSpinner.setSelection(((ArrayAdapter)(wishlistOccasionSpinner.getAdapter())).getPosition(data.getOccasion()));
             wishlistDisplayOrder = data.getDisplayOrder();
-            String keywords = data.getKeyword().replace(COMMA, NEWLINE);
-            Timber.d("Keywords are: %s", keywords);
-            tagsEditText.setText(keywords);
+            tagsEditText.setText(data.getKeyword().replace(COMMA, NEWLINE));
             //ageSpinner.setSelection(((ArrayAdapter)(ageSpinner.getAdapter())).getPosition(data.getAge()));
             tickerMinView.setText(String.format("%d.0", data.getMinPrice().intValue()));
             tickerMaxView.setText(String.format("%d.0", data.getMaxPrice().intValue()));
@@ -425,7 +424,6 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
     @DebugLog
     public void loadData(boolean pullToRefresh) {
         if (wishlistId == Wishlist.DEFAULT_ID) {
-            Timber.d("New wishlist!");
             showContent();
         } else {
             presenter.subscribe(false);
