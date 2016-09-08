@@ -1,28 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:id="@+id/activity_product_details_frame"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context=".presentation.view.activity.ProductDetailsPagerActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_product_details_frame"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.view.activity.ProductDetailsPagerActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="#ffffff">
+        android:elevation="4dp"
+        android:theme="@style/AppThemeDarkActionBar"/>
 
-    </android.support.v7.widget.Toolbar>
-
-    <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal"
-        android:id="@+id/activity_product_details_view_pager"
-        android:layout_marginTop="58dp"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+
+        <LinearLayout
+            android:id="@+id/linearL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v4.view.ViewPager
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:id="@+id/activity_product_details_view_pager"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp"
+                android:paddingTop="30dp"
+                android:paddingBottom="30dp"
+                android:paddingEnd="@dimen/card_padding"
+                android:paddingLeft="@dimen/card_padding"
+                android:paddingRight="@dimen/card_padding"
+                android:paddingStart="@dimen/card_padding">
+
+
+            </android.support.v4.view.ViewPager>
+
+        </LinearLayout>
+        <Button
+            android:id="@+id/open_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/go_buy_it"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_alignBottom="@+id/linearL"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+    </RelativeLayout>
+
+
+
+
 
 </FrameLayout>

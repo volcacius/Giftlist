@@ -259,7 +259,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         //menu wishlistlist is the same for here
-        getActivity().getMenuInflater().inflate(R.menu.menu_wishlistlist, menu);
+        getActivity().getMenuInflater().inflate(R.menu.menu_wishlist, menu);
         final MenuItem searchItem = menu.findItem(R.id.action_search);
         searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -370,6 +370,10 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
             case R.id.action_settings:
                 //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
                 IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
+                return true;
+            case R.id.action_home:
+                //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
+                IntentStarter.startWishlistListActivity(getContext());
                 return true;
             default:
                 break;
