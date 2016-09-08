@@ -18,19 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/open_website"
+        <LinearLayout
+            android:id="@+id/linearL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="@string/go_buy_it"
-            android:layout_centerHorizontal="true"
-            android:textColor="@color/white"
-            android:backgroundTint="@color/colorAccent"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <android.support.v4.view.ViewPager
@@ -42,6 +33,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:overScrollMode="never"
+                android:layout_marginBottom="30dp"
                 android:layout_marginTop="30dp"
                 android:paddingTop="30dp"
                 android:paddingBottom="30dp"
@@ -49,9 +41,22 @@
                 android:paddingLeft="@dimen/card_padding"
                 android:paddingRight="@dimen/card_padding"
                 android:paddingStart="@dimen/card_padding">
+
+
             </android.support.v4.view.ViewPager>
 
         </LinearLayout>
+        <Button
+            android:id="@+id/open_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="@string/go_buy_it"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/colorAccent"
+            android:layout_alignBottom="@+id/linearL"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
 
     </RelativeLayout>
 
