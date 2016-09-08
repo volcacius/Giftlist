@@ -71,7 +71,6 @@ public class WishlistPresenter extends BaseRxLcePresenter<WishlistView, List<Pro
     @Override
     @DebugLog
     protected void onNext(List<Product> data) {
-        getView().showLoading(false);
         List<Product> orderedList = new LinkedList<>(data);
         Collections.sort(orderedList);
         getView().setData(orderedList);

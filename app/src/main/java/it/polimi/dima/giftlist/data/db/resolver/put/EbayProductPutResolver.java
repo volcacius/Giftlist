@@ -29,33 +29,11 @@ public class EbayProductPutResolver extends DefaultPutResolver<EbayProduct> {
     @Override
     protected UpdateQuery mapToUpdateQuery(@NonNull EbayProduct object) {
 
-        Object[] argsArray = {object.getId(),
-                              object.getName(),
-                              object.getDescription(),
-                              object.getPrice(),
-                              object.getConvertedPrice(),
-                              object.getCurrencyType().toString(),
-                              object.getImageUrl(),
-                              object.getImageUri(),
-                              object.getProductPage(),
-                              object.getWishlistId(),
-                              object.getPrimaryKeyId(),
-                              object.getDisplayOrder()};
+        Object[] argsArray = {object.getPrimaryKeyId()};
 
         return UpdateQuery.builder()
                 .table(EbayProductTable.TABLE)
-                .where(EbayProductTable.COLUMN_ID + " = ?")
                 .where(EbayProductTable.COLUMN_PRIMARY_ID + " = ?")
-                .where(EbayProductTable.COLUMN_NAME + " = ?")
-                .where(EbayProductTable.COLUMN_DESCRIPTION + " = ?")
-                .where(EbayProductTable.COLUMN_PRICE + " = ?")
-                .where(EbayProductTable.COLUMN_CONVERTED_PRICE + " = ?")
-                .where(EbayProductTable.COLUMN_CURRENCY_TYPE + " = ?")
-                .where(EbayProductTable.COLUMN_IMAGE_URL + " = ?")
-                .where(EbayProductTable.COLUMN_IMAGE_URI + " = ?")
-                .where(EbayProductTable.COLUMN_PRODUCT_PAGE + " = ?")
-                .where(EbayProductTable.COLUMN_WISHLIST_ID + " = ?")
-                .where(EbayProductTable.COLUMN_DISPLAY_ORDER + " = ?")
                 .whereArgs(Arrays.asList(argsArray))
                 .build();
     }

@@ -58,10 +58,9 @@ android {
     buildTypes {
         release {
             debuggable false
-            signingConfig signingConfigs.release
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ext.betaDistributionReleaseNotesFilePath = file('../crashlytics_release_notes.txt').absolutePath
+            signingConfig signingConfigs.debug
+            minifyEnabled false
+
         }
         debug {
             signingConfig signingConfigs.debug
@@ -214,12 +213,12 @@ dependencies {
 
 
     //dependencies provided on compile only on debug builds
-    debugCompile "com.jakewharton.timber:timber:$TIMBER_VERSION"
-    debugCompile "jp.wasabeef:takt:$TAKT_VERSION"
+    compile "com.jakewharton.timber:timber:$TIMBER_VERSION"
+    compile "jp.wasabeef:takt:$TAKT_VERSION"
     debugCompile "com.github.moduth:blockcanary-ui:$BLOCK_CANARY_VERSION"
     debugCompile "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
-    debugCompile "com.facebook.stetho:stetho:$STETHO_VERSION"
-    debugCompile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
+    compile "com.facebook.stetho:stetho:$STETHO_VERSION"
+    compile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
 
     //dependencies provided on compile only on release builds
     //no-op dependencies allows to build while providing an empty dependency for something that is needed only in debug build

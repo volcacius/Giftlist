@@ -95,10 +95,6 @@ public class ProductPickerActivity extends BaseActivity implements HasComponent<
                 //implemented in the fragment
                 return false;
 
-            case R.id.action_settings:
-                //implemented in the fragment
-                return false;
-
             default:
                 Timber.d("default option from activity");
                 // If we got here, the user's action was not recognized.

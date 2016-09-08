@@ -69,6 +69,8 @@ public class GiftlistApplication extends Application {
                     .currencyModule(new CurrencyModule())
                     .dbModule(new DbModule())
                     .build();
+            BlockCanary.install(this, new AppBlockCanaryContext()).start();
+            refWatcher = LeakCanary.install(this);
         }
     }
 

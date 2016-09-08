@@ -27,13 +27,11 @@ public class CurrencyPutResolver extends DefaultPutResolver<Currency> {
     @NonNull
     @Override
     protected UpdateQuery mapToUpdateQuery(@NonNull Currency object) {
-        Object[] argsArray = {object.getCurrencyType().toString(),
-                              object.getRate()};
+        Object[] argsArray = {object.getCurrencyType().toString()};
 
         return UpdateQuery.builder()
                 .table(CurrencyTable.TABLE)
                 .where(CurrencyTable.COLUMN_CURRENCY_TYPE + " = ?")
-                .where(CurrencyTable.COLUMN_RATE + " = ?")
                 .whereArgs(Arrays.asList(argsArray))
                 .build();
     }

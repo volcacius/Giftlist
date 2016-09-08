@@ -3,6 +3,7 @@ package it.polimi.dima.giftlist.presentation.view.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -44,7 +45,7 @@ import timber.log.Timber;
  * Created by Elena on 19/01/2016.
  */
 @FragmentWithArgs
-public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlingAdapterView, List<Product>, ProductPickerView, ProductPickerPresenter>
+public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView, List<Product>, ProductPickerView, ProductPickerPresenter>
         implements ProductPickerView {
 
     private static final boolean NO_PULL_TO_REFRESH = false;
@@ -258,16 +259,8 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<SwipeFlin
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_wishlist:
-                Timber.d("button add pressed");
                 IntentStarter.startWishlistActivity(getContext(), wishlistId);
                 return true;
-
-            case R.id.action_settings:
-                Timber.d("button settings pressed");
-                //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
-                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
-                return true;
-
             default:
                 break;
 

@@ -1,12 +1,12 @@
 package it.polimi.dima.giftlist.presentation.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,15 +17,11 @@ import org.fabiomsr.moneytextview.MoneyTextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.ButterKnife;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
-import it.polimi.dima.giftlist.data.model.EbayProduct;
-import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.util.ImageConstants;
 import timber.log.Timber;
@@ -71,7 +67,7 @@ public class ProductPickerAdapter extends BaseAdapter {
         if (view != null) {
             productPickerViewHolder = (ProductPickerViewHolder) view.getTag();
         } else {
-            view = layoutInflater.inflate(R.layout.view_product, parent, false);
+            view = layoutInflater.inflate(R.layout.view_swipable_product_card, parent, false);
             productPickerViewHolder = new ProductPickerViewHolder(view);
             view.setTag(productPickerViewHolder);
         }
@@ -85,7 +81,7 @@ public class ProductPickerAdapter extends BaseAdapter {
 
         if (currentProduct.getImageUrl() == null) {
             Timber.d("no image available");
-            ColorDrawable colorDrawable = new ColorDrawable(productPickerViewHolder.colorPrimary);
+            ColorDrawable colorDrawable = new ColorDrawable(Color.GRAY);
             productPickerViewHolder.productThumb.setDrawingCacheEnabled(true);
             productPickerViewHolder.productThumb.setImageDrawable(colorDrawable);
         } else {
@@ -125,8 +121,6 @@ public class ProductPickerAdapter extends BaseAdapter {
         MoneyTextView priceTextView;
         @Bind(R.id.product_price_converted)
         MoneyTextView convertedPriceTextView;
-        @BindColor(R.color.colorPrimary)
-        int colorPrimary;
 
         public ProductPickerViewHolder(View view) {
             ButterKnife.bind(this, view);

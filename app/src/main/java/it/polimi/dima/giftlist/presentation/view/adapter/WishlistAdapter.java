@@ -1,6 +1,7 @@
 package it.polimi.dima.giftlist.presentation.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.view.ViewCompat;
@@ -94,7 +95,7 @@ public class WishlistAdapter extends SelectableAdapter<WishlistAdapter.ViewHolde
         }
 
         if (imageUri == null) {
-            ColorDrawable colorDrawable = new ColorDrawable(holder.colorPrimary);
+            ColorDrawable colorDrawable = new ColorDrawable(Color.GRAY);
             holder.thumbnail.setDrawingCacheEnabled(true);
             holder.thumbnail.setImageDrawable(colorDrawable);
         } else {
@@ -345,8 +346,6 @@ public class WishlistAdapter extends SelectableAdapter<WishlistAdapter.ViewHolde
         ImageView thumbnail;
         @Bind(R.id.product_price_converted)
         TextView convertedPriceTextView;
-        @BindColor(R.color.colorPrimary)
-        public int colorPrimary;
         @Bind(R.id.product_price)
         public TextView priceTextView;
 

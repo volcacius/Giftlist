@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_width="match_parent"
@@ -17,9 +17,9 @@
         />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
+                  android:layout_width="wrap_content"
                   android:layout_height="match_parent"
-                  android:orientation="horizontal">
+                  android:orientation="vertical">
 
         <com.like.LikeButton
 
@@ -33,18 +33,7 @@
             app:dots_secondary_color="@color/material_red_800"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            />
-
-        <Button
-            android:id="@+id/reload_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:contentDescription="reload"
-            android:text="try reloading"
-            android:visibility="gone"
-            android:layout_weight="1"
+            android:layout_gravity="top"
             />
 
     </LinearLayout>
@@ -60,6 +49,17 @@
         app:dots_secondary_color="@color/material_blue_500"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right|bottom"
+        android:layout_gravity="bottom"
         />
-</FrameLayout>
+
+    <Button
+        android:id="@+id/reload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:contentDescription="reload"
+        android:text="try reloading"
+        android:visibility="gone"
+        android:layout_weight="1"
+        />
+</RelativeLayout>

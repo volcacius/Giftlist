@@ -30,33 +30,11 @@ public class EtsyProductPutResolver extends DefaultPutResolver<EtsyProduct> {
     @Override
     protected UpdateQuery mapToUpdateQuery(@NonNull EtsyProduct object) {
 
-        Object[] argsArray = {object.getId(),
-                              object.getName(),
-                              object.getDescription(),
-                              object.getPrice(),
-                              object.getConvertedPrice(),
-                              object.getCurrencyType().toString(),
-                              object.getImageUrl(),
-                              object.getImageUri(),
-                              object.getProductPage(),
-                              object.getWishlistId(),
-                              object.getDisplayOrder(),
-                              object.getPrimaryKeyId()};
+        Object[] argsArray = {object.getPrimaryKeyId()};
 
         return UpdateQuery.builder()
                 .table(EtsyProductTable.TABLE)
-                .where(EtsyProductTable.COLUMN_ID + " = ?")
-                .where(EtsyProductTable.COLUMN_NAME + " = ?")
-                .where(EtsyProductTable.COLUMN_DESCRIPTION + " = ?")
-                .where(EtsyProductTable.COLUMN_PRICE + " = ?")
-                .where(EtsyProductTable.COLUMN_CONVERTED_PRICE + " = ?")
-                .where(EtsyProductTable.COLUMN_CURRENCY_TYPE + " = ?")
-                .where(EtsyProductTable.COLUMN_IMAGE_URL + " = ?")
-                .where(EtsyProductTable.COLUMN_IMAGE_URI + " = ?")
-                .where(EtsyProductTable.COLUMN_PRODUCT_PAGE + " = ?")
-                .where(EtsyProductTable.COLUMN_WISHLIST_ID + " = ?")
                 .where(EtsyProductTable.COLUMN_PRIMARY_ID + " = ?")
-                .where(EtsyProductTable.COLUMN_DISPLAY_ORDER + " = ?")
                 .whereArgs(Arrays.asList(argsArray))
                 .build();
     }

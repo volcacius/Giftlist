@@ -1,14 +1,12 @@
 package it.polimi.dima.giftlist.presentation.view.fragment;
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,11 +22,8 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.BindColor;
-import butterknife.OnClick;
 import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.CurrencyType;
-import it.polimi.dima.giftlist.data.model.EbayProduct;
-import it.polimi.dima.giftlist.data.model.EtsyProduct;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.view.adapter.ProductDetailsPagerAdapter;
 import it.polimi.dima.giftlist.util.ImageConstants;
@@ -54,8 +49,6 @@ public class ProductDetailsFragment extends BaseFragment {
     MoneyTextView priceTextView;
     @Bind(R.id.product_price_converted)
     MoneyTextView convertedPriceTextView;
-    @BindColor(R.color.colorPrimary)
-    int colorPrimary;
     @Bind(R.id.product_card)
     CardView cardView;
 
@@ -81,7 +74,7 @@ public class ProductDetailsFragment extends BaseFragment {
         }
 
         if (product.getImageUrl() == null) {
-            ColorDrawable colorDrawable = new ColorDrawable(colorPrimary);
+            ColorDrawable colorDrawable = new ColorDrawable(Color.GRAY);
             productThumb.setDrawingCacheEnabled(true);
             productThumb.setImageDrawable(colorDrawable);
         } else {

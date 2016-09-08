@@ -29,6 +29,8 @@
             android:layout_below="@id/product_name"
             android:layout_centerHorizontal="true"
             android:layout_margin="10dp"
+            android:outlineProvider="bounds"
+            android:elevation="15dp"
             />
 
         <LinearLayout
