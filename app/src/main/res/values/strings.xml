@@ -55,6 +55,7 @@
     <string name="snack_bar_action_dismiss">dismiss</string>
     <string name="pick_source_error">Pick at least one source</string>
     <string name="action_welcome_wizard">Welcome Wizard</string>
+    <string name="swipe_it_on_products">Swipe it on products!</string>
 
     <string-array name="ages">
         <item>baby</item>

@@ -4,22 +4,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/welcome_page"
-    tools:background="@color/material_purple_300">
+    style="@style/welcome_page_land"
+    tools:background="@color/material_purple_400">
 
     <RelativeLayout
-        android:id="@+id/rocket"
-        android:layout_width="match_parent"
+        android:id="@+id/image_wrapper"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:clipToPadding="false">
+        android:layout_centerVertical="true">
 
         <net.steamcrafted.materialiconlib.MaterialIconView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="center"
-            android:id="@+id/shop_icon"
+            android:id="@+id/quiz_icon"
             />
 
     </RelativeLayout>
@@ -28,14 +26,17 @@
         style="@style/text_title"
         android:id="@+id/title"
         android:layout_above="@+id/subtitle"
-        android:text="@string/swipe_it_on_products"
+        android:layout_alignTop="@id/image_wrapper"
+        android:layout_toRightOf="@+id/image_wrapper"
+        android:text="Let us help you"
         app:view_behavior=".presentation.view.animation.ParallaxTitleBehaviour" />
 
     <TextView
         style="@style/text_subtitle"
         android:id="@+id/subtitle"
-        android:layout_alignParentBottom="true"
-        android:text="Left for yay \nright for meh."
+        android:layout_toRightOf="@+id/image_wrapper"
+        android:layout_alignBottom="@id/image_wrapper"
+        android:text="You are only a few questions \naway from the perfect gift."
         app:view_behavior=".presentation.view.animation.ParallaxSubtitleBehaviour" />
 
 </com.redbooth.WelcomePageLayout>

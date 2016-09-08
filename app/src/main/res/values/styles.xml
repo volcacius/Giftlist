@@ -22,6 +22,13 @@
         <item name="android:clipToPadding">false</item>
     </style>
 
+    <style name="welcome_page_land">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:padding">50dp</item>
+        <item name="android:clipToPadding">false</item>
+    </style>
+
     <style name="product_picker_settings_page_first">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
