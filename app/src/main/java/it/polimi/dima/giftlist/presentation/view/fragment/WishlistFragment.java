@@ -78,7 +78,8 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
 
     @OnClick(R.id.fab)
     void onFabClick() {
-        IntentStarter.startProductPickerSettingsActivity(getContext(), wishlistId);
+        //I can pass the default order even though it's not the correct one since it's just an update of the wishlist
+        IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
     }
 
     @Inject

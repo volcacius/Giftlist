@@ -1,7 +1,10 @@
 package it.polimi.dima.giftlist.presentation.presenter;
 
+import android.database.Cursor;
+
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
+import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 import com.pushtorefresh.storio.sqlite.queries.RawQuery;
 
@@ -11,7 +14,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import hugo.weaving.DebugLog;
+import it.polimi.dima.giftlist.data.db.table.EbayProductTable;
+import it.polimi.dima.giftlist.data.db.table.EtsyProductTable;
 import it.polimi.dima.giftlist.data.db.table.WishlistTable;
+import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.domain.interactor.GetWishlistUseCase;
 import it.polimi.dima.giftlist.presentation.view.WishlistSettingsView;
@@ -30,22 +37,22 @@ public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettin
     }
 
     @Override
+    @DebugLog
     public void subscribe(boolean pullToRefresh) {
         if(!useCase.isUnsubscribed()) {
             unsubscribe();
-        }
-        if (isViewAttached()) {
-            getView().showLoading(pullToRefresh);
         }
         useCase.execute(new BaseSubscriber(pullToRefresh));
     }
 
     @Override
+    @DebugLog
     protected void onCompleted() {
         //DB subscriptions does not complete
     }
 
     @Override
+    @DebugLog
     protected void onError(Throwable e, boolean pullToRefresh) {
         if (isViewAttached()) {
             getView().showError(e, pullToRefresh);
@@ -54,60 +61,61 @@ public class WishlistSettingsPresenter extends BaseRxLcePresenter<WishlistSettin
     }
 
     @Override
+    @DebugLog
     protected void onNext(Wishlist data) {
-        if (isViewAttached()) {
-            getView().showLoading(false);
-        }
         getView().setData(data);
         if (isViewAttached()) {
             getView().showContent();
         }
     }
 
-    public void addWishlist(long wishlistId, String wishlistName, String occasion, int displayOrder) {
-        Timber.d("Wishlist insert query is: %s", WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion, displayOrder));
-        db.executeSQL()
+    @DebugLog
+    public int getStartingProductDisplayOrder(long wishlistId) {
+        int ebayMax = Product.DEFAULT_DISPLAY_ORDER;
+        int etsyMax = Product.DEFAULT_DISPLAY_ORDER;
+        Cursor ebayCursor = db.get().cursor()
                 .withQuery(RawQuery.builder()
-                        .query(WishlistTable.getCustomPutQuery(wishlistId, wishlistName, occasion, displayOrder))
-                        .affectsTables(WishlistTable.TABLE)
+                        .query(EbayProductTable.getMaxProductDisplayOrderQuery(wishlistId))
                         .build())
                 .prepare()
-                .asRxSingle()
-                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(new SingleSubscriber<Object>() {
-                    @Override
-                    public void onSuccess(Object value) {
-                        Timber.d("Success in inserting the wishlist %d", wishlistId);
-                    }
+                .executeAsBlocking();
+        if(ebayCursor.getCount() > 0 && ebayCursor.moveToFirst()) {
+            //Get the first and only column
+            ebayMax = ebayCursor.getInt(0);
+            ebayCursor.close();
+        }
+        Cursor etsyCursor = db.get().cursor()
+                .withQuery(RawQuery.builder()
+                        .query(EtsyProductTable.getMaxProductDisplayOrderQuery(wishlistId))
+                        .build())
+                .prepare()
+                .executeAsBlocking();
+        if(etsyCursor.getCount() > 0 && etsyCursor.moveToFirst()) {
+            //Get the first and only column
+            etsyMax = etsyCursor.getInt(0);
+        }
 
-                    @Override
-                    public void onError(Throwable error) {
-                        Timber.d("Error in inserting the wishlist %d", wishlistId);
-
-                    }
-                });
+        Timber.d("Ebay order is %d, Etsy order is %d", ebayMax, etsyMax);
+        //If no rows are present, the query return 0
+        return Math.max(ebayMax, etsyMax) + 1;
     }
 
-    public void updateWishlist(long wishlistId, String wishlistName, String occasion) {
-        Timber.d("Wishlist update query is: %s", WishlistTable.getNameOccasionUpdateQuery(wishlistId, wishlistName, occasion));
-        db.executeSQL()
-                .withQuery(RawQuery.builder()
-                        .query(WishlistTable.getNameOccasionUpdateQuery(wishlistId, wishlistName, occasion))
-                        .affectsTables(WishlistTable.TABLE)
-                        .build())
+    @DebugLog
+    public void putWishlist(Wishlist wishlist) {
+        db.put()
+                .object(wishlist)
                 .prepare()
                 .asRxSingle()
-                .observeOn(AndroidSchedulers.mainThread()) //all Observables in StorIO already subscribed on Schedulers.io(), you just need to set observeOn()
-                .subscribe(new SingleSubscriber<Object>() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<PutResult>() {
                     @Override
-                    public void onSuccess(Object value) {
-                        Timber.d("Success in updating the wishlist %d", wishlistId);
+                    public void onSuccess(PutResult value) {
+                        Timber.d("Wishlist update/creation success");
                     }
 
                     @Override
                     public void onError(Throwable error) {
-                        Timber.d("Error in updating the wishlist %d", wishlistId);
-
+                        Timber.d("Wishlist update/creation error");
                     }
                 });
     }

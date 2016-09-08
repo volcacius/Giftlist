@@ -6,7 +6,7 @@
     style="@style/product_picker_settings_page_second"
     tools:background="@color/material_purple_500">
 
-    <TextView
+<TextView
         style="@style/text_title"
         android:id="@+id/gift_recipient"
         android:text="@string/tell_us_something_about_your_gift_recipient"
@@ -44,3 +44,4 @@
     </RelativeLayout>
 
 </com.redbooth.WelcomePageLayout>
+

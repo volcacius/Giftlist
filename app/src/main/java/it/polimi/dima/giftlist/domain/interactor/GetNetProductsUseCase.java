@@ -37,7 +37,7 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
     private static final int PRODUCT_PER_PAGE = 25;
     private static final int DIGITS = 2;
     private static final int STARTING_OFFSET = 0;
-    public static final String SPACE = " ";
+    private static final String NEWLINE = "\n";
     public static final String COMMA = ",";
     private List<ProductRepository> productRepositoryList;
     private List<CategoryType> chosenCategoriesList;
@@ -76,10 +76,10 @@ public class GetNetProductsUseCase extends UseCase<List<Product>> {
         List<Observable<List<Product>>> productListObservableList = new ArrayList<>();
 
         //Place commas between keywoards instead of spaces
-        if (keywords.endsWith(SPACE)) {
+        if (keywords.endsWith(NEWLINE)) {
             keywords = keywords.substring(0, keywords.length() - 1);
         }
-        keywords = keywords.replace(SPACE, COMMA);
+        keywords = keywords.replace(NEWLINE, COMMA);
         Timber.d("Keywords with commas are: %s", keywords);
 
         for (ProductRepository pr : productRepositoryList) {

@@ -24,7 +24,6 @@ import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.ProductPickerComponent;
 import it.polimi.dima.giftlist.presentation.module.ProductPickerModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerFragmentBuilder;
-import it.polimi.dima.giftlist.presentation.view.fragment.ProductPickerSettingsFragment;
 import timber.log.Timber;
 
 

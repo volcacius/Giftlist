@@ -1,5 +1,6 @@
 package it.polimi.dima.giftlist.domain.interactor;
 
+import com.fernandocejas.frodo.annotation.RxLogObservable;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 
@@ -24,6 +25,7 @@ public class GetWishlistUseCase extends UseCase<Wishlist> {
     }
 
     @Override
+    @RxLogObservable
     protected Observable<Wishlist> buildUseCaseObservable() {
         return db.get()
                 .object(Wishlist.class)

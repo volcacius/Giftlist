@@ -11,7 +11,9 @@ import it.polimi.dima.giftlist.R;
 import it.polimi.dima.giftlist.data.model.Wishlist;
 import it.polimi.dima.giftlist.di.HasComponent;
 import it.polimi.dima.giftlist.presentation.component.WishlistComponent;
+import it.polimi.dima.giftlist.presentation.component.WishlistSettingsComponent;
 import it.polimi.dima.giftlist.presentation.module.WishlistModule;
+import it.polimi.dima.giftlist.presentation.module.WishlistSettingsModule;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistListFragment;
 import it.polimi.dima.giftlist.presentation.view.fragment.WishlistSettingsFragmentBuilder;
 import timber.log.Timber;
@@ -19,7 +21,7 @@ import timber.log.Timber;
 /**
  * Created by Elena on 10/08/2016.
  */
-public class WishlistSettingsActivity extends BaseActivity implements HasComponent<WishlistComponent> {
+public class WishlistSettingsActivity extends BaseActivity implements HasComponent<WishlistSettingsComponent> {
 
     private static final String EXTRA_WISHLIST_ID = "wishlist_id";
     private static final String EXTRA_WISHLIST_DISPLAY_ORDER = "wishlist_display_order";
@@ -29,7 +31,7 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
     @State
     int displayOrder;
 
-    WishlistComponent wishlistComponent;
+    WishlistSettingsComponent wishlistSettingsComponent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +63,12 @@ public class WishlistSettingsActivity extends BaseActivity implements HasCompone
     }
 
     @Override
-    public WishlistComponent getComponent() {
-        return wishlistComponent;
+    public WishlistSettingsComponent getComponent() {
+        return wishlistSettingsComponent;
     }
 
     @Override
     public void createComponent() {
-        wishlistComponent = getApplicationComponent().plus(new WishlistModule(this, wishlistId));
+        wishlistSettingsComponent = getApplicationComponent().plus(new WishlistSettingsModule(this, wishlistId));
     }
 }

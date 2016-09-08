@@ -432,7 +432,8 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         public boolean onMenuItemClick(MenuItem menuItem) {
             switch (menuItem.getItemId()) {
                 case R.id.action_add:
-                    IntentStarter.startProductPickerSettingsActivity(context, wishlistId);
+                    //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
+                    IntentStarter.startWishlistSettingsActivity(context, wishlistId, Wishlist.DEFAULT_ORDER);
                     return true;
                 case R.id.action_settings:
                     //I'm passing the default order value here since it is an update of the wishlist, so it won't be used

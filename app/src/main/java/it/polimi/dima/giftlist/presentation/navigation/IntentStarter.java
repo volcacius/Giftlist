@@ -15,7 +15,6 @@ import it.polimi.dima.giftlist.data.model.CategoryType;
 import it.polimi.dima.giftlist.data.model.Product;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductDetailsPagerActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerActivity;
-import it.polimi.dima.giftlist.presentation.view.activity.ProductPickerSettingsActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistListActivity;
 import it.polimi.dima.giftlist.presentation.view.activity.WishlistSettingsActivity;
@@ -41,11 +40,6 @@ public class IntentStarter {
 
     public static void startWishlistListActivity(@NonNull Context context) {
         Intent intentToLaunch = WishlistListActivity.getCallingIntent(context);
-        context.startActivity(intentToLaunch);
-    }
-
-    public static void startProductPickerSettingsActivity(@NonNull Context context, long wishlistId) {
-        Intent intentToLaunch = ProductPickerSettingsActivity.getCallingIntent(context, wishlistId);
         context.startActivity(intentToLaunch);
     }
 

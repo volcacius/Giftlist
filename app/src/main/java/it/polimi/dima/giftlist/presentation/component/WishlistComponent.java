@@ -18,6 +18,4 @@ public interface WishlistComponent {
     void inject(WishlistFragment wishlistFragment);
 
     WishlistPresenter provideWishlistPresenter();
-    WishlistSettingsPresenter provideWishlistSettingsPresenter();
-
 }

@@ -7,7 +7,7 @@
     style="@style/product_picker_settings_page_fourth"
     tools:background="@color/material_purple_500">
 
-    <TextView
+<TextView
         style="@style/text_title"
         android:id="@+id/final_details"
         android:text="@string/some_final_details" />
@@ -25,7 +25,7 @@
             android:textColor="@color/white"
             android:fontFamily="sans-serif-light"
             android:id="@+id/pick_tags"
-            android:text="Insert optional search keywords:"
+            android:text="Insert optional return separated search keywords:"
             android:layout_alignParentLeft="true"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:maxHeight="145dp"
                 android:layout_height="wrap_content"
-                TagsEditText:allowSpaceInTag="false"
+                TagsEditText:allowSpaceInTag="true"
                 TagsEditText:tagsCloseImageRight="@drawable/tag_close"
                 TagsEditText:tagsCloseImageLeft="@drawable/dot"
                 TagsEditText:tagsTextColor="@color/white"

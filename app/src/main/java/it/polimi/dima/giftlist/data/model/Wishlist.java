@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.rengwuxian.materialedittext.MaterialAutoCompleteTextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +14,7 @@ import it.polimi.dima.giftlist.R;
 /**
  * Created by Alessandro on 08/01/16.
  */
-public class Wishlist implements Comparable<Wishlist> {
+public class Wishlist implements Comparable<Wishlist>, Serializable {
 
     public static final long DEFAULT_ID = 0;
     public static final int DEFAULT_ORDER = 0;
@@ -24,7 +25,6 @@ public class Wishlist implements Comparable<Wishlist> {
     private String age;
     private Float minPrice;
     private Float maxPrice;
-    private List<Product> productList;
     private long id;
     private int displayOrder;
 
@@ -69,20 +69,8 @@ public class Wishlist implements Comparable<Wishlist> {
         return maxPrice;
     }
 
-    public List<Product> getProductList() {
-        return productList;
-    }
-
-    public void appendProductList(List<Product> productList) {
-        this.productList.addAll(productList);
-    }
-
     public long getId() {
         return id;
-    }
-
-    public void setProductList(List<Product> productList) {
-        this.productList = productList;
     }
 
     public int getDisplayOrder() {
