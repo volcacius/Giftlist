@@ -53,10 +53,10 @@ public class GiftlistApplication extends Application {
                                         .currencyModule(new CurrencyModule())
                                         .dbModule(new DbModule())
                                         .build();
-            Takt.stock(this).play();
+           // Takt.stock(this).play();
             BlockCanary.install(this, new AppBlockCanaryContext()).start();
             refWatcher = LeakCanary.install(this);
-            Stetho.initializeWithDefaults(this);
+ //           Stetho.initializeWithDefaults(this);
             Timber.plant(new Timber.DebugTree());
         } else {
             applicationComponent = DaggerReleaseApplicationComponent.builder()

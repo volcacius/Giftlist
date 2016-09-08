@@ -215,8 +215,10 @@ dependencies {
     //dependencies provided on compile only on debug builds
     compile "com.jakewharton.timber:timber:$TIMBER_VERSION"
     compile "jp.wasabeef:takt:$TAKT_VERSION"
-    debugCompile "com.github.moduth:blockcanary-ui:$BLOCK_CANARY_VERSION"
-    debugCompile "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
+    debugCompile "com.github.moduth:blockcanary-no-op:$BLOCK_CANARY_VERSION"
+    debugCompile "com.squareup.leakcanary:leakcanary-android-no-op:$LEAK_CANARY_VERSION"
+    //debugCompile "com.github.moduth:blockcanary-ui:$BLOCK_CANARY_VERSION"
+    //debugCompile "com.squareup.leakcanary:leakcanary-android:$LEAK_CANARY_VERSION"
     compile "com.facebook.stetho:stetho:$STETHO_VERSION"
     compile "com.facebook.stetho:stetho-okhttp3:$STETHO_VERSION"
 

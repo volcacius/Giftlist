@@ -137,7 +137,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
                 if (actionMode != null) {
                     toggleSelection(position);
                 } else {
-                    IntentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getProductList(), wishlistAdapter.getItem(position).getId());
+                    IntentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getFilterableProductList(), wishlistAdapter.getItem(position).getId());
                 }
             }
 

@@ -214,6 +214,10 @@ public class WishlistAdapter extends SelectableAdapter<WishlistAdapter.ViewHolde
         this.filterableProductList = filterableProductList;
     }
 
+    public LinkedList<Product> getFilterableProductList() {
+        return filterableProductList;
+    }
+
     //This is a pattern to declare an onClick in the ViewHolder but implement it in the fragment
     public interface OnProductClickListener {
         public void onItemClick(View view , int position);
