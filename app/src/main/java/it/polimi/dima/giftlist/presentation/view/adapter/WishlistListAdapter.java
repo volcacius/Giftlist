@@ -142,7 +142,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
         String occasion = filterableWishlistList.get(position).getOccasion();
         int order = filterableWishlistList.get(position).getDisplayOrder();
 
-        holder.wishlistNameTextView.setText(String.format("%d %s", order, wishlistName));
+        holder.wishlistNameTextView.setText(wishlistName);
         holder.wishlistOccasionTextView.setText(occasion);
 
         picasso.load(Wishlist.getWishlistThumbnail(context, occasion))
