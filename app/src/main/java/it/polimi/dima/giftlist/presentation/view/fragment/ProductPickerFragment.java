@@ -135,7 +135,9 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
         likeButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                flingContainer.getTopCardListener().selectLeft();
+                if (!productPickerAdapter.isEmpty()) {
+                    flingContainer.getTopCardListener().selectLeft();
+                }
             }
 
             @Override
@@ -147,7 +149,9 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
         discardButton.setOnLikeListener(new OnLikeListener() {
             @Override
             public void liked(LikeButton likeButton) {
-                flingContainer.getTopCardListener().selectRight();
+                if (!productPickerAdapter.isEmpty()) {
+                    flingContainer.getTopCardListener().selectRight();
+                }
             }
 
             @Override
@@ -259,7 +263,7 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_wishlist:
-                IntentStarter.startWishlistActivity(getContext(), wishlistId);
+                IntentStarter.startWishlistActivity(getContext(), wishlistId, false);
                 return true;
             default:
                 break;

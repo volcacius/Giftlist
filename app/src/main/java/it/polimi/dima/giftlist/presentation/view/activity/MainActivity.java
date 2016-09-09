@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity {
         boolean firstOpening = sharedPreferences.getBoolean(FIRST_OPENING, true);
         if (firstOpening) {
             sharedPreferences.edit().putBoolean(FIRST_OPENING, false).apply();
-            IntentStarter.startWelcomeActivity(this);
+            IntentStarter.startWelcomeActivity(this, true);
         } else {
             IntentStarter.startWishlistListActivity(this);
         }

@@ -79,7 +79,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     @OnClick(R.id.fab)
     void onFabClick() {
         //I can pass the default order even though it's not the correct one since it's just an update of the wishlist
-        IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
+        IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER, false);
     }
 
     @Inject
@@ -137,7 +137,7 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
                 if (actionMode != null) {
                     toggleSelection(position);
                 } else {
-                    IntentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getFilterableProductList(), wishlistAdapter.getItem(position).getId());
+                    IntentStarter.startProductDetailsPagerActivity(getContext(), wishlistAdapter.getFilterableProductList(), wishlistAdapter.getItem(position).getId(), false);
                 }
             }
 
@@ -367,10 +367,6 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
-                //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
-                IntentStarter.startWishlistSettingsActivity(getContext(), wishlistId, Wishlist.DEFAULT_ORDER);
-                return true;
             case R.id.action_home:
                 //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
                 IntentStarter.startWishlistListActivity(getContext());

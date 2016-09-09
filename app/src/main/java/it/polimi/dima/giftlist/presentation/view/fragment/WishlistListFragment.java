@@ -70,7 +70,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
 
     @OnClick(R.id.fab)
     void onFabClick() {
-        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID, wishlistListAdapter.getWishlistList().size());
+        IntentStarter.startWishlistSettingsActivity(getContext(), Wishlist.DEFAULT_ID, wishlistListAdapter.getWishlistList().size(), false);
     }
 
     @Inject
@@ -124,7 +124,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
                 if (actionMode != null) {
                     toggleSelection(position);
                 } else {
-                    IntentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position));
+                    IntentStarter.startWishlistActivity(getContext(), wishlistListAdapter.getItemId(position), true);
                 }
             }
 
@@ -270,7 +270,7 @@ public class WishlistListFragment extends BaseMvpLceFragment<RecyclerView, List<
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_welcome_wizard:
-                IntentStarter.startWelcomeActivity(getContext());
+                IntentStarter.startWelcomeActivity(getContext(), false);
                 return true;
         }
         return false;

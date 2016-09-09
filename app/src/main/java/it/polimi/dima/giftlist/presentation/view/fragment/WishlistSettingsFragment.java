@@ -295,7 +295,7 @@ public class WishlistSettingsFragment extends BaseMvpLceFragment<LinearLayout, W
                 maxPriceFloat,
                 minPriceFloat,
                 wishlistId,
-                startingProductDisplayOrder);
+                startingProductDisplayOrder, false);
     }
 
     private ArrayList<CategoryType> getChosenCategoriesFromUI(String ageSelected, String occasion) {

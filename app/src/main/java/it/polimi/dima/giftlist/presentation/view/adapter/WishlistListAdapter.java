@@ -433,11 +433,7 @@ public class WishlistListAdapter extends SelectableAdapter<WishlistListAdapter.V
             switch (menuItem.getItemId()) {
                 case R.id.action_add:
                     //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
-                    IntentStarter.startWishlistSettingsActivity(context, wishlistId, Wishlist.DEFAULT_ORDER);
-                    return true;
-                case R.id.action_settings:
-                    //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
-                    IntentStarter.startWishlistSettingsActivity(context, wishlistId, Wishlist.DEFAULT_ORDER);
+                    IntentStarter.startWishlistSettingsActivity(context, wishlistId, Wishlist.DEFAULT_ORDER, false);
                     return true;
                 default:
                     break;

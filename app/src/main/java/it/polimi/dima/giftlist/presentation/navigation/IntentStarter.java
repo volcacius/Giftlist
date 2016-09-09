@@ -30,13 +30,19 @@ public class IntentStarter {
     public IntentStarter() {
     }
 
-    public static void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId, int startingDisplayOrder) {
+    public static void startProductPickerActivity(@NonNull Context context, HashMap<Class, Boolean> enabledRepositoryMap, ArrayList<CategoryType> chosenCategoriesList, String keywords, Float maxprice, Float minprice, long wishlistId, int startingDisplayOrder, boolean putIntoHistory) {
         Intent intentToLaunch = ProductPickerActivity.getCallingIntent(context, enabledRepositoryMap, chosenCategoriesList, keywords, maxprice, minprice, wishlistId, startingDisplayOrder);
+        if (!putIntoHistory) {
+            intentToLaunch.setFlags(intentToLaunch.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        }
         context.startActivity(intentToLaunch);
     }
 
-    public static void startWishlistActivity(@NonNull Context context, long wishlistId) {
+    public static void startWishlistActivity(@NonNull Context context, long wishlistId, boolean putIntoHistory) {
         Intent intentToLaunch = WishlistActivity.getCallingIntent(context, wishlistId);
+        if (!putIntoHistory) {
+            intentToLaunch.setFlags(intentToLaunch.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        }
         context.startActivity(intentToLaunch);
     }
 
@@ -45,19 +51,28 @@ public class IntentStarter {
         context.startActivity(intentToLaunch);
     }
 
-    public static void startWishlistSettingsActivity(@NonNull Context context, long wishlistId, int displayOrder) {
+    public static void startWishlistSettingsActivity(@NonNull Context context, long wishlistId, int displayOrder, boolean putIntoHistory) {
         Intent intentToLaunch = WishlistSettingsActivity.getCallingIntent(context,wishlistId, displayOrder);
+        if (!putIntoHistory) {
+            intentToLaunch.setFlags(intentToLaunch.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        }
         context.startActivity(intentToLaunch);
     }
 
-    public static void startProductDetailsPagerActivity(@NonNull Context context, List<Product> productList, long selectedProductId) {
+    public static void startProductDetailsPagerActivity(@NonNull Context context, List<Product> productList, long selectedProductId, boolean putIntoHistory) {
         ArrayList<Product> productArrayList = new ArrayList<>(productList);
         Intent intentToLaunch = ProductDetailsPagerActivity.getCallingIntent(context, productArrayList, selectedProductId);
+        if (!putIntoHistory) {
+            intentToLaunch.setFlags(intentToLaunch.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        }
         context.startActivity(intentToLaunch);
     }
 
-    public static void startWelcomeActivity(Context context) {
+    public static void startWelcomeActivity(Context context, boolean putIntoHistory) {
         Intent intentToLaunch = WelcomeActivity.getCallingIntent(context);
+        if (!putIntoHistory) {
+            intentToLaunch.setFlags(intentToLaunch.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        }
         context.startActivity(intentToLaunch);
     }
 }

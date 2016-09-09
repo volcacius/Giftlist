@@ -81,7 +81,7 @@ public class WishlistAdapter extends SelectableAdapter<WishlistAdapter.ViewHolde
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Product currentProduct = productList.get(position);
+        Product currentProduct = filterableProductList.get(position);
         String productName = currentProduct.getName();
         String imageUri = currentProduct.getImageUri();
         float price = currentProduct.getPrice();
