@@ -12,42 +12,70 @@
     <com.lorentzos.flingswipe.SwipeFlingAdapterView
         android:id="@+id/contentView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="#ffeee9e2"
         />
 
-    <LinearLayout android:layout_width="match_parent"
+    <LinearLayout android:layout_width="wrap_content"
+        android:layout_margin="15dp"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:orientation="horizontal">
 
-        <com.like.LikeButton
-            app:like_drawable="@drawable/heart"
-            app:unlike_drawable="@drawable/heart"
-            app:icon_size="30dp"
-            android:id="@+id/like_button"
-            app:circle_start_color="@color/material_red_500"
-            app:circle_end_color="@color/material_red_900"
-            app:dots_primary_color="@color/material_red_500"
-            app:dots_secondary_color="@color/material_red_800"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <FrameLayout style="@style/AppTheme"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:elevation="10dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/material_red_200"
             android:layout_gravity="bottom"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:layout_weight="1">
 
-            android:layout_weight="1"/>
+            <com.like.LikeButton
+                app:like_drawable="@drawable/heart"
+                app:unlike_drawable="@drawable/heart"
+                app:icon_size="30dp"
+                android:id="@+id/like_button"
+                app:circle_start_color="@color/material_red_500"
+                app:circle_end_color="@color/material_red_900"
+                app:dots_primary_color="@color/material_red_500"
+                app:dots_secondary_color="@color/material_red_800"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
 
-        <com.like.LikeButton
-            app:icon_size="30dp"
-            android:id="@+id/discard_button"
-            app:like_drawable="@drawable/delete_forever"
-            app:unlike_drawable="@drawable/delete_forever"
-            app:circle_start_color="@color/material_blue_500"
-            app:circle_end_color="@color/material_blue_900"
-            app:dots_primary_color="@color/material_blue_900"
-            app:dots_secondary_color="@color/material_blue_500"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        </FrameLayout>
+
+        <FrameLayout style="@style/AppTheme"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:elevation="10dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/material_blue_200"
             android:layout_gravity="bottom"
-            android:layout_weight="1"/>
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:layout_weight="1">
+
+            <com.like.LikeButton
+                app:icon_size="30dp"
+                android:id="@+id/discard_button"
+                app:like_drawable="@drawable/delete_forever"
+                app:unlike_drawable="@drawable/delete_forever"
+                app:circle_start_color="@color/material_blue_500"
+                app:circle_end_color="@color/material_blue_900"
+                app:dots_primary_color="@color/material_blue_900"
+                app:dots_secondary_color="@color/material_blue_500"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </FrameLayout>
+
 
         <Button
             android:id="@+id/reload_button"
@@ -60,6 +88,5 @@
             android:layout_weight="1"/>
 
     </LinearLayout>
-
 
 </FrameLayout>

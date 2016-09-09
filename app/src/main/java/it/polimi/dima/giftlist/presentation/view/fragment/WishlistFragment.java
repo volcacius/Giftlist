@@ -364,19 +364,6 @@ public class WishlistFragment extends BaseMvpLceFragment<RecyclerView, List<Prod
         searchView.clearFocus();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_home:
-                //I'm passing the default order value here since it is an update of the wishlist, so it won't be used
-                IntentStarter.startWishlistListActivity(getContext());
-                return true;
-            default:
-                break;
-        }
-        return false;
-    }
-
     private class ActionModeCallback implements ActionMode.Callback {
         @SuppressWarnings("unused")
         private final String TAG = ActionModeCallback.class.getSimpleName();

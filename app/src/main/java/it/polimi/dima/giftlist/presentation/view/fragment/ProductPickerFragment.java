@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
 import com.hannesdorfmann.fragmentargs.annotation.FragmentWithArgs;
@@ -58,7 +59,6 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
     LikeButton discardButton;
     @Bind(R.id.reload_button)
     Button reloadButton;
-
 
     @Arg
     long wishlistId;
@@ -241,12 +241,12 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
 
     @Override
     public void showProductAddedError() {
-        ToastFactory.showShortToast(getContext(), R.string.product_added_error);
+        Toast.makeText(getContext(), R.string.product_added_error, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void showProductAddedSuccess() {
-        ToastFactory.showShortToast(getContext(), R.string.product_added);
+        Toast.makeText(getContext(), R.string.product_added, Toast.LENGTH_SHORT).show();
     }
 
     @Override
