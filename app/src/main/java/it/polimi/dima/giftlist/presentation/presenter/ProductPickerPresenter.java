@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import com.fernandocejas.frodo.annotation.RxLogObservable;
-import com.fernandocejas.frodo.annotation.RxLogSubscriber;
-import com.pushtorefresh.storio.contentresolver.operations.put.PutResults;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.operations.put.PutResult;
 import com.squareup.picasso.Picasso;
@@ -32,8 +30,6 @@ import it.polimi.dima.giftlist.presentation.exception.UnknownProductException;
 import it.polimi.dima.giftlist.presentation.view.ProductPickerView;
 import it.polimi.dima.giftlist.domain.interactor.GetNetProductsUseCase;
 import it.polimi.dima.giftlist.util.ImageConstants;
-import rx.Observable;
-import rx.Observer;
 import rx.Single;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -85,7 +81,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
             getView().showContent();
         }
         unsubscribe();
-        checkPendingSubscription();
+        runPendingSubscription();
     }
 
     @Override
@@ -94,7 +90,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
             getView().showError(e, pullToRefresh);
         }
         unsubscribe();
-        checkPendingSubscription();
+        runPendingSubscription();
     }
 
     @Override
@@ -189,7 +185,7 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
     }
 
     //Check if there is a pending subscription to register
-    private void checkPendingSubscription() {
+    private void runPendingSubscription() {
         if (isSubscriptionPending) {
             subscribe(NO_PULL_TO_REFRESH);
             isSubscriptionPending = false;
@@ -237,8 +233,6 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
                 .onlyScaleDown()
                 .into(myTarget);
     }
-
-
 }
 
 

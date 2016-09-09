@@ -7,6 +7,7 @@ import android.support.v7.widget.CardView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.hannesdorfmann.fragmentargs.annotation.Arg;
@@ -57,6 +58,8 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
     LikeButton likeButton;
     @Bind(R.id.discard_button)
     LikeButton discardButton;
+    @Bind(R.id.reload_button_wrapper)
+    FrameLayout reloadButtonWrapper;
     @Bind(R.id.reload_button)
     Button reloadButton;
 
@@ -164,6 +167,7 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
     @OnClick(R.id.reload_button)
     public void reloadItems() {
         loadData(NO_PULL_TO_REFRESH);
+        showContent();
     }
 
     @NonNull
@@ -213,9 +217,8 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
     @Override
     public void showError(Throwable e, boolean pullToRefresh) {
         super.showError(e, NO_PULL_TO_REFRESH);
-        reloadButton.setVisibility(View.VISIBLE);
+        reloadButtonWrapper.setVisibility(View.VISIBLE);
         reloadButton.setEnabled(true);
-        e.printStackTrace();
     }
 
     @Override
@@ -228,7 +231,7 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
         super.showContent();
         likeButton.setEnabled(true);
         discardButton.setEnabled(true);
-        reloadButton.setVisibility(View.GONE);
+        reloadButtonWrapper.setVisibility(View.GONE);
         reloadButton.setEnabled(false);
     }
 
@@ -236,6 +239,8 @@ public class ProductPickerFragment extends BaseMvpLceViewStateFragment<CardView,
     public void showLoading(boolean pullToRefresh) {
         likeButton.setEnabled(false);
         discardButton.setEnabled(false);
+        reloadButton.setEnabled(false);
+        reloadButtonWrapper.setVisibility(View.VISIBLE);
         super.showLoading(NO_PULL_TO_REFRESH);
     }
 

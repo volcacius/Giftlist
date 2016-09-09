@@ -30,7 +30,7 @@
         android:background="@drawable/circle"
         android:backgroundTint="@color/material_red_200"
         android:layout_gravity="bottom"
-        android:layout_margin="15dp"
+        android:layout_margin="12dp"
         android:padding="15dp"
         android:layout_weight="1">
 
@@ -57,7 +57,7 @@
         android:background="@drawable/circle"
         android:backgroundTint="@color/material_blue_200"
         android:layout_gravity="bottom"
-        android:layout_margin="15dp"
+        android:layout_margin="12dp"
         android:padding="15dp"
         android:layout_weight="1">
 
@@ -77,16 +77,29 @@
 
     </FrameLayout>
 
+        <FrameLayout style="@style/AppTheme"
+            android:id="@+id/reload_button_wrapper"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:elevation="10dp"
+            android:background="@drawable/circle"
+            android:backgroundTint="@color/material_green_200"
+            android:layout_gravity="bottom"
+            android:visibility="gone"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:layout_weight="1">
+
+            <Button style="@style/AppTheme"
+                android:id="@+id/reload_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_autorenew_white_18dp">
+
+            </Button>
+
+        </FrameLayout>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/reload_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center"
-        android:contentDescription="reload"
-        android:text="try reloading"
-        android:visibility="gone"
-        android:layout_weight="1"
-        />
 </FrameLayout>
