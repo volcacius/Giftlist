@@ -95,10 +95,8 @@ public class ProductPickerPresenter extends BaseRxLcePresenter<ProductPickerView
 
     @Override
     protected void onNext(List<Product> data) {
-        if (isViewAttached()) {
-            getView().appendData(data);
-            getView().showContent();
-        }
+        getView().appendData(data);
+        getView().showContent();
     }
 
     @Override
