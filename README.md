@@ -27,6 +27,7 @@ For our application we choose to adopt the Loading-Content-Error of the MVP patt
 * __Error:__ View displayed if something went wrong or the data are not available.
 
 This schema of the Wishlist Activity and all the related classes well explains how the pattern was implemented:
+
 ![MVP implementation](https://github.com/volcacius/Giftlist/blob/master/images/MVP_Lce.png)
 
 All the *Base* classes in the diagram are extended from the Mosby library and take care of all the base MVP mechanism.
@@ -40,17 +41,18 @@ The MVP pattern also allows to works well with the already mentioned [Rx Java pa
 We followed [this post](https://labs.ribot.co.uk/android-application-architecture-8b6e34acda65) from Ribot(from which we also take the following image) to wire it up with the MVP pattern.
 
 ![MVP and RX](https://github.com/volcacius/Giftlist/blob/master/images/MVP_RxJava.png)
+
 The key idea behind RxJava is the following: an Observable object (the external repositories) emits items (the Products), that are consumed as soon as they are ready by the Subscriber (the Model logic in the MVP pattern).
 
 The Model makes extensive use of Rx technology in the product fetching phase: this way even if the API call retrieves multiple products at once, the first product can be displayed as soon as it is ready, without waiting for the end of the API call. As soon as a product is ready, the Model and subsequently the Presenter is immediately notified and the View can be updated.
 For the API call itself we integrated the Rx Java paradigm with two libraries: [OkHttp](https://github.com/square/okhttp), to handle http calls, enrich them with authentication information and deserialize the XML response; and [Retrofit2](https://github.com/square/retrofit), to access the API of external services.
 
-#External service APIs
+##External service APIs
 For the Giftlist application is essential to exploit external web services. We employed three different API services: [Ebay API service](https://go.developer.ebay.com/api-documentation) and [Etsy API service](https://www.etsy.com/developers/documentation/) were exploited to look for product and to propose them to the user, while [European Central Bank](https://sdw-wsrest.ecb.europa.eu/) API service is used for retrieving the up-to-date exchange rates for price conversion.
 
 ![API call flow](https://github.com/volcacius/Giftlist/blob/master/images/APIcall.png)
 
-#Dependency Injection
+##Dependency Injection
 Another powerful paradigm we exploited in the application development is  performing dependency injection (DI) with the [Dagger2](http://google.github.io/dagger/) library. We aimed at a hugely decoupled architecture, and provided an extensive system of models and components to cover all the activities in the application. 
 
 ![API call flow](https://github.com/volcacius/Giftlist/blob/master/images/Injection.png)
@@ -69,7 +71,7 @@ Each *@PerActivity* component is declared in an Activity and is built by the par
 
 By exploiting a novel kind of pattern in the usage of Dagger2, we are also able to inject automatically different kind of objects depending on the type of build, i.e. Debug or Release, at compile time. This way for example we can inject an interceptor of OkHttp requests in debug builds in order to be able to observe the flow of data.
 
-#Annotations
+##Annotations
 We make extensive use of a variety of libraries that reduce the verbosity of the source code by generating boilerplate code at compile-time through annotations. Such libraries are [Butterknife](http://jakewharton.github.io/butterknife/), [IcePick](https://github.com/frankiesardo/icepick), [ParcelablePlease](https://github.com/sockeqwe/ParcelablePlease), [FragmentArgument](https://github.com/sockeqwe/fragmentargs), and the already described Dagger2. 
 
 The advantage of compile-time code generation is that it doesn't introduce any performance overhead, since reflection is not used.
