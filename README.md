@@ -1,4 +1,4 @@
-#Purpose
+#Giftlist
 This project was developed for the course "Design and Implementation of Mobile Application at [Politecnico di Milano](www.polimi.it) by [Alessandro Pappalardo](https://github.com/volcacius) and [Elena Sacchi](https://github.com/lifeindeath) and is currently under final revision.
 The Giftlist project consists in a shopper assistant oriented to the choice and purchase of gifts for friends and loved ones. It helps the user searching for possible gifts for different people and occasions, proposing them a set of items he can either discard or save in a wishlist later accessible to make the final decision for the purchase.
 It does not handle the purchase and delivery themselves: once the user has chosen the perfect gift, the app readdresses him/her to the retailer web page.
